@@ -3,6 +3,9 @@ export default class Jogador {
     this.nome = nome;
     this.cor = cor;
     this.localizacaoAtual = casaInicial;
+    this.notas = [];
+    this.cartas = [];
+    this.casaCidades = []
   }
 
   jogarDados(totalCasas) {
@@ -14,4 +17,7 @@ export default class Jogador {
 
     return { dado1, dado2, soma, novaPosicao: this.localizacaoAtual };
   }
+  comprarCarta(){}
+  comprarCasa(){}
+  pagarAluguel(){}
 }
