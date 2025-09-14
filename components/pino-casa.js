@@ -1,15 +1,13 @@
-Vue.component('peao', {
+Vue.component('pino-casa', {
   props: ['cor'],
   template: `<div :style="estilo"></div>`,
   computed: {
     estilo() {
       return {
-        width: '15px',
-        height: '15px',
-        borderRadius: '50%',
+        width: '10px',
+        height: '10px',
         backgroundColor: this.cor,
-        border: '1px solid #000',
-        margin: '2px auto',
+        margin: '1px auto',
       };
     }
   }

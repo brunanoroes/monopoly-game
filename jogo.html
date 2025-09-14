@@ -9,26 +9,35 @@
   <body>
     <div id="appVue" v-cloak>
       <div>
-        <dados></dados>
+        <button @click="jogarTurno(jogadores[0])">Rodar Dados</button>
       </div>
       <div class="board">
-            <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
-            <div v-for="cidade in cidades" :id="'cidade-' + cidade.id" class="city" :style="{ ...EstilizarObjetoPosicao(cidade), backgroundColor: cidade.cor }" @click="jogadorAtivoAcao(cidade, 1)">
-              <!-- Peão -->{{cidade.nome}}
-              <div v-for="jogador in cidade.jogadores">
-                <pino-jogador :cor="jogador.cor"></pino-jogador>
-              </div>
+        <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
+        <div v-for="casa in casas" 
+            :id="'casa-' + casa.id" 
+            class="city" 
+            :style="EstilizarObjetoPosicao(casa)" 
+            @click="jogadorAtivoAcao(casa, 1)">
+          
+          <!-- Nome da casa -->
+          {{ casa.nome }}
 
-              <!-- Casas -->
-              <div v-for="(casa, index) in cidade.listaCasas" :key="index">
-                <pino-casa :cor="cidade.cor"></pino-casa>
-              </div>
-            </div>
+          <!-- Jogadores nesta casa -->
+          <div v-for="jogador in casa.listaJogadores" :key="jogador.nome">
+            <peao :cor="jogador.cor"></peao>
           </div>
+
+          <!-- Construções nesta casa -->
+          <div v-for="(c, index) in casa.listaCasas" :key="index">
+            <pino-casa :cor="c.cor"></pino-casa>
+          </div>
+        </div>
     </div>
 
     <!-- Vue 2 -->
     <script src="assets/vue.js"></script>
+    <script src="components/pino-casa.js"></script>
+    <script src="components/peao.js"></script>
 
     <!-- App principal -->
     <script type="module" src="jogo.js"></script>
