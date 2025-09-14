@@ -1,0 +1,35 @@
+/* Estilo da Board (fundo) */
+.board {
+  position: relative;
+  aspect-ratio: 16 / 9; /* ou a proporção real da imagem */
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.imagem-fundo {
+  position: absolute; /* <- necessário para fixar como fundo */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* mantém proporção sem cortar */
+  z-index: 0; /* envia a imagem para trás */
+  pointer-events: none; /* impede que a imagem bloqueie cliques */
+}
+
+.city {
+  position: absolute;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  justify-content: center;
+  font-size: 10px; /* Ajuste do tamanho do texto da cidade */
+  color: white;
+  font-weight: bold;
+  z-index: 1;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}

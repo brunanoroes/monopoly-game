@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monopoly - Jogo</title>
+    <link rel="stylesheet" href="css/jogo.css" />
+  </head>
+  <body>
+    <div id="appVue" v-cloak>
+      <div>
+        <dados></dados>
+      </div>
+      <div class="board">
+            <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
+            <div v-for="cidade in cidades" :id="'cidade-' + cidade.id" class="city" :style="{ ...EstilizarObjetoPosicao(cidade), backgroundColor: cidade.cor }" @click="jogadorAtivoAcao(cidade, 1)">
+              <!-- Peão -->{{cidade.nome}}
+              <div v-for="jogador in cidade.jogadores">
+                <pino-jogador :cor="jogador.cor"></pino-jogador>
+              </div>
+
+              <!-- Casas -->
+              <div v-for="(casa, index) in cidade.listaCasas" :key="index">
+                <pino-casa :cor="cidade.cor"></pino-casa>
+              </div>
+            </div>
+          </div>
+    </div>
+
+    <!-- Vue 2 -->
+    <script src="assets/vue.js"></script>
+
+    <!-- App principal -->
+    <script type="module" src="jogo.js"></script>
+  </body>
+</html>
