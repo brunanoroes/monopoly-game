@@ -38,6 +38,10 @@ new Vue({
       // adiciona na nova casa
       this.casas[jogador.localizacaoAtual].listaJogadores.push(jogador);
 
+      if(this.casas[jogador.localizacaoAtual].tipoEspaco === 2){
+        //this.mostraModalComprarouAlugar
+      }
+
       console.log(`${jogador.nome} rolou ${resultado.dado1} + ${resultado.dado2} = ${resultado.soma}, nova posição: ${resultado.novaPosicao}`);
     }
   },

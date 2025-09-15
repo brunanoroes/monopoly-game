@@ -1,6 +1,6 @@
 const casasJson = [
-  { id: 0, nome: 'Saída', x: 70, y: 90, cor: 'white', listaCasas: [], listaJogadores: [] },
-  { id: 1, nome: 'Mediterranean Avenue', x: 86, y: 95, cor: 'brown', listaCasas: [], listaJogadores: [] },
+  { id: 0, nome: 'Saída', x: 70, y: 90, cor: 'white', listaCasas: [], listaJogadores: [], tipoEspaco: 1 },
+  { id: 1, nome: 'Mediterranean Avenue', x: 86, y: 95, cor: 'brown', listaCasas: [], listaJogadores: [], tipoEspaco: 2 },
   { id: 2, nome: 'Cofre Comunitário', x: 77, y: 95, cor: 'white', listaCasas: [], listaJogadores: [] },
   { id: 3, nome: 'Baltic Avenue', x: 68, y: 95, cor: 'brown', listaCasas: [], listaJogadores: [] },
   { id: 4, nome: 'Imposto de Renda', x: 59, y: 95, cor: 'gray', listaCasas: [], listaJogadores: [] },

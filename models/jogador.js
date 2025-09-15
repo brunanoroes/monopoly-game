@@ -3,7 +3,7 @@ export default class Jogador {
     this.nome = nome;
     this.cor = cor;
     this.localizacaoAtual = casaInicial;
-    this.notas = [];
+    this.dinheiro = 50.00;
     this.cartas = [];
     this.casaCidades = []
   }
