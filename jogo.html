@@ -8,12 +8,27 @@
   </head>
   <body>
     <div id="appVue" v-cloak>
-      <div>
-        <button @click="jogarTurno(jogadores[0])">Rodar Dados</button>
+      <div class="jogadores">
+        <div 
+          v-for="jogador in jogadores" 
+          :key="jogador.nome"
+          :class="['jogador', { ativo: jogador === jogadorAtivo }]"
+        >
+          <span class="nome">{{ jogador.nome }}</span>
+          <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
+        </div>
       </div>
+
+        <button 
+          @click="jogarTurno(jogadorAtivo)"
+          :style="{ backgroundColor: jogadorAtivo.cor, color: '#fff', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }"
+        >
+          Rodar Dados
+        </button>
+
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
-        <div v-for="casa in casas" 
+        <div  v-for="casa in casas" 
             :id="'casa-' + casa.id" 
             class="city" 
             :style="EstilizarObjetoPosicao(casa)" 
@@ -23,21 +38,39 @@
           {{ casa.nome }}
 
           <!-- Jogadores nesta casa -->
-          <div v-for="jogador in casa.listaJogadores" :key="jogador.nome">
-            <peao :cor="jogador.cor"></peao>
+          <div v-for="peaoCor in casa.listaJogadores" :key="peaoCor">
+            <peao :cor="peaoCor"></peao>
           </div>
 
-          <!-- Construções nesta casa -->
-          <div v-for="(c, index) in casa.listaCasas" :key="index">
-            <pino-casa :cor="c.cor"></pino-casa>
+          <pino-casa :casaConstruida="casa.casaConstruida"></pino-casa>
+
+        </div>
+      </div>
+      <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
+
+      <button @click="ComprarCartasTeste()">ComprarCartasTeste</button>
+      <div style="display: flex">
+        <div class="conteiner-cartas-jogo">
+          <div v-for="(carta, index) in jogadorAtivo.cartas" :key="index" style="margin: 4px;">
+            <carta 
+            @click="SelecionarCarta()"
+              :nome="carta.nome" 
+              :conteudo="carta.conteudo" 
+              :descricao="carta.descricao"
+            ></carta>
           </div>
         </div>
-    </div>
+      </div>
+
+  <modal v-if="modal.mostra" :tipo="modal.tipo" :mensagem="modal.mensagem" :precoCompra="modal.precoCompra" :precoCompra="modal.precoAluguel" :precoCompra="modal.precoPagar"></modal>
+  </div>
 
     <!-- Vue 2 -->
     <script src="assets/vue.js"></script>
     <script src="components/pino-casa.js"></script>
     <script src="components/peao.js"></script>
+    <script src="components/dados.js"></script>
+    <script src="components/carta.js"></script>
 
     <!-- App principal -->
     <script type="module" src="jogo.js"></script>

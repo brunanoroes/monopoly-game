@@ -1,17 +1,54 @@
 import casasJson from './data/casas.js';
-import Jogador from './models/jogador.js';
+import cartasJson from './data/cartas.js';
+import TabuleiroModel from './models/TabuleiroModel.js';
 
 new Vue({
   el: '#appVue',
   data: {
     casas: casasJson,
+    cartas: cartasJson,
+    cartasSorte: [],
+    cartasCofre: [],
     jogadores: [],
-    totalCasas: casasJson.length
+    jogadorAtivo: {},
+    totalCasas: casasJson.length,
+    modal: {
+      tipo: 0,
+      mostra: false,
+      mensagem: '',
+      precoCompra: '',
+      precoAluguel: '',
+      precoPagar: '',
+    },
+    dados: {
+      numero1: 0,
+      numero2: 0
+    }
   },
   created() {
-    const jogador1 = new Jogador("Bruna", "red", 0);
-    this.jogadores.push(jogador1);
-    this.casas[jogador1.localizacaoAtual].listaJogadores.push(jogador1);
+    const params = new URLSearchParams(window.location.search);
+    this.nomesJogadores = params.getAll('nomesjogadores[]');
+  },
+  mounted() {
+
+    this.tabuleiro = new TabuleiroModel({
+      nomesJogadores: this.nomesJogadores,
+      casas: this.casas,
+      cartas: this.cartas,
+    });
+
+    this.tabuleiro.MontarTabuleiro();
+
+    // sincronizar os dados de volta
+    this.jogadores = this.tabuleiro.jogadores;
+    this.jogadorAtivo = this.tabuleiro.jogadorAtivo;
+    this.cartasSorte = this.tabuleiro.cartasSorte;
+    this.cartasCofre = this.tabuleiro.cartasCofre;
+  },
+  computed: {
+    jogadoresRestantes() {
+      return this.jogadores.filter(j => j !== this.jogadorAtivo);
+    }
   },
   methods: {
     EstilizarObjetoPosicao(objeto) {
@@ -28,22 +65,64 @@ new Vue({
     },
 
     jogarTurno(jogador) {
-      // tira da casa atual
-      this.casas[jogador.localizacaoAtual].listaJogadores =
-        this.casas[jogador.localizacaoAtual].listaJogadores.filter(j => j !== jogador);
+      //Remove a cor do jogador da casa atual
+      const casaAtual = this.casas[jogador.localizacaoAtual];
+      casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
 
-      // rola os dados e move
+      //Rola os dados
       const resultado = jogador.jogarDados(this.totalCasas);
 
-      // adiciona na nova casa
-      this.casas[jogador.localizacaoAtual].listaJogadores.push(jogador);
+      //Atualiza os números do dado
+      this.dados.numero1 = resultado.dado1;
+      this.dados.numero2 = resultado.dado2;
 
-      if(this.casas[jogador.localizacaoAtual].tipoEspaco === 2){
-        //this.mostraModalComprarouAlugar
+      //Adiciona a cor do jogador na nova casa
+      const novaCasa = this.casas[jogador.localizacaoAtual];
+      if (!novaCasa.listaJogadores) novaCasa.listaJogadores = [];
+      novaCasa.listaJogadores.push(jogador.cor);
+
+      //Verifica ação da casa (ex: comprar/alugar)
+      if (novaCasa.tipoEspaco === 2) {
+        this.modal.mostra = true;
+        this.modal.tipo = 'comprar';
+        this.modal.mensagem = `Você caiu em ${novaCasa.nome}`;
+        this.modal.precoCompra = novaCasa.preco;
       }
 
+      //Log
       console.log(`${jogador.nome} rolou ${resultado.dado1} + ${resultado.dado2} = ${resultado.soma}, nova posição: ${resultado.novaPosicao}`);
+
+      //Passa a vez para o próximo jogador
+      const indexAtual = this.jogadores.indexOf(jogador);
+      const proximoIndex = (indexAtual + 1) % this.jogadores.length;
+      this.jogadorAtivo = this.jogadores[proximoIndex];
+    },
+
+    ComprarCartasTeste() {
+      this.jogadorAtivo.cartas = [
+        {
+          nome: 'Sorte',
+          conteudo: 'Avance até o ponto de partida',
+          descricao: 'Vá diretamente para o ponto de partida (colete R$200).',
+        },
+        {
+          nome: 'Sorte',
+          conteudo: 'Multa de velocidade',
+          descricao: 'Pague R$15.',
+        },
+        {
+          nome: 'Sorte',
+          conteudo: 'Vá para a prisão',
+          descricao: 'Vá diretamente para a prisão. Não passe pelo ponto de partida, não receba R$200.',
+        },
+        {
+          nome: 'Sorte',
+          conteudo: 'Avance até o próximo utilitário',
+          descricao: 'Se não for comprado, você pode comprá-lo. Se for de outro jogador, pague o aluguel.',
+        },
+      ];
     }
+
   },
 });
 
