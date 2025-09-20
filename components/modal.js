@@ -1,4 +1,4 @@
-Vue.component('carta', {
+Vue.component('modal', {
   props: ['tipo'],
   template: `
     <div v-if="tipo === 1">

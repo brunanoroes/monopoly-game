@@ -1,18 +1,53 @@
 import casasJson from './data/casas.js';
-import Jogador from './models/jogador.js';
+import cartasJson from './data/cartas.js';
+import TabuleiroModel from './models/TabuleiroModel.js';
 
 new Vue({
   el: '#appVue',
   data: {
     casas: casasJson,
+    cartas: cartasJson,
+    cartasSorte: [],
+    cartasCofre: [],
     jogadores: [],
-    totalCasas: casasJson.length
+    jogadorAtivo: {},
+    totalCasas: casasJson.length,
+    modal: {
+      tipo: 0,
+      mostra: false,
+      mensagem: '',
+      precoCompra: '',
+      precoAluguel: '',
+      precoPagar: '',
+    },
+    dados: {
+      numero1: 0,
+      numero2: 0
+    }
   },
   created() {
-    const jogador1 = new Jogador("Bruna", "red", 0);
-    this.jogadores.push(jogador1);
-    this.casas[jogador1.localizacaoAtual].listaJogadores.push(jogador1);
+    const params = new URLSearchParams(window.location.search);
+    this.nomesJogadores = params.getAll('nomesjogadores[]');
   },
+  mounted() {
+    this.tabuleiro = new TabuleiroModel({
+      nomesJogadores: this.nomesJogadores,
+      casas: this.casas,
+      jogadores: this.jogadores,
+      cartas: this.cartas,
+    });
+
+    this.tabuleiro.MontarTabuleiro();
+
+    // sincronizar os dados de volta
+    this.jogadores = this.tabuleiro.jogadores;
+    this.jogadorAtivo = this.tabuleiro.jogadorAtivo;
+    this.cartasSorte = this.tabuleiro.cartasSorte;
+    this.cartasCofre = this.tabuleiro.cartasCofre;
+  },
+  // computed(){
+  //   jogadoresRestantes = this.jogadores - jogadorAtivo
+  // },
   methods: {
     EstilizarObjetoPosicao(objeto) {
       return {
@@ -34,6 +69,10 @@ new Vue({
 
       // rola os dados e move
       const resultado = jogador.jogarDados(this.totalCasas);
+
+      this.dados.numero1 = resultado.dado1;
+
+      this.dados.numero2 = resultado.dado2;
 
       // adiciona na nova casa
       this.casas[jogador.localizacaoAtual].listaJogadores.push(jogador);

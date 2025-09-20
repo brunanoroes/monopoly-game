@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Monopoly - Início</title>
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
+  <body>
+    <div id="appVue">
+      <h2>Olá, bem-vindo ao nosso projeto de Monopoly!</h2>
+      <a href="instrucao.html" target="_blank">Instrução</a>
+      <label>Quantos jogadores?</label>
+      <select v-model.number="quantidade">
+        <option value="0" disabled>Selecione</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+
+      <div v-if="quantidade > 0">
+        <label>Quais os nomes dos jogadores?</label>
+        <div v-for="(nome, index) in nomes" :key="index">
+          <input v-model="nomes[index]" placeholder="Nome do jogador" />
+        </div>
+      </div>
+
+      <br />
+      <a :href="linkJogar" v-if="todosNomesPreenchidos && quantidade">Jogar</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+      new Vue({
+        el: '#appVue',
+        data: {
+          quantidade: 0,
+          nomes: [],
+        },
+        watch: {
+          quantidade(novaQtd) {
+            // Atualiza a lista de nomes conforme o número de jogadores
+            this.nomes = Array(novaQtd).fill('');
+          },
+        },
+        computed: {
+          todosNomesPreenchidos() {
+            return this.nomes.every(nome => nome.trim() !== '');
+          },
+          linkJogar() {
+            const params = this.nomes.map((nome, i) => `nomesjogadores[]=${encodeURIComponent(nome)}`).join('&');
+            return `jogo.html?${params}`;
+          },
+        },
+      });
+    </script>
+
+    <!-- Vue 2 -->
+    <script src="assets/vue.js"></script>
+  </body>
+</html>
