@@ -8,17 +8,24 @@
   </head>
   <body>
     <div id="appVue" v-cloak>
-      <!--div v-for="jogador in jogadoresRestantes">
-        {{jogador.nome}}
-        {{jogador.dinheiro}}
+      <div class="jogadores">
+        <div 
+          v-for="jogador in jogadores" 
+          :key="jogador.nome"
+          :class="['jogador', { ativo: jogador === jogadorAtivo }]"
+        >
+          <span class="nome">{{ jogador.nome }}</span>
+          <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
+        </div>
       </div>
-      <div>
-        {{jogadorAtivo.nome}}
-        {{jogadorAtivo.dinheiro}}
-      </div-->
-      <div>
-        <button @click="jogarTurno(jogadores[0])">Rodar Dados</button>
-      </div>
+
+        <button 
+          @click="jogarTurno(jogadorAtivo)"
+          :style="{ backgroundColor: jogadorAtivo.cor, color: '#fff', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }"
+        >
+          Rodar Dados
+        </button>
+
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
         <div  v-for="casa in casas" 

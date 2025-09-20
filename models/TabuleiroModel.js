@@ -1,10 +1,11 @@
 import Jogador from './JogadorModel.js';
 
 export default class TabuleiroModel {
-  constructor({ nomesJogadores, casas, jogadores, cartas}) {
+  constructor({ nomesJogadores, casas, cartas}) {
     this.nomesJogadores = nomesJogadores;
+    this.cartas = cartas;
     this.casas = casas;
-    this.jogadores = jogadores;
+    this.jogadores = [];
     this.cartasSorte = [];
     this.cartasCofre = [];
     this.jogadorAtivo = null;
@@ -48,7 +49,7 @@ export default class TabuleiroModel {
     this.cartasSorte = embaralhar(this.cartasSorte);
     this.cartasCofre = embaralhar(this.cartasCofre);
   }
-  
+
   async MontarTabuleiro() {
     this.PosicionarPeoes();
     this.EmbaralharCartas();
