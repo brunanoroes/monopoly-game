@@ -1,9 +1,9 @@
 Vue.component('carta', {
-  props: ['tipo'],
+  props: ['nome', 'conteudo', 'descricao'],
   template: `
-    <div v-if="tipo === 1">
-    </div>
-    <div v-if="tipo === 2">
+    <div class="carta-jogavel" @click="$emit('click')">
+      <h4>{{ nome }}</h4>
+      <p >{{ conteudo }} {{ descricao }}</p>
     </div>
   `,
 });

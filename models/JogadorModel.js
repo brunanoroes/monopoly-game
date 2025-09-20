@@ -1,5 +1,6 @@
 export default class Jogador {
-  constructor(nome, cor, dinheiroInicial = 1500, casaInicial = 0) {
+  constructor(tipo, nome, cor, dinheiroInicial = 1500, casaInicial = 0) {
+    this.tipo = tipo;
     this.nome = nome;
     this.cor = cor;
     this.dinheiro = dinheiroInicial;

@@ -12,12 +12,21 @@ export default class TabuleiroModel {
   }
 
   PosicionarPeoes() {
-    const coresPeao = ['pink', 'blue', 'green', 'red', 'yellow', 'orange'];
+    const coresPeao = ['pink', 'blue', 'green', 'red'];
     this.jogadores.length = 0;
 
-    this.nomesJogadores.forEach((nome, index) => {
+    // Cria uma lista de 4 nomes: pega os nomes fornecidos e completa com bots se necessário
+    const nomesCompletos = [...this.nomesJogadores];
+    while (nomesCompletos.length < 4) {
+      const botNumero = nomesCompletos.length + 1;
+      nomesCompletos.push(`Bot${botNumero}`);
+    }
+
+    nomesCompletos.forEach((nome, index) => {
       const cor = coresPeao[index % coresPeao.length];
-      const jogador = new Jogador(nome, cor, 1500);
+      const tipo = index < this.nomesJogadores.length ? 'jogador' : 'bot';
+
+      const jogador = new Jogador(tipo, nome, cor, 1500);
 
       // Jogador começa na saída (casa com nome "Saída")
       const casaSaida = this.casas.find(c => c.nome === 'Saída');
@@ -31,6 +40,7 @@ export default class TabuleiroModel {
 
     this.jogadorAtivo = this.jogadores[0];
   }
+
 
   EmbaralharCartas() {
     // Separa em dois montes
