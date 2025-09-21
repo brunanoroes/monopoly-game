@@ -18,7 +18,7 @@ export default class TabuleiroModel {
     const nomesCompletos = [...this.nomesJogadores];
     while (nomesCompletos.length < 4) {
       const botNumero = nomesCompletos.length + 1;
-      nomesCompletos.push(`Bot${botNumero}`);
+      nomesCompletos.push(`Bot ${botNumero}`);
     }
 
     nomesCompletos.forEach((nome, index) => {
@@ -36,6 +36,7 @@ export default class TabuleiroModel {
 
       this.jogadores.push(jogador);
     });
+
 
     this.jogadorAtivo = this.jogadores[0];
   }
@@ -61,9 +62,13 @@ export default class TabuleiroModel {
 
   atualizarCasaJogador(jogador, posicao) {
     //Remove a cor do jogador da casa atual
+
     const casaAtual = this.casas[jogador.localizacaoAtual];
     casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
 
+    console.log([...casaAtual.listaJogadores.filter(cor => cor !== jogador.cor)]);
+    console.log(casaAtual);
+    console.log([...this.casas]);
     // Adiciona a cor do jogador na nova casa
     const novaCasa = this.casas[posicao];
     if (!novaCasa.listaJogadores) novaCasa.listaJogadores = [];
@@ -80,16 +85,16 @@ export default class TabuleiroModel {
 
   //Funções das casas
 
-  realizarFuncao(jogador, casa, modal, params) {
+  realizarFuncao(jogador, casa, modal) {
     switch (casa.tipo) {
       case 'sorte':
-        this.sorte(jogador, casa, modal, params);
+        this.sorte(jogador, casa, modal);
         break;
       case 'cofre':
-        this.cofre(jogador, casa, modal, params);
+        this.cofre(jogador, casa, modal);
         break;
       case 'propriedade':
-        this.propriedade(jogador, casa, modal, params);
+        this.propriedade(jogador, casa, modal);
         break;
       // case 'teste':
       //   this.te(jogador, casa, modal, params);

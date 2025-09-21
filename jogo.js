@@ -7,9 +7,6 @@ new Vue({
   el: '#appVue',
   data: {
     tabuleiro: null,
-    casas: casasJson,
-    cartasSorte: cartasSorte,
-    cartasCofre: cartasCofre,
     jogadorAtivo: {},
     totalCasas: casasJson.length,
     modal: {
@@ -29,9 +26,9 @@ new Vue({
 
     this.tabuleiro = new TabuleiroModel({
       nomesJogadores: this.nomesJogadores,
-      casas: this.casas,
-      cartasSorte: this.cartasSorte,
-      cartasCofre: this.cartasCofre
+      casas: casasJson,
+      cartasSorte: cartasSorte,
+      cartasCofre: cartasCofre
     });
 
     this.tabuleiro.MontarTabuleiro();
@@ -58,7 +55,7 @@ new Vue({
       let lancamentos = 0;
       let numero1 = 0;
       let numero2 = 0;
-      while (numero1 === numero2 || lancamentos < 3) {
+      while (numero1 === numero2 && lancamentos < 3) {
         lancamentos++;
         //Rola os dados
         const resultado = jogador.jogarDados(this.totalCasas);
@@ -74,8 +71,8 @@ new Vue({
         this.tabuleiro.realizarFuncao(jogador, novaCasa, this.modal, novaCasa.params);
 
         //Log
-        console.log(`${jogador.nome} rolou ${resultado.dado1} + ${resultado.dado2} = ${resultado.soma}, nova posição: ${resultado.novaPosicao}`);
-        if (lancamentos >= 3) this.tabuleiro.prisao(jogador);
+        console.log(`${jogador.nome} rolou ${numero1} + ${numero2} = ${resultado.soma}, nova posição: ${resultado.novaPosicao}`);
+        //if (lancamentos >= 3) this.tabuleiro.prisao(jogador);
       }
       //Passa a vez para o próximo jogador
       this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(jogador);

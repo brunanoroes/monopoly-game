@@ -28,7 +28,7 @@
 
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
-        <div  v-for="casa in casas" 
+        <div  v-for="casa in tabuleiro.casas" 
             :id="'casa-' + casa.id" 
             class="city" 
             :style="EstilizarObjetoPosicao(casa)" 
