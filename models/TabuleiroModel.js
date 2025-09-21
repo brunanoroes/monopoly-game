@@ -4,6 +4,7 @@ export default class TabuleiroModel {
   constructor({ nomesJogadores, casas, cartasSorte, cartasCofre }) {
     this.nomesJogadores = nomesJogadores;
     this.casas = casas;
+    this.totalCasas = casas.length;
     this.jogadores = [];
     this.cartasSorte = cartasSorte;
     this.cartasCofre = cartasCofre;
@@ -33,7 +34,6 @@ export default class TabuleiroModel {
         if (!casaSaida.listaJogadores) casaSaida.listaJogadores = [];
         casaSaida.listaJogadores.push(jogador.cor);
       }
-
       this.jogadores.push(jogador);
     });
 
@@ -60,19 +60,19 @@ export default class TabuleiroModel {
     this.EmbaralharCartas();
   }
 
-  atualizarCasaJogador(jogador, posicao) {
+  atualizarCasaJogador(jogador, soma) {
     //Remove a cor do jogador da casa atual
 
     const casaAtual = this.casas[jogador.localizacaoAtual];
     casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
-
-    console.log([...casaAtual.listaJogadores.filter(cor => cor !== jogador.cor)]);
-    console.log(casaAtual);
-    console.log([...this.casas]);
+    
+    //Calcula nova posição
+    const novaPosicao = (jogador.localizacaoAtual + soma) % this.totalCasas;
     // Adiciona a cor do jogador na nova casa
-    const novaCasa = this.casas[posicao];
+    const novaCasa = this.casas[novaPosicao];
     if (!novaCasa.listaJogadores) novaCasa.listaJogadores = [];
     novaCasa.listaJogadores.push(jogador.cor);
+    jogador.localizacaoAtual = novaPosicao;
     return novaCasa;
   }
 

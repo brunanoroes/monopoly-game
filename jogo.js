@@ -8,7 +8,6 @@ new Vue({
   data: {
     tabuleiro: null,
     jogadorAtivo: {},
-    totalCasas: casasJson.length,
     modal: {
       tipo: 0,
       mostra: false,
@@ -57,15 +56,15 @@ new Vue({
       let numero2 = 0;
       while (numero1 === numero2 && lancamentos < 3) {
         lancamentos++;
-        //Rola os dados
-        const resultado = jogador.jogarDados(this.totalCasas);
 
-        //Atualiza os números do dado
+        //Lançar dados
+        const resultado = jogador.jogarDados(this.totalCasas);
+    
         numero1 = resultado.dado1;
         numero2 = resultado.dado2;
 
         //Atualiza a casa do jogador no tabuleiro
-        const novaCasa = this.tabuleiro.atualizarCasaJogador(jogador, resultado.novaPosicao);
+        const novaCasa = this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
         //Realiza ação da casa (ex: comprar/alugar)
         this.tabuleiro.realizarFuncao(jogador, novaCasa, this.modal, novaCasa.params);

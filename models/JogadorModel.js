@@ -8,15 +8,11 @@ export default class Jogador {
     this.propriedades = []; 
   }
 
-  jogarDados(totalCasas) {
+  jogarDados() {
     const dado1 = Math.floor(Math.random() * 6) + 1;
     const dado2 = Math.floor(Math.random() * 6) + 1;
     const soma = dado1 + dado2;
-
-    // atualiza posição no tabuleiro
-    this.localizacaoAtual = (this.localizacaoAtual + soma) % totalCasas;
-
-    return { dado1, dado2, soma, novaPosicao: this.localizacaoAtual };
+    return { dado1, dado2, soma };
   }
 
   comprarCasa(casa) {
