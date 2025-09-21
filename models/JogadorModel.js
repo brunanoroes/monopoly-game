@@ -5,7 +5,7 @@ export default class Jogador {
     this.cor = cor;
     this.dinheiro = dinheiroInicial;
     this.localizacaoAtual = casaInicial;
-    this.cartas = []; // propriedades ou cartas sorte/cofre
+    this.propriedades = []; 
   }
 
   jogarDados(totalCasas) {
@@ -40,5 +40,13 @@ export default class Jogador {
 
   receber(valor) {
     this.dinheiro += valor;
+  }
+
+  pagar(valor) {
+    if (this.dinheiro >= valor) {
+      this.dinheiro -= valor;
+      return true;
+    }
+    return false;
   }
 }

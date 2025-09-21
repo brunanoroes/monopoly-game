@@ -1,13 +1,12 @@
 import Jogador from './JogadorModel.js';
 
 export default class TabuleiroModel {
-  constructor({ nomesJogadores, casas, cartas}) {
+  constructor({ nomesJogadores, casas, cartasSorte, cartasCofre }) {
     this.nomesJogadores = nomesJogadores;
-    this.cartas = cartas;
     this.casas = casas;
     this.jogadores = [];
-    this.cartasSorte = [];
-    this.cartasCofre = [];
+    this.cartasSorte = cartasSorte;
+    this.cartasCofre = cartasCofre;
     this.jogadorAtivo = null;
   }
 
@@ -41,12 +40,7 @@ export default class TabuleiroModel {
     this.jogadorAtivo = this.jogadores[0];
   }
 
-
   EmbaralharCartas() {
-    // Separa em dois montes
-    this.cartasSorte = this.cartas.filter(c => c.nome === 'Sorte');
-    this.cartasCofre = this.cartas.filter(c => c.nome === 'Cofre Comunitário');
-
     // Embaralhar usando Fisher-Yates
     const embaralhar = (array) => {
       for (let i = array.length - 1; i > 0; i--) {
@@ -64,4 +58,113 @@ export default class TabuleiroModel {
     this.PosicionarPeoes();
     this.EmbaralharCartas();
   }
+
+  atualizarCasaJogador(jogador, posicao) {
+    //Remove a cor do jogador da casa atual
+    const casaAtual = this.casas[jogador.localizacaoAtual];
+    casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
+
+    // Adiciona a cor do jogador na nova casa
+    const novaCasa = this.casas[posicao];
+    if (!novaCasa.listaJogadores) novaCasa.listaJogadores = [];
+    novaCasa.listaJogadores.push(jogador.cor);
+    return novaCasa;
+  }
+
+  getProximoJogadorAtivo(jogador) {
+    const indexAtual = this.jogadores.indexOf(jogador);
+    const proximoIndex = (indexAtual + 1) % this.jogadores.length;
+    this.jogadorAtivo = this.jogadores[proximoIndex];
+    return this.jogadorAtivo;
+  }
+
+  //Funções das casas
+
+  realizarFuncao(jogador, casa, modal, params) {
+    switch (casa.tipo) {
+      case 'sorte':
+        this.sorte(jogador, casa, modal, params);
+        break;
+      case 'cofre':
+        this.cofre(jogador, casa, modal, params);
+        break;
+      case 'propriedade':
+        this.propriedade(jogador, casa, modal, params);
+        break;
+      // case 'teste':
+      //   this.te(jogador, casa, modal, params);
+      //   break;
+      }
+    }
+
+  sorte(jogador, modal) {
+    const carta = this.cartasSorte.shift(); // pega a primeira carta
+    this.cartasSorte.push(carta); // coloca no final do baralho
+
+    modal.tipo = 1;
+    modal.mostra = true;
+    modal.mensagem = carta.descricao || carta.conteudo;
+
+    // Exemplos de efeitos simples:
+    if (carta.conteudo.includes('ponto de partida')) {
+      jogador.localizacaoAtual = 0;
+      jogador.receber(200);
+    }
+    if (carta.conteudo.includes('Multa')) {
+      jogador.pagar(15);
+    }
+    if (carta.conteudo.includes('prisão')) {
+      jogador.localizacaoAtual = 10; // posição da prisão
+    }
+  }
+
+  cofre(jogador, modal) {
+    const carta = this.cartasCofre.shift();
+    this.cartasCofre.push(carta);
+
+    modal.tipo = 2;
+    modal.mostra = true;
+    modal.mensagem = carta.descricao || carta.conteudo;
+
+    if (carta.conteudo.includes('Receba')) {
+      const valor = parseInt(carta.descricao.replace(/\D/g, '')) || 0;
+      jogador.receber(valor);
+    }
+    if (carta.conteudo.includes('Pague')) {
+      const valor = parseInt(carta.descricao.replace(/\D/g, '')) || 0;
+      jogador.pagar(valor);
+    }
+    if (carta.conteudo.includes('prisão')) {
+      jogador.localizacaoAtual = 10;
+    }
+    // Adapte para outros efeitos conforme necessário
+  }
+
+  propriedade(jogador, casa, modal, params) {
+    if (!casa.proprietarioCor) {
+      // Casa sem dono, pode comprar
+      modal.tipo = 3;
+      modal.mostra = true;
+      modal.mensagem = `Deseja comprar ${casa.nome} por R$${casa.prices ? casa.prices[0] : 0}?`;
+      modal.precoCompra = casa.prices ? casa.prices[0] : 0;
+      // A lógica de compra deve ser tratada no Vue após confirmação do usuário
+    } else if (casa.proprietarioCor !== jogador.cor) {
+      // Pagar aluguel
+      const aluguel = casa.fee ? casa.fee[casa.casaConstruida || 0] : 0;
+      modal.tipo = 4;
+      modal.mostra = true;
+      modal.mensagem = `Pague aluguel de R$${aluguel} para o proprietário.`;
+      modal.precoAluguel = aluguel;
+      jogador.pagar(aluguel);
+      // Encontrar o proprietário e pagar
+      const proprietario = this.jogadores.find(j => j.cor === casa.proprietarioCor);
+      if (proprietario) proprietario.receber(aluguel);
+    } else {
+      // O jogador caiu em sua própria propriedade
+      modal.tipo = 5;
+      modal.mostra = true;
+      modal.mensagem = `Você está em sua própria propriedade.`;
+    }
+  }
+
 }
