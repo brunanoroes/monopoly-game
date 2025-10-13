@@ -1,6 +1,5 @@
 import casasJson from './data/casas.js';
 import cartasSorte from './data/cartasSorte.js';
-import cartasCofre from './data/cartasCofre.js';
 import TabuleiroModel from './models/TabuleiroModel.js';
 
 new Vue({
@@ -9,13 +8,14 @@ new Vue({
     tabuleiro: null,
     jogadorAtivo: {},
     modal: {
-      tipo: 0,
+      tipo: 1,
       mostra: false,
-      mensagem: '',
-      precoCompra: '',
-      precoAluguel: '',
-      precoPagar: '',
+      mensagem: "",
+      prices: [],
+      selected: 0,
+      mensagemAlerta: "",
     }
+
   },
   created() {
     const params = new URLSearchParams(window.location.search);
@@ -24,13 +24,10 @@ new Vue({
   mounted() {
 
     this.tabuleiro = new TabuleiroModel({
-      nomesJogadores: this.nomesJogadores,
-      casas: casasJson,
-      cartasSorte: cartasSorte,
-      cartasCofre: cartasCofre
+      nomesJogadores: this.nomesJogadores
     });
 
-    this.tabuleiro.MontarTabuleiro();
+    this.tabuleiro.MontarTabuleiro(cartasSorte, casasJson);
 
     this.jogadorAtivo = this.tabuleiro.jogadorAtivo;
   },
@@ -66,18 +63,22 @@ new Vue({
         //Atualiza a casa do jogador no tabuleiro
         const novaCasa = this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
-        //Realiza ação da casa (ex: comprar/alugar)
-        this.tabuleiro.realizarFuncao(jogador, novaCasa, this.modal, novaCasa.params);
-
         //Log
         console.log(`${jogador.nome} rolou ${numero1} + ${numero2} = ${resultado.soma}, nova posição: ${resultado.novaPosicao}`);
+
+        //Realiza ação da casa (ex: comprar/alugar)
+        this.tabuleiro.realizarFuncao(jogador, novaCasa, this.modal);
+
         //if (lancamentos >= 3) this.tabuleiro.prisao(jogador);
       }
       //Passa a vez para o próximo jogador
       this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(jogador);
     },
-
-
-  },
+    confirmarCompra() {
+      this.tabuleiro.comprarPropriedade(this.jogadorAtivo, this.modal.selected, this.modal);
+    },
+    dismiss(){
+      this.modal.mostra = false;
+    }
+  }
 });
-

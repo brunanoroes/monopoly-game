@@ -47,14 +47,16 @@
         </div>
       </div>
 
-  <modal v-if="modal.mostra" :tipo="modal.tipo" :mensagem="modal.mensagem" :precoCompra="modal.precoCompra" :precoCompra="modal.precoAluguel" :precoCompra="modal.precoPagar"></modal>
-  </div>
+      <modal v-show="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @dismiss="dismiss"></modal>
+
+    </div>
 
     <!-- Vue 2 -->
     <script src="assets/vue.js"></script>
     <script src="components/pino-casa.js"></script>
     <script src="components/peao.js"></script>
     <script src="components/dados.js"></script>
+    <script src="components/modal.js"></script>
 
     <!-- App principal -->
     <script type="module" src="jogo.js"></script>
