@@ -1,9 +1,45 @@
 Vue.component('modal', {
-  props: ['tipo'],
+  props: ['modal',],
   template: `
-    <div v-if="tipo === 1">
+    <div>
+      <div v-if="modal.tipo === 1">
+        <div class="modal-overlay">
+          <div class="modal-content">
+          <label>{{ modal.mensagem }}</label><br/>
+          <p>{{modal.mensagemAlerta}}</p>
+            <input type="radio" v-model="modal.selected" value="0"/>Terreno {{ modal.prices[0] || 0 }}R$ <br/>
+            <input type="radio" v-model="modal.selected" value="1"/>Casa 1 {{ modal.prices[1] || 0 }}R$ <br/>
+            <input type="radio" v-model="modal.selected" value="2"/>Casa 2 {{ modal.prices[2] || 0 }}R$ <br/>
+            <input type="radio" v-model="modal.selected" value="3"/>Hotel {{ modal.prices[3] || 0 }}R$ <br/>
+            <button @click="$emit('confirmar-compra')">Comprar</button>
+            <button @click="$emit('dismiss')">Não</button>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="modal.tipo === 2">
+        <div class="modal-overlay">
+          <div class="modal-content">
+            {{ modal.mensagem }}
+          </div>
+        </div>
+      </div>
+
+      <div v-if="modal.tipo === 3">
+        <div class="modal-overlay">
+          <div class="modal-content">
+            {{ modal.mensagem }}
+          </div>
+        </div>
+      </div>
+
+      <div v-if="modal.tipo === 4">
+        <div class="modal-overlay">
+          <div class="modal-content">
+            {{ modal.mensagem }}
+          </div>
+        </div>
+      </div>
     </div>
-    <div v-if="tipo === 2">
-    </div>
-  `,
+  `
 });

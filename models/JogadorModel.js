@@ -5,18 +5,14 @@ export default class Jogador {
     this.cor = cor;
     this.dinheiro = dinheiroInicial;
     this.localizacaoAtual = casaInicial;
-    this.cartas = []; // propriedades ou cartas sorte/cofre
+    this.propriedades = []; 
   }
 
-  jogarDados(totalCasas) {
+  jogarDados() {
     const dado1 = Math.floor(Math.random() * 6) + 1;
     const dado2 = Math.floor(Math.random() * 6) + 1;
     const soma = dado1 + dado2;
-
-    // atualiza posição no tabuleiro
-    this.localizacaoAtual = (this.localizacaoAtual + soma) % totalCasas;
-
-    return { dado1, dado2, soma, novaPosicao: this.localizacaoAtual };
+    return { dado1, dado2, soma };
   }
 
   comprarCasa(casa) {
@@ -40,5 +36,13 @@ export default class Jogador {
 
   receber(valor) {
     this.dinheiro += valor;
+  }
+
+  pagar(valor) {
+    if (this.dinheiro >= valor) {
+      this.dinheiro -= valor;
+      return true;
+    }
+    return false;
   }
 }

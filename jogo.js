@@ -1,29 +1,21 @@
 import casasJson from './data/casas.js';
-import cartasJson from './data/cartas.js';
+import cartasSorte from './data/cartasSorte.js';
 import TabuleiroModel from './models/TabuleiroModel.js';
 
 new Vue({
   el: '#appVue',
   data: {
-    casas: casasJson,
-    cartas: cartasJson,
-    cartasSorte: [],
-    cartasCofre: [],
-    jogadores: [],
+    tabuleiro: null,
     jogadorAtivo: {},
-    totalCasas: casasJson.length,
     modal: {
-      tipo: 0,
+      tipo: 1,
       mostra: false,
-      mensagem: '',
-      precoCompra: '',
-      precoAluguel: '',
-      precoPagar: '',
-    },
-    dados: {
-      numero1: 0,
-      numero2: 0
+      mensagem: "",
+      prices: [],
+      selected: 0,
+      mensagemAlerta: "",
     }
+
   },
   created() {
     const params = new URLSearchParams(window.location.search);
@@ -32,23 +24,12 @@ new Vue({
   mounted() {
 
     this.tabuleiro = new TabuleiroModel({
-      nomesJogadores: this.nomesJogadores,
-      casas: this.casas,
-      cartas: this.cartas,
+      nomesJogadores: this.nomesJogadores
     });
 
-    this.tabuleiro.MontarTabuleiro();
+    this.tabuleiro.MontarTabuleiro(cartasSorte, casasJson);
 
-    // sincronizar os dados de volta
-    this.jogadores = this.tabuleiro.jogadores;
     this.jogadorAtivo = this.tabuleiro.jogadorAtivo;
-    this.cartasSorte = this.tabuleiro.cartasSorte;
-    this.cartasCofre = this.tabuleiro.cartasCofre;
-  },
-  computed: {
-    jogadoresRestantes() {
-      return this.jogadores.filter(j => j !== this.jogadorAtivo);
-    }
   },
   methods: {
     EstilizarObjetoPosicao(objeto) {
@@ -65,64 +46,39 @@ new Vue({
     },
 
     jogarTurno(jogador) {
-      //Remove a cor do jogador da casa atual
-      const casaAtual = this.casas[jogador.localizacaoAtual];
-      casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
 
-      //Rola os dados
-      const resultado = jogador.jogarDados(this.totalCasas);
+      //Rola os dados até que não sejam iguais ou sejam iguais 3 vezes
+      let lancamentos = 0;
+      let numero1 = 0;
+      let numero2 = 0;
+      while (numero1 === numero2 && lancamentos < 3) {
+        lancamentos++;
 
-      //Atualiza os números do dado
-      this.dados.numero1 = resultado.dado1;
-      this.dados.numero2 = resultado.dado2;
+        //Lançar dados
+        const resultado = jogador.jogarDados(this.totalCasas);
+    
+        numero1 = resultado.dado1;
+        numero2 = resultado.dado2;
 
-      //Adiciona a cor do jogador na nova casa
-      const novaCasa = this.casas[jogador.localizacaoAtual];
-      if (!novaCasa.listaJogadores) novaCasa.listaJogadores = [];
-      novaCasa.listaJogadores.push(jogador.cor);
+        //Atualiza a casa do jogador no tabuleiro
+        const novaCasa = this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
-      //Verifica ação da casa (ex: comprar/alugar)
-      if (novaCasa.tipoEspaco === 2) {
-        this.modal.mostra = true;
-        this.modal.tipo = 'comprar';
-        this.modal.mensagem = `Você caiu em ${novaCasa.nome}`;
-        this.modal.precoCompra = novaCasa.preco;
+        //Log
+        console.log(`${jogador.nome} rolou ${numero1} + ${numero2} = ${resultado.soma}, nova posição: ${resultado.novaPosicao}`);
+
+        //Realiza ação da casa (ex: comprar/alugar)
+        this.tabuleiro.realizarFuncao(jogador, novaCasa, this.modal);
+
+        //if (lancamentos >= 3) this.tabuleiro.prisao(jogador);
       }
-
-      //Log
-      console.log(`${jogador.nome} rolou ${resultado.dado1} + ${resultado.dado2} = ${resultado.soma}, nova posição: ${resultado.novaPosicao}`);
-
       //Passa a vez para o próximo jogador
-      const indexAtual = this.jogadores.indexOf(jogador);
-      const proximoIndex = (indexAtual + 1) % this.jogadores.length;
-      this.jogadorAtivo = this.jogadores[proximoIndex];
+      this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(jogador);
     },
-
-    ComprarCartasTeste() {
-      this.jogadorAtivo.cartas = [
-        {
-          nome: 'Sorte',
-          conteudo: 'Avance até o ponto de partida',
-          descricao: 'Vá diretamente para o ponto de partida (colete R$200).',
-        },
-        {
-          nome: 'Sorte',
-          conteudo: 'Multa de velocidade',
-          descricao: 'Pague R$15.',
-        },
-        {
-          nome: 'Sorte',
-          conteudo: 'Vá para a prisão',
-          descricao: 'Vá diretamente para a prisão. Não passe pelo ponto de partida, não receba R$200.',
-        },
-        {
-          nome: 'Sorte',
-          conteudo: 'Avance até o próximo utilitário',
-          descricao: 'Se não for comprado, você pode comprá-lo. Se for de outro jogador, pague o aluguel.',
-        },
-      ];
+    confirmarCompra() {
+      this.tabuleiro.comprarPropriedade(this.jogadorAtivo, this.modal.selected, this.modal);
+    },
+    dismiss(){
+      this.modal.mostra = false;
     }
-
-  },
+  }
 });
-
