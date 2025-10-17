@@ -58,7 +58,10 @@ export default class TabuleiroModel {
 		this.jogadorAtivo = this.jogadores[0];
 	}
 
-	CriarCartas() {
+	CriarCartas(cartasSorte = [], cartasCofre = []) {
+		this.cartasSorte = cartasSorte;
+		this.cartasCofre = cartasCofre;
+
 		// Embaralhar usando Fisher-Yates
 		const embaralhar = (array) => {
 			for (let i = array.length - 1; i > 0; i--) {
@@ -67,15 +70,9 @@ export default class TabuleiroModel {
 			}
 			return array;
 		};
+
 		this.cartasSorte = embaralhar(this.cartasSorte);
 		this.cartasCofre = embaralhar(this.cartasCofre);
-	}
-
-	async MontarTabuleiro(cartasSorte, casasJson) {
-		this.CriarCartas(cartasSorte);
-		this.PosicionarPeoes();
-		
-		this.CriarCasas(casasJson);
 	}
 
 	atualizarCasaJogador(jogador, soma) {
@@ -106,5 +103,11 @@ export default class TabuleiroModel {
 	realizarFuncao(jogador, casa, modal) {
 		casa.funcao(jogador, modal);
 	}
+	async MontarTabuleiro(cartasSorte, casasJson) {
+		this.CriarCasas(casasJson);
+		this.CriarCartas(cartasSorte);
+		this.PosicionarPeoes();
+	}
+
 
 }

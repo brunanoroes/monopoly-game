@@ -17,14 +17,14 @@
           <span class="nome">{{ jogador.nome }}</span>
           <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
         </div>
-      </div>
-
+        
         <button 
           @click="jogarTurno(jogadorAtivo)"
           :style="{ backgroundColor: jogadorAtivo.cor, color: '#fff', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }"
         >
           Rodar Dados
         </button>
+      </div>
 
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
