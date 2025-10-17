@@ -8,17 +8,6 @@
   </head>
   <body>
     <div id="appVue" v-cloak>
-      <div class="jogadores">
-        <div 
-          v-for="jogador in tabuleiro ? tabuleiro.jogadores : []" 
-          :key="jogador.nome"
-          :class="['jogador', { ativo: jogador === jogadorAtivo }]"
-        >
-          <span class="nome">{{ jogador.nome }}</span>
-          <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
-        </div>
-      </div>
-
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
         <div :style="EstilizarObjetoPosicao(areadados)">
@@ -29,6 +18,16 @@
           >
             Rodar Dados
           </button>
+        </div>
+        <div class="jogadores" :style="EstilizarObjetoPosicao(jogodiv)">
+          <div 
+            v-for="jogador in tabuleiro ? tabuleiro.jogadores : []" 
+            :key="jogador.nome"
+            :class="['jogador', { ativo: jogador === jogadorAtivo }]"
+          >
+            <span class="nome">{{ jogador.nome }}</span>
+            <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
+          </div>
         </div>
         <div v-for="casa in tabuleiro.casas" 
             :id="'casa-' + casa.id" 

@@ -17,6 +17,7 @@ new Vue({
       mensagemAlerta: "",
     },
     areadados: {x: 45, y: 50},
+    jogodiv: {x: 5, y: 10},
     dados: {
       numero1 : 1,
       numero2 : 1
