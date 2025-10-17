@@ -1,14 +1,15 @@
 Vue.component('pino-casa', {
-  props: ['casaConstruida'],
-  template: `<div :style="estilo"></div>`,
+  props: ['casaConstruida', 'proprietarioCor'],
+  template: `
+    <img 
+      :src="imagem" 
+      :alt="'Casa ' + proprietarioCor" 
+      class="pino-casa"
+    >
+  `,
   computed: {
-    estilo() {
-      return {
-        width: '10px',
-        height: '10px',
-        backgroundColor: this.casaConstruida,
-        margin: '1px auto',
-      };
+    imagem() {
+      return `assets/casas/${this.proprietarioCor}/casa${this.casaConstruida}.png`;
     }
   }
 });

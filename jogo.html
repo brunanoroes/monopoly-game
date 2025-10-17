@@ -47,9 +47,13 @@
                 :total="casa.listaJogadores.length">
           </peao>
 
-          <pino-casa :casaConstruida="casa.casaConstruida"></pino-casa>
+          <pino-casa v-if="casa.casaConstruida"
+            :casa-construida="casa.casaConstruida" 
+            :proprietario-cor="casa.proprietarioCor">
+          </pino-casa>
 
         </div>
+      </div>
 
 
       <modal v-show="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @dismiss="dismiss"></modal>

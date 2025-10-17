@@ -5,8 +5,8 @@ export default class Propriedade extends Casa {
         super(id, nome, x, y, listaJogadores);
         this.prices = prices;
         this.fee = fee;
-        this.casaConstruida = casaConstruida;
-        this.proprietarioCor = proprietarioCor;
+        this.casaConstruida = casaConstruida; //1, 2, 3 ou 4
+        this.proprietarioCor = proprietarioCor; //'azul', 'vermelho', 'verde', 'amarelo'
         this.cor = cor;
     }
     funcao(jogador, modal) {

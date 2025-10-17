@@ -1,12 +1,12 @@
 const casasJson = [
   // Lado inferior (da direita p/ esquerda)
   { id: 0, nome: "Início", x: 45, y: 80, funcao: "saida", value: 200, listaJogadores: [] },
-  { id: 1, nome: "Gragoatá", x: 45, y: 80, cor: "brown", funcao: "propriedade", prices: [200, 350, 550, 700], fee: [20, 30, 40, 60], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
-  { id: 2, nome: "Santa Rosa", x: 40, y: 75, cor: "brown", funcao: "propriedade", prices: [220, 370, 560, 720], fee: [25, 35, 45, 65], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
-  { id: 3, nome: "Ingá", x: 35, y: 70, cor: "brown", funcao: "propriedade", prices: [240, 400, 580, 750], fee: [30, 40, 50, 70], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
-  { id: 4, nome: "Boa Viagem", x: 30, y: 65, cor: "gray", funcao: "propriedade", listaJogadores: [] },
-  { id: 5, nome: "Charitas", x: 25, y: 60, cor: "black", funcao: "propriedade", prices: [260, 420, 600, 800], fee: [35, 45, 55, 75], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
-  { id: 6, nome: "São Domingos", x: 20, y: 55, cor: "black", funcao: "propriedade", prices: [280, 450, 620, 850], fee: [40, 50, 60, 80], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
+  { id: 1, nome: "Gragoatá", x: 43, y: 78, cor: "brown", funcao: "propriedade", prices: [200, 350, 550, 700], fee: [20, 30, 40, 60], casaConstruida: 1, proprietarioCor: "vermelho", listaJogadores: [] },
+  { id: 2, nome: "Santa Rosa", x: 38, y: 73, cor: "brown", funcao: "propriedade", prices: [220, 370, 560, 720], fee: [25, 35, 45, 65], casaConstruida: 2, proprietarioCor: "vermelho", listaJogadores: [] },
+  { id: 3, nome: "Ingá", x: 32, y: 68, cor: "brown", funcao: "propriedade", prices: [240, 400, 580, 750], fee: [30, 40, 50, 70], casaConstruida: 3, proprietarioCor: "vermelho", listaJogadores: [] },
+  { id: 4, nome: "Boa Viagem", x: 28, y: 63, cor: "gray", funcao: "propriedade", listaJogadores: [] },
+  { id: 5, nome: "Charitas", x: 23, y: 58, cor: "black", funcao: "propriedade", prices: [260, 420, 600, 800], fee: [35, 45, 55, 75], casaConstruida: 4, proprietarioCor: "vermelho", listaJogadores: [] },
+  { id: 6, nome: "São Domingos", x: 20, y: 50, cor: "black", funcao: "propriedade", prices: [280, 450, 620, 850], fee: [40, 50, 60, 80], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
   { id: 7, nome: "Piratininga", x: 15, y: 50, cor: "black", funcao: "propriedade", prices: [280, 450, 620, 850], fee: [40, 50, 60, 80], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
 { id: 8, nome: "MAC", x: 10, y: 45, funcao: "companhia", proprietarioCor: "", listaJogadores: [] },
 
