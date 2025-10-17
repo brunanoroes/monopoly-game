@@ -75,20 +75,40 @@ export default class TabuleiroModel {
 		this.cartasCofre = embaralhar(this.cartasCofre);
 	}
 
-	atualizarCasaJogador(jogador, soma) {
-		//Remove a cor do jogador da casa atual
-
-		const casaAtual = this.casas[jogador.localizacaoAtual];
+	async atualizarCasaJogador(jogador, soma) {
+		// Remove o jogador da casa atual
+		let casaAtual = this.casas[jogador.localizacaoAtual];
 		casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
 
-		//Calcula nova posição
-		const novaPosicao = (jogador.localizacaoAtual + soma) % this.totalCasas;
-		// Adiciona a cor do jogador na nova casa
-		const novaCasa = this.casas[novaPosicao];
-		if (!novaCasa.listaJogadores) novaCasa.listaJogadores = [];
-		novaCasa.listaJogadores.push(jogador.cor);
-		jogador.localizacaoAtual = novaPosicao;
-		return novaCasa;
+		// Calcula o destino final
+		const destino = (jogador.localizacaoAtual + soma) % this.totalCasas;
+
+		// Anda uma casa por vez
+		for (let i = 1; i <= soma; i++) {
+			// Espera 1 segundo
+			await new Promise(resolve => setTimeout(resolve, 1000));
+
+			// Calcula a próxima posição (com wrap se passar do fim)
+			const novaPosicao = (jogador.localizacaoAtual + 1) % this.totalCasas;
+
+			// Remove o jogador da casa atual
+			casaAtual = this.casas[jogador.localizacaoAtual];
+			casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
+
+			// Adiciona o jogador na nova casa
+			const novaCasa = this.casas[novaPosicao];
+			if (!novaCasa.listaJogadores) novaCasa.listaJogadores = [];
+			novaCasa.listaJogadores.push(jogador.cor);
+
+			// Atualiza a posição atual
+			jogador.localizacaoAtual = novaPosicao;
+
+			// (Opcional) Atualiza visualmente o tabuleiro a cada passo
+			// this.atualizarTabuleiro(); // <- se existir uma função de render
+		}
+
+		// Retorna a casa final
+		return this.casas[jogador.localizacaoAtual];
 	}
 
 	getProximoJogadorAtivo(jogador) {

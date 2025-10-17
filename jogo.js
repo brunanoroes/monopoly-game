@@ -43,8 +43,6 @@ new Vue({
     // atualiza referência ao jogador ativo (já definida dentro do model)
     this.jogadorAtivo = this.tabuleiro ? this.tabuleiro.jogadorAtivo : null;
 
-    // debug rápido: inspeciona tabuleiro
-    console.log('Tabuleiro montado:', this.tabuleiro);
   },
   methods: {
     EstilizarObjetoPosicao(objeto) {
@@ -77,7 +75,7 @@ new Vue({
         this.dados.numero2 = numero2
 
         //Atualiza a casa do jogador no tabuleiro
-        const novaCasa = this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
+        const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
         //Realiza ação da casa (ex: comprar/alugar)
         this.tabuleiro.realizarFuncao(jogador, novaCasa, this.modal);
