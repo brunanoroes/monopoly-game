@@ -116,3 +116,8 @@
 .city .peao:nth-child(2) { top: 25%; left: 75%; }
 .city .peao:nth-child(3) { top: 75%; left: 25%; }
 .city .peao:nth-child(4) { top: 75%; left: 75%; }
+
+.dado {
+  width: 4rem;
+  height: 4rem;
+}

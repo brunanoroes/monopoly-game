@@ -15,6 +15,11 @@ new Vue({
       prices: [],
       selected: 0,
       mensagemAlerta: "",
+    },
+    areadados: {x: 45, y: 50},
+    dados: {
+      numero1 : 1,
+      numero2 : 1
     }
   },
   created() {
@@ -68,11 +73,11 @@ new Vue({
         numero1 = resultado.dado1;
         numero2 = resultado.dado2;
 
+        this.dados.numero1 = numero1
+        this.dados.numero2 = numero2
+
         //Atualiza a casa do jogador no tabuleiro
         const novaCasa = this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
-
-        //Log
-        console.log(`${jogador.nome} rolou ${numero1} + ${numero2} = ${resultado.soma}, nova posição: ${resultado.novaPosicao}`);
 
         //Realiza ação da casa (ex: comprar/alugar)
         this.tabuleiro.realizarFuncao(jogador, novaCasa, this.modal);

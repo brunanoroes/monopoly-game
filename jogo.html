@@ -17,17 +17,19 @@
           <span class="nome">{{ jogador.nome }}</span>
           <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
         </div>
-        
-        <button 
-          @click="jogarTurno(jogadorAtivo)"
-          :style="{ backgroundColor: jogadorAtivo.cor, color: '#fff', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }"
-        >
-          Rodar Dados
-        </button>
       </div>
 
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
+        <div :style="EstilizarObjetoPosicao(areadados)">
+          <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
+          <button 
+            @click="jogarTurno(jogadorAtivo)"
+            :style="{ backgroundColor: jogadorAtivo.cor, color: '#fff', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }"
+          >
+            Rodar Dados
+          </button>
+        </div>
         <div v-for="casa in tabuleiro.casas" 
             :id="'casa-' + casa.id" 
             class="city" 
