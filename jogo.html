@@ -28,7 +28,7 @@
 
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
-        <div  v-for="casa in tabuleiro.casas" 
+        <div v-for="casa in tabuleiro.casas" 
             :id="'casa-' + casa.id" 
             class="city" 
             :style="EstilizarObjetoPosicao(casa)" 
@@ -38,14 +38,17 @@
           {{ casa.nome }}
 
           <!-- Jogadores nesta casa -->
-          <div v-for="peaoCor in casa.listaJogadores" :key="peaoCor">
-            <peao :cor="peaoCor"></peao>
-          </div>
+          <peao v-for="(peaoCor, index) in casa.listaJogadores" 
+                :key="peaoCor + '-' + index" 
+                :cor="peaoCor" 
+                :index="index"
+                :total="casa.listaJogadores.length">
+          </peao>
 
           <pino-casa :casaConstruida="casa.casaConstruida"></pino-casa>
 
         </div>
-      </div>
+
 
       <modal v-show="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @dismiss="dismiss"></modal>
 

@@ -1,18 +1,18 @@
 const casasJson = [
   // Lado inferior (da direita p/ esquerda)
-  { id: 0, nome: "Início", x: 50, y: 90, funcao: "saida", value: 200, listaJogadores: [] },
+  { id: 0, nome: "Início", x: 45, y: 80, funcao: "saida", value: 200, listaJogadores: [] },
   { id: 1, nome: "Gragoatá", x: 45, y: 85, cor: "brown", funcao: "propriedade", prices: [200, 350, 550, 700], fee: [20, 30, 40, 60], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
   { id: 2, nome: "Santa Rosa", x: 38.5, y: 79, cor: "brown", funcao: "propriedade", prices: [220, 370, 560, 720], fee: [25, 35, 45, 65], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
   { id: 3, nome: "Ingá", x: 36, y: 72, cor: "brown", funcao: "propriedade", prices: [240, 400, 580, 750], fee: [30, 40, 50, 70], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
-  { id: 4, nome: "Boa Viagem", x: 28, y: 70, cor: "gray", funcao: "imposto", listaJogadores: [] },
+  { id: 4, nome: "Boa Viagem", x: 28, y: 70, cor: "gray", funcao: "propriedade", listaJogadores: [] },
   { id: 5, nome: "Charitas", x: 21, y: 66, cor: "black", funcao: "propriedade", prices: [260, 420, 600, 800], fee: [35, 45, 55, 75], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
   { id: 6, nome: "São Domingos", x: 19, y: 59, cor: "black", funcao: "propriedade", prices: [280, 450, 620, 850], fee: [40, 50, 60, 80], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
   { id: 7, nome: "Piratininga", x: 15, y: 55, cor: "black", funcao: "propriedade", prices: [280, 450, 620, 850], fee: [40, 50, 60, 80], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
-{ id: 8, nome: "MAC", x: 10, y: 45, funcao: "mac", proprietarioCor: "", listaJogadores: [] },
+{ id: 8, nome: "MAC", x: 10, y: 45, funcao: "companhia", proprietarioCor: "", listaJogadores: [] },
 
   // Lado esquerdo (subindo)
     { id: 9, nome: "Pé Pequeno", x: 15, y: 45, cor: "white", funcao: "propriedade", prices: [300, 470, 650, 880], fee: [45, 55, 65, 85], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
-  { id: 10, nome: "Jardim Icaraí", x: 20, y: 37, cor: "white", funcao: "prisao", rodadasJogador: { jogadorCor: "", rodadas: 0 }, listaJogadores: [] },
+  { id: 10, nome: "Jardim Icaraí", x: 20, y: 37, cor: "white", funcao: "propriedade", rodadasJogador: { jogadorCor: "", rodadas: 0 }, listaJogadores: [] },
   { id: 11, nome: "Engenho do Mato", x: 25, y: 36, cor: "white", funcao: "propriedade", prices: [320, 480, 660, 900], fee: [50, 60, 70, 90], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
    { id: 12, nome: "Sorte", x: 28, y: 30, funcao: "sorte", listaJogadores: [] },
   { id: 13, nome: "Cubango", x: 35, y: 25, cor: "pink", funcao: "propriedade", prices: [340, 500, 680, 920], fee: [55, 65, 75, 95], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
@@ -21,7 +21,7 @@ const casasJson = [
   { id: 16, nome: "UFF", x: 48, y: 10, funcao: "companhia", proprietarioCor: "", listaJogadores: [] },
 
 // Lado esquerdo (descendo)
-  { id: 17, nome: "Vital Brasil", x: 58, y: 14, cor: "orange", funcao: "cofre", listaJogadores: [] },
+  { id: 17, nome: "Vital Brasil", x: 58, y: 14, cor: "orange", funcao: "propriedade", listaJogadores: [] },
   { id: 18, nome: "Camboinhas", x: 62, y: 18, cor: "orange", funcao: "propriedade", prices: [400, 560, 740, 980], fee: [70, 80, 90, 110], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
   { id: 19, nome: "Fonseca", x: 66, y: 22, cor: "orange", funcao: "propriedade", prices: [420, 580, 760, 1000], fee: [75, 85, 95, 115], casaConstruida: 0, proprietarioCor: "", listaJogadores: [] },
   { id: 20, nome: "Sorte", x: 70, y: 29, funcao: "sorte", listaJogadores: [] },

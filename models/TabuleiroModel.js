@@ -16,7 +16,7 @@ export default class TabuleiroModel {
 		for (const casaData of casasJson) {
 			switch (casaData.funcao) {
 				case 'propriedade':
-					this.casas.push(new Propriedade(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.prices, casaData.fee, casaData.casaConstruida, casaData.proprietarioCor));
+					this.casas.push(new Propriedade(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.prices, casaData.fee, casaData.casaConstruida, casaData.proprietarioCor, casaData.cor));
 					break;
 				case 'sorte':
 					this.casas.push(new Sorte(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, this.cartasSorte));
@@ -29,7 +29,7 @@ export default class TabuleiroModel {
 	}
 
 	PosicionarPeoes() {
-		const coresPeao = ['pink', 'blue', 'green', 'red'];
+		const coresPeao = ['azul', 'vermelho', 'verde', 'amarelo'];
 		this.jogadores.length = 0;
 
 		// Cria uma lista de 4 nomes: pega os nomes fornecidos e completa com bots se necessário
@@ -46,7 +46,7 @@ export default class TabuleiroModel {
 			const jogador = new Jogador(tipo, nome, cor, 1500);
 
 			// Jogador começa na saída (casa com nome "Saída")
-			const casaSaida = this.casas.find(c => c.nome === 'Saída');
+			const casaSaida = this.casas.find(c => c.nome === 'Início');
 			if (casaSaida) {
 				if (!casaSaida.listaJogadores) casaSaida.listaJogadores = [];
 				casaSaida.listaJogadores.push(jogador.cor);

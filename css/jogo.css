@@ -17,23 +17,6 @@
   pointer-events: none; /* impede que a imagem bloqueie cliques */
 }
 
-.city {
-  position: absolute;
-  width: 1.3rem;
-  height: 1.3rem;
-  border-radius: 50%;
-  border: 2px solid white;
-  display: flex;
-  align-items: center;
-  transform: translate(-50%, -50%);
-  justify-content: center;
-  font-size: 10px; /* Ajuste do tamanho do texto da cidade */
-  color: white;
-  font-weight: bold;
-  z-index: 1;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-}
-
 .jogadores {
   display: flex;
   flex-direction: column;
@@ -112,3 +95,24 @@
   padding: 20px;
   border-radius: 8px;
 }
+
+.city {
+  width: 7rem;
+  height: 7rem;
+
+}
+
+.peao {
+  position: absolute;
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+  pointer-events: none;
+  transition: 0.2s;
+}
+
+/* Distribui os peões em posições diferentes */
+.city .peao:nth-child(1) { top: 25%; left: 25%; }
+.city .peao:nth-child(2) { top: 25%; left: 75%; }
+.city .peao:nth-child(3) { top: 75%; left: 25%; }
+.city .peao:nth-child(4) { top: 75%; left: 75%; }

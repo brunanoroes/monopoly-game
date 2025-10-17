@@ -1,12 +1,13 @@
 import Casa from "./CasaModel.js";
 
 export default class Propriedade extends Casa {
-    constructor(id, nome, x, y, listaJogadores, prices = [], fee = [], casaConstruida = 0, proprietarioCor = null) {
+    constructor(id, nome, x, y, listaJogadores, prices = [], fee = [], casaConstruida = 0, proprietarioCor = null, cor) {
         super(id, nome, x, y, listaJogadores);
         this.prices = prices;
         this.fee = fee;
         this.casaConstruida = casaConstruida;
         this.proprietarioCor = proprietarioCor;
+        this.cor = cor;
     }
     funcao(jogador, modal) {
         if (!this.proprietarioCor) {

@@ -49,18 +49,7 @@ new Vue({
         position: 'absolute',
         top: `${objeto.y}%`,
         left: `${objeto.x}%`,
-        backgroundColor: bg,
-        width: '1.3rem',       // mesma dimensão que .city no CSS
-        height: '1.3rem',
-        borderRadius: '50%',
-        transform: 'translate(-50%, -50%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '10px',
-        color: 'white',
-        zIndex: 1,
-        border: '2px solid white'
+
       };
     },
 
