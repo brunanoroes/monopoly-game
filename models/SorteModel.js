@@ -1,12 +1,9 @@
 import Casa from "./CasaModel.js";
 
 export default class Sorte extends Casa {
-    constructor(id, nome, x, y, listaJogadores, prices = [], fee = [], casaConstruida = 0, proprietarioCor = null) {
+    constructor(id, nome, x, y, listaJogadores, lateral) {
         super(id, nome, x, y, listaJogadores);
-        this.prices = prices;
-        this.fee = fee;
-        this.casaConstruida = casaConstruida;
-        this.proprietarioCor = proprietarioCor;
+        this.lateral = lateral;
     }
     
     funcao(jogador, modal) {
