@@ -34,9 +34,6 @@
             class="city" 
             :style="EstilizarObjetoPosicao(casa)" 
             @click="jogadorAtivoAcao(casa, 1)">
-          
-          <!-- Nome da casa -->
-          {{ casa.nome }}
 
           <!-- Jogadores nesta casa -->
           <peao v-for="(peaoCor, index) in casa.listaJogadores" 
@@ -50,6 +47,11 @@
             :casa-construida="casa.casaConstruida" 
             :proprietario-cor="casa.proprietarioCor">
           </pino-casa>
+
+          <!--pino-casa
+            :casa-construida="5" 
+            proprietario-cor="vermelho">
+          </pino-casa-->
 
         </div>
       </div>
