@@ -11,13 +11,15 @@
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
         <div :style="EstilizarObjetoPosicao(areadados)">
-          <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
-          <button 
-            @click="jogarTurno(jogadorAtivo)"
-            :style="{ backgroundColor: jogadorAtivo.cor, color: '#fff', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }"
-          >
-            Rodar Dados
-          </button>
+          <div>
+            <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
+            <button 
+              @click="jogarTurno(jogadorAtivo)"
+              :style="{ backgroundColor: jogadorAtivo.cor }" class="buttonRodarDados"
+            >
+              Rodar Dados
+            </button>
+          </div>   
         </div>
         <div class="jogadores" :style="EstilizarObjetoPosicao(jogodiv)">
           <div 
@@ -36,19 +38,19 @@
             @click="jogadorAtivoAcao(casa, 1)">
 
           <!-- Jogadores nesta casa -->
-          <peao v-for="(peaoCor, index) in casa.listaJogadores" 
+           <peao v-for="(peaoCor, index) in casa.listaJogadores" 
                 :key="peaoCor + '-' + index" 
                 :cor="peaoCor" 
                 :index="index"
                 :total="casa.listaJogadores.length">
           </peao>
-<!-- 
+
           <pino-casa v-if="casa.casaConstruida"
             :casa-construida="casa.casaConstruida" 
             :proprietario-cor="casa.proprietarioCor">
-          </pino-casa>
+          </pino-casa> 
 
-          <peao
+          <!-- <peao
                 cor="vermelho" 
                 :index="1"
                 :total="casa.listaJogadores.length">

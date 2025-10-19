@@ -32,7 +32,7 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
 .jogador {
   display: flex;
   justify-content: space-between;
-  padding: 6px 10px;
+  padding: 0.4rem 0.8px;
   border-radius: 6px;
   background: #f5f5f5;
   transition: 0.3s;
@@ -43,44 +43,6 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   border: 2px solid #ffcc00;
   font-weight: bold;
   transform: scale(1.05); /* cresce um pouco */
-}
-
-.conteiner-cartas-jogo {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1rem;
-}
-
-.carta-jogavel {
-  width: 200px;
-  min-height: 120px;
-  background-color: #fff;
-  border-radius: 16px;
-  border: none;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  padding: 16px 12px;
-  text-align: center;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 12px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  cursor: pointer;
-  overflow: hidden;
-  position: relative;
-  color: white;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-}
-
-.carta-jogavel h3 {
-  margin-top: 0;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #222;
-}
-
-.carta-jogavel p {
-  font-size: 0.95rem;
-  color: #e2d3d3;
-  margin: 8px 0 0;
 }
 
 .modal-overlay {
@@ -101,14 +63,14 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
 }
 
 .city {
-  width: 7rem;
-  height: 7rem;
+  width: 5rem;
+  height: 5rem;
 }
 
 .peao {
   position: absolute;
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
   object-fit: contain;
   pointer-events: none;
   transition: 0.2s;
@@ -126,6 +88,136 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
 }
 
 .pino-casa {
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.buttonRodarDados {
+  color: #fff;
+  font-weight: bold;
+  border-radius: 0.6rem;
+  border: none;
+  cursor: pointer;
+  width: 5rem;
+  height: 2rem;
+  margin-left: 1.7rem;
+}
+
+/* ========================================
+   📱 RESPONSIVIDADE DO TABULEIRO E ELEMENTOS
+   ======================================== */
+
+/* 🧩 Tablets e telas médias (≤ 1024px) */
+@media (max-width: 1200px) {
+
+  .city {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .peao {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .pino-casa {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .dado {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .jogadores {
+    max-width: 10rem;
+    max-height: 4rem;
+  }
+  .jogador {
+    max-height: 0.5rem;
+  }
+
+  .buttonRodarDados{
+    max-width: 5rem;
+    max-height: 2rem;
+  }
+
+}
+
+/* 📲 Celulares grandes (≤ 768px) */
+@media (max-width: 900px) {
+
+  .city {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .peao {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .pino-casa {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .dado {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .jogadores {
+    max-width: 7rem;
+    max-height: 3rem;
+    font-size: 0.6rem;
+  }
+  .jogador {
+    max-height: 0.3rem;
+  }
+
+  .buttonRodarDados{
+    max-width: 3rem;
+    max-height: 1rem;
+  }
+}
+
+/* 📱 Celulares pequenos (≤ 480px) */
+@media (max-width: 480px) {
+
+  .city {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .peao {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  .pino-casa {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  .dado {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  .jogadores {
+    max-width: 3rem;
+    max-height: 2rem;
+    font-size: 0.3rem;
+  }
+  .jogador {
+    max-height: 0.2rem;
+  }
+
+  .buttonRodarDados{
+    max-width: 2rem;
+    max-height: 1rem;
+     font-size: 0.3rem;
+  }
 }
