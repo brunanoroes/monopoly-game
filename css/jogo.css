@@ -103,7 +103,6 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
 .city {
   width: 7rem;
   height: 7rem;
-
 }
 
 .peao {
@@ -116,10 +115,10 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
 }
 
 /* Distribui os peões em posições diferentes */
-.city .peao:nth-child(1) { top: 25%; left: 25%; }
-.city .peao:nth-child(2) { top: 25%; left: 75%; }
-.city .peao:nth-child(3) { top: 75%; left: 25%; }
-.city .peao:nth-child(4) { top: 75%; left: 75%; }
+.city .peao:nth-child(1) { top: 3%; left: 5%; }
+.city .peao:nth-child(2) { top: 3%; left: 35%; }
+.city .peao:nth-child(3) { top: 35%; left: 5%; }
+.city .peao:nth-child(4) { top: 35%; left: 35%; }
 
 .dado {
   width: 4rem;

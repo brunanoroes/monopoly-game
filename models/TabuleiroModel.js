@@ -16,7 +16,7 @@ export default class TabuleiroModel {
 		for (const casaData of casasJson) {
 			switch (casaData.funcao) {
 				case 'propriedade':
-					this.casas.push(new Propriedade(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.prices, casaData.fee, casaData.casaConstruida, casaData.proprietarioCor, casaData.cor));
+					this.casas.push(new Propriedade(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.prices, casaData.fee, casaData.casaConstruida, casaData.proprietarioCor, casaData.cor, casaData.lateral));
 					break;
 				case 'sorte':
 					this.casas.push(new Sorte(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, this.cartasSorte));

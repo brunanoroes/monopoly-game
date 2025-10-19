@@ -47,13 +47,22 @@ new Vue({
   },
   methods: {
     EstilizarObjetoPosicao(objeto) {
-      // objeto é uma casa; use x/y e não dependa de objeto.cor (nem sempre existe)
-      const bg = objeto.cor || 'transparent'; // fallback
+      
+      // Define o ângulo conforme o valor de 'lateral'
+      let angulo = 0;
+      switch (objeto.lateral) {
+        case 1: angulo = 45; break;
+        case 2: angulo = -5; break;
+        case 3: angulo = 45; break;
+        case 4: angulo = 0; break;
+      }
+
       return {
         position: 'absolute',
         top: `${objeto.y}%`,
         left: `${objeto.x}%`,
-
+        transform: `rotate(${angulo}deg)`,
+        transformOrigin: 'center center', // gira em torno do centro
       };
     },
 
