@@ -1,16 +1,15 @@
 Vue.component('peao', {
   props: ['cor'],
-  template: `<div :style="estilo"></div>`,
+  template: `
+    <img 
+      :src="imagem" 
+      :alt="'Peão ' + cor" 
+      class="peao"
+    >
+  `,
   computed: {
-    estilo() {
-      return {
-        width: '15px',
-        height: '15px',
-        borderRadius: '50%',
-        backgroundColor: this.cor,
-        border: '1px solid #000',
-        margin: '2px auto',
-      };
+    imagem() {
+      return 'assets/peoes/peao-' + this.cor + '.png';
     }
   }
 });

@@ -8,44 +8,77 @@
   </head>
   <body>
     <div id="appVue" v-cloak>
-      <div class="jogadores">
-        <div 
-          v-for="jogador in tabuleiro ? tabuleiro.jogadores : []" 
-          :key="jogador.nome"
-          :class="['jogador', { ativo: jogador === jogadorAtivo }]"
-        >
-          <span class="nome">{{ jogador.nome }}</span>
-          <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
-        </div>
-      </div>
-
-        <button 
-          @click="jogarTurno(jogadorAtivo)"
-          :style="{ backgroundColor: jogadorAtivo.cor, color: '#fff', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }"
-        >
-          Rodar Dados
-        </button>
-
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
-        <div  v-for="casa in tabuleiro.casas" 
+        <div :style="EstilizarObjetoPosicao(areadados)">
+          <div>
+            <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
+            <button 
+              @click="jogarTurno(jogadorAtivo)"
+              :style="{ backgroundColor: jogadorAtivo.cor }" class="buttonRodarDados"
+            >
+              Rodar Dados
+            </button>
+          </div>   
+        </div>
+        <div class="jogadores" :style="EstilizarObjetoPosicao(jogodiv)">
+          <div 
+            v-for="jogador in tabuleiro ? tabuleiro.jogadores : []" 
+            :key="jogador.nome"
+            :class="['jogador', { ativo: jogador === jogadorAtivo }]"
+          >
+            <span class="nome">{{ jogador.nome }}</span>
+            <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
+          </div>
+        </div>
+        <div v-for="casa in tabuleiro.casas" 
             :id="'casa-' + casa.id" 
             class="city" 
             :style="EstilizarObjetoPosicao(casa)" 
             @click="jogadorAtivoAcao(casa, 1)">
-          
-          <!-- Nome da casa -->
-          {{ casa.nome }}
 
           <!-- Jogadores nesta casa -->
-          <div v-for="peaoCor in casa.listaJogadores" :key="peaoCor">
-            <peao :cor="peaoCor"></peao>
-          </div>
+           <peao v-for="(peaoCor, index) in casa.listaJogadores" 
+                :key="peaoCor + '-' + index" 
+                :cor="peaoCor" 
+                :index="index"
+                :total="casa.listaJogadores.length">
+          </peao>
 
-          <pino-casa :casaConstruida="casa.casaConstruida"></pino-casa>
+          <pino-casa v-if="casa.casaConstruida"
+            :casa-construida="casa.casaConstruida" 
+            :proprietario-cor="casa.proprietarioCor">
+          </pino-casa> 
+
+          <!-- <peao
+                cor="vermelho" 
+                :index="1"
+                :total="casa.listaJogadores.length">
+          </peao>
+          <peao
+                cor="azul" 
+                :index="1"
+                :total="casa.listaJogadores.length">
+          </peao>
+          <peao
+                cor="amarelo" 
+                :index="1"
+                :total="casa.listaJogadores.length">
+          </peao>
+          <peao
+                cor="verde" 
+                :index="1"
+                :total="casa.listaJogadores.length">
+          </peao> 
+
+          <pino-casa 
+            :casa-construida="1" 
+            proprietario-cor="vermelho">
+          </pino-casa>  -->
 
         </div>
       </div>
+
 
       <modal v-show="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @dismiss="dismiss"></modal>
 

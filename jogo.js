@@ -6,7 +6,8 @@ new Vue({
   el: '#appVue',
   data: {
     tabuleiro: null,
-    jogadorAtivo: {},
+    jogadorAtivo: null,
+    nomesJogadores: [], // inicializa
     modal: {
       tipo: 1,
       mostra: false,
@@ -14,39 +15,59 @@ new Vue({
       prices: [],
       selected: 0,
       mensagemAlerta: "",
+    },
+    areadados: {x: 45, y: 50},
+    jogodiv: {x: 5, y: 75},
+    dados: {
+      numero1 : 1,
+      numero2 : 1
     }
-
   },
   created() {
     const params = new URLSearchParams(window.location.search);
-    this.nomesJogadores = params.getAll('nomesjogadores[]');
+    // se não houver nomes na URL, nomesJogadores será []
+    this.nomesJogadores = params.getAll('nomesjogadores[]') || [];
   },
-  mounted() {
-
+  // tornar mounted async para aguardar montagem do tabuleiro
+  async mounted() {
     this.tabuleiro = new TabuleiroModel({
       nomesJogadores: this.nomesJogadores
     });
 
-    this.tabuleiro.MontarTabuleiro(cartasSorte, casasJson);
+    // se MontarTabuleiro for async, await; protege se não for
+    if (this.tabuleiro.MontarTabuleiro && typeof this.tabuleiro.MontarTabuleiro === 'function') {
+      await this.tabuleiro.MontarTabuleiro(cartasSorte, casasJson);
+    } else {
+      console.warn('MontarTabuleiro não encontrado em TabuleiroModel');
+    }
 
-    this.jogadorAtivo = this.tabuleiro.jogadorAtivo;
+    // atualiza referência ao jogador ativo (já definida dentro do model)
+    this.jogadorAtivo = this.tabuleiro ? this.tabuleiro.jogadorAtivo : null;
+
   },
   methods: {
     EstilizarObjetoPosicao(objeto) {
+      
+      // Define o ângulo conforme o valor de 'lateral'
+      let angulo = 0;
+      switch (objeto.lateral) {
+        case 1: angulo = 35; break;
+        case 2: angulo = -35; break;
+        case 3: angulo = 35; break;
+        case 4: angulo = -35; break;
+      }
+
       return {
         position: 'absolute',
         top: `${objeto.y}%`,
         left: `${objeto.x}%`,
-        backgroundColor: objeto.cor,
-        width: '20px',
-        height: '20px',
-        borderRadius: '50%',
-        transform: 'translate(-50%, -50%)',
+        transform: `rotate(${angulo}deg)`,
+        transformOrigin: 'center center', // gira em torno do centro
       };
     },
 
-    jogarTurno(jogador) {
-
+    async jogarTurno(jogador) {
+      if (!jogador) return;
       //Rola os dados até que não sejam iguais ou sejam iguais 3 vezes
       let lancamentos = 0;
       let numero1 = 0;
@@ -54,31 +75,51 @@ new Vue({
       while (numero1 === numero2 && lancamentos < 3) {
         lancamentos++;
 
-        //Lançar dados
-        const resultado = jogador.jogarDados(this.totalCasas);
+        //Lançar dados - seu JogadorModel deve retornar {dado1,dado2,soma,novaPosicao}
+        const resultado = jogador.jogarDados(this.tabuleiro ? this.tabuleiro.totalCasas : 0);
     
         numero1 = resultado.dado1;
         numero2 = resultado.dado2;
 
-        //Atualiza a casa do jogador no tabuleiro
-        const novaCasa = this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
+        this.dados.numero1 = numero1
+        this.dados.numero2 = numero2
 
-        //Log
-        console.log(`${jogador.nome} rolou ${numero1} + ${numero2} = ${resultado.soma}, nova posição: ${resultado.novaPosicao}`);
+        //Atualiza a casa do jogador no tabuleiro
+        const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
         //Realiza ação da casa (ex: comprar/alugar)
         this.tabuleiro.realizarFuncao(jogador, novaCasa, this.modal);
 
-        //if (lancamentos >= 3) this.tabuleiro.prisao(jogador);
+        // Se a ação alterar dados reativos que você mostra, atualize referências:
+        this.jogadorAtivo = this.tabuleiro.jogadorAtivo;
       }
       //Passa a vez para o próximo jogador
       this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(jogador);
     },
+
     confirmarCompra() {
-      this.tabuleiro.comprarPropriedade(this.jogadorAtivo, this.modal.selected, this.modal);
+      if (!this.tabuleiro || !this.jogadorAtivo) return;
+      if (this.tabuleiro.comprarPropriedade) {
+        this.tabuleiro.comprarPropriedade(this.jogadorAtivo, this.modal.selected, this.modal);
+      } else {
+        console.warn('comprarPropriedade não implementado no TabuleiroModel');
+      }
     },
+
     dismiss(){
       this.modal.mostra = false;
+    },
+
+    // função disparada no clique da casa (você chamou jogadorAtivoAcao)
+    jogadorAtivoAcao(casa, tipo) {
+      if (!this.jogadorAtivo) return;
+      // Exemplo: abre modal para comprar se propriedade, etc.
+      console.log('ação na casa', casa, tipo);
+      // se a casa for propriedade, abre o modal com os prices
+      if (casa.prices) {
+        this.modal.prices = casa.prices;
+        this.modal.mostra = true;
+      }
     }
   }
 });
