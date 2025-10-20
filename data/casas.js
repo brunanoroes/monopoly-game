@@ -4,7 +4,7 @@ const casasJson = [
   { id: 1, nome: "Gragoatá", x: 43, y: 78, cor: "brown", funcao: "propriedade", prices: [200, 350, 550, 700], fee: [20, 30, 40, 60], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 1 },
   { id: 2, nome: "Santa Rosa", x: 38, y: 73, cor: "brown", funcao: "propriedade", prices: [220, 370, 560, 720], fee: [25, 35, 45, 65], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 1 },
   { id: 3, nome: "Ingá", x: 34, y: 68, cor: "brown", funcao: "propriedade", prices: [240, 400, 580, 750], fee: [30, 40, 50, 70], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 1 },
-  { id: 4, nome: "Boa Viagem", x: 30, y: 64, cor: "gray", funcao: "propriedade", listaJogadores: [], lateral: 1 },
+  { id: 4, nome: "Boa Viagem", x: 30, y: 64, cor: "gray", funcao: "propriedade", listaJogadores: [], lateral: 1, casaConstruida: 0, proprietarioCor: "" },
   { id: 5, nome: "Charitas", x: 26, y: 60, cor: "black", funcao: "propriedade", prices: [260, 420, 600, 800], fee: [35, 45, 55, 75], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 1 },
   { id: 6, nome: "São Domingos", x: 22, y: 55, cor: "black", funcao: "propriedade", prices: [280, 450, 620, 850], fee: [40, 50, 60, 80], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 1 },
   { id: 7, nome: "Piratininga", x: 17, y: 51, cor: "black", funcao: "propriedade", prices: [280, 450, 620, 850], fee: [40, 50, 60, 80], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 1 },
