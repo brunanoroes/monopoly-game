@@ -51,10 +51,10 @@ new Vue({
       // Define o ângulo conforme o valor de 'lateral'
       let angulo = 0;
       switch (objeto.lateral) {
-        case 1: angulo = 35; break;
-        case 2: angulo = -35; break;
-        case 3: angulo = 35; break;
-        case 4: angulo = -35; break;
+        case 1: angulo = 0; break;
+        case 2: angulo = 0; break;
+        case 3: angulo = 0; break;
+        case 4: angulo = 0; break;
       }
 
       return {
