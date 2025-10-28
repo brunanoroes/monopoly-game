@@ -7,10 +7,10 @@ Vue.component('modal', {
           <div class="modal-content">
           <label>{{ modal.mensagem }}</label><br/>
           <p>{{modal.mensagemAlerta}}</p>
-            <input type="radio" v-model="modal.selected" value="0"/>Terreno {{ modal.prices[0] || 0 }}R$ <br/>
-            <input type="radio" v-model="modal.selected" value="1"/>Casa 1 {{ modal.prices[1] || 0 }}R$ <br/>
-            <input type="radio" v-model="modal.selected" value="2"/>Casa 2 {{ modal.prices[2] || 0 }}R$ <br/>
-            <input type="radio" v-model="modal.selected" value="3"/>Hotel {{ modal.prices[3] || 0 }}R$ <br/>
+            <input type="radio" v-model="modal.selected" value="1"/>Casa 1 {{ modal.prices[0] || 0 }}R$ <br/>
+            <input type="radio" v-model="modal.selected" value="2"/>Casa 2 {{ modal.prices[1] || 0 }}R$ <br/>
+            <input type="radio" v-model="modal.selected" value="3"/>Casa 3 {{ modal.prices[2] || 0 }}R$ <br/>
+            <input type="radio" v-model="modal.selected" value="4"/>Hotel {{ modal.prices[3] || 0 }}R$ <br/>
             <button @click="$emit('confirmar-compra')">Comprar</button>
             <button @click="$emit('dismiss')">Não</button>
           </div>
@@ -22,6 +22,7 @@ Vue.component('modal', {
           <div class="modal-content">
             {{ modal.mensagem }}
           </div>
+          <button @click="$emit('dismiss')">Fechar</button>
         </div>
       </div>
 
@@ -30,6 +31,7 @@ Vue.component('modal', {
           <div class="modal-content">
             {{ modal.mensagem }}
           </div>
+          <button @click="$emit('dismiss')">Fechar</button>
         </div>
       </div>
 
@@ -38,6 +40,7 @@ Vue.component('modal', {
           <div class="modal-content">
             {{ modal.mensagem }}
           </div>
+          <button @click="$emit('dismiss')">Fechar</button>
         </div>
       </div>
     </div>
