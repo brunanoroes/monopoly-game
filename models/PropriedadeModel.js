@@ -37,23 +37,23 @@ export default class Propriedade extends Casa {
         }
     }
 
-    comprarCasa(jogador, selectedOption, modal) {
-        if (!selectedOption) {
+    comprarCasa(jogador, modal) {
+        const tipoCasa = modal.selected;
+        if (!tipoCasa) {
             modal.mensagemAlerta = 'Selecione uma opção.';
             return;
         }
         if (this && !this.proprietarioCor) {
-            const preco = this.prices ? this.prices[selectedOption] : 0;
-            if (jogador.dinheiro >= preco) {
-                jogador.pagar(preco);
+            const preco = this.prices ? this.prices[tipoCasa - 1] : 0;
+            console.log(jogador.dinheiro, preco)
+                if(!jogador.pagar(preco)){
+                    modal.mensagemAlerta = 'Saldo insuficiente.';
+                    return false
+                }
                 this.proprietarioCor = jogador.cor;
-                this.casaConstruida = selectedOption; // Marca o nível da construção
+                this.casaConstruida = tipoCasa;
                 jogador.propriedades.push(this);
                 modal.mostra = false;
-            }
-            else {
-                modal.mensagemAlerta = 'Saldo insuficiente para comprar esta propriedade.';
-            }
         }
     }
 

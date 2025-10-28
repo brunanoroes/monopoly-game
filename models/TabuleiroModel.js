@@ -14,15 +14,15 @@ export default class TabuleiroModel {
 
 	CriarCasas(casasJson) {
 		for (const casaData of casasJson) {
-			switch (casaData.funcao) {
-				case 'propriedade':
-					this.casas.push(new Propriedade(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.prices, casaData.fee, casaData.casaConstruida, casaData.proprietarioCor, casaData.cor, casaData.lateral));
-					break;
-				case 'sorte':
-					this.casas.push(new Sorte(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral));
-					break
-				default:
-					this.casas.push(new Casa(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral)); // Casas simples sem lógica especial
+			 switch (casaData.funcao) {
+			 	case 'propriedade':
+				this.casas.push(new Propriedade(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.prices, casaData.fee, casaData.casaConstruida, casaData.proprietarioCor, casaData.cor, casaData.lateral));
+					 break;
+				 case 'sorte':
+				 	this.casas.push(new Sorte(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral));
+				 	break
+				 default:
+				 	this.casas.push(new Casa(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral)); // Casas simples sem lógica especial
 			}
 		}
 		this.totalCasas = this.casas.length;
@@ -118,11 +118,6 @@ export default class TabuleiroModel {
 		return this.jogadorAtivo;
 	}
 
-	//Funções das casas
-
-	realizarFuncao(jogador, casa, modal) {
-		casa.funcao(jogador, modal);
-	}
 	async MontarTabuleiro(cartasSorte, casasJson) {
 		this.CriarCasas(casasJson);
 		this.CriarCartas(cartasSorte);

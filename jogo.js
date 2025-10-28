@@ -88,22 +88,24 @@ new Vue({
         const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
         //Realiza ação da casa (ex: comprar/alugar)
-        this.tabuleiro.realizarFuncao(jogador, novaCasa, this.modal);
+        await this.realizarFuncao(jogador, novaCasa, this.modal);
 
         // Se a ação alterar dados reativos que você mostra, atualize referências:
-        this.jogadorAtivo = this.tabuleiro.jogadorAtivo;
+        //this.jogadorAtivo = this.tabuleiro.jogadorAtivo;
       }
       //Passa a vez para o próximo jogador
-      this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(jogador);
+      //this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(jogador);
     },
 
-    confirmarCompra() {
-      if (!this.tabuleiro || !this.jogadorAtivo) return;
-      if (this.tabuleiro.comprarPropriedade) {
-        this.tabuleiro.comprarPropriedade(this.jogadorAtivo, this.modal.selected, this.modal);
-      } else {
-        console.warn('comprarPropriedade não implementado no TabuleiroModel');
-      }
+    realizarFuncao(jogador, casa, modal) {
+      casa.funcao(jogador, modal);
+    },
+
+    async confirmarCompra() {
+      const casaId = this.jogadorAtivo.localizacaoAtual
+      const casa = this.tabuleiro.casas[casaId]
+      await casa.comprarCasa(this.jogadorAtivo, this.modal)
+      this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
     },
 
     dismiss(){

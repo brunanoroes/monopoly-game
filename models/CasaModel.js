@@ -7,8 +7,10 @@ export default class Casa {
         this.listaJogadores = listaJogadores || [];
         this.lateral = lateral;
     }
-    funcao() {
-        return this.id;
+    funcao(jogador, modal) {
+        modal.tipo = 2;
+        modal.mostra = true;
+        modal.mensagem = 'Ainda não implementado';
     }
     
 }   
