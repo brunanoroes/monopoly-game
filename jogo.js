@@ -79,11 +79,7 @@ new Vue({
       const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
       //Realiza ação da casa (ex: comprar/alugar)
-      this.realizarFuncao(jogador, novaCasa, this.modal);
-    },
-
-    realizarFuncao(jogador, casa, modal) {
-      casa.funcao(jogador, modal);
+      novaCasa.funcao(jogador, this.modal);
     },
 
     async confirmarCompra() {
@@ -102,7 +98,6 @@ new Vue({
       this.modal.mostra = false;
     },
 
-    // função disparada no clique da casa (você chamou jogadorAtivoAcao)
     jogadorAtivoAcao(casa, tipo) {
       if (!this.jogadorAtivo) return;
       // Exemplo: abre modal para comprar se propriedade, etc.
@@ -112,6 +107,33 @@ new Vue({
         this.modal.prices = casa.prices;
         this.modal.mostra = true;
       }
+    },
+
+    async pagarAluguel(){
+ 
+      const casa = this.tabuleiro.casas.find(
+        casa => casa.id === this.jogadorAtivo.localizacaoAtual
+      );
+
+      var _valor = 0;
+      if(casa.tipo === "praia"){
+        _valor = casa ? casa.fee : 0;
+      }
+      else{
+        _valor = casa ? casa.fee[casa.casaConstruida - 1] : 0;
+      }
+      
+      const _jogador = this.tabuleiro.jogadores.find(
+        jogador => jogador.cor === casa.proprietarioCor
+      );
+
+      if(await this.jogadorAtivo.pagar(_valor)){
+        _jogador.receber(_valor)
+        this.dismiss()
+        casa.funcao(this.jogadorAtivo, this.modal, 1);
+      }else{
+        modal.mensagemAlerta = "Jogador não tem dinheiro para pagar Alguel, precisa vender propriedades - Função não implementada ainda"
+      }  
     }
   }
 });

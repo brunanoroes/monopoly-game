@@ -39,6 +39,7 @@ Vue.component('modal', {
         <div class="modal-overlay">
           <div class="modal-content">
             <h2 class="modal-title">{{ modal.mensagem }}</h2>
+            <p class="modal-subtitle">{{ modal.mensagemAlerta }}</p>
             <p class="modal-subtitle">Preço: <span class="price">{{ modal.prices }} R$</span></p>
 
             <div class="buttons">
@@ -53,6 +54,7 @@ Vue.component('modal', {
         <div class="modal-overlay">
           <div class="modal-content">
             <h2 class="modal-title">{{ modal.mensagem }}</h2>
+            <p class="modal-subtitle">{{ modal.mensagemAlerta }}</p>
             <button class="btn confirm" @click="$emit('pagar-aluguel')">Pagar</button>
           </div>
         </div>
@@ -62,6 +64,7 @@ Vue.component('modal', {
         <div class="modal-overlay">
           <div class="modal-content">
             <h2 class="modal-title">{{ modal.mensagem }}</h2>
+            <p class="modal-subtitle">{{ modal.mensagemAlerta }}</p>
              <button class="btn cancel" @click="$emit('dismiss')">Fechar</button>
           </div>
         </div>

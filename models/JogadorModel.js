@@ -15,15 +15,6 @@ export default class Jogador {
     return { dado1, dado2, soma };
   }
 
-  pagarAluguel(casa) {
-    if (casa.dono && casa.dono !== this) {
-      this.dinheiro -= casa.aluguel;
-      casa.dono.dinheiro += casa.aluguel;
-      return true;
-    }
-    return false;
-  }
-
   receber(valor) {
     this.dinheiro += valor;
   }

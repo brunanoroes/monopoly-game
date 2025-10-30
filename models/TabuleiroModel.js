@@ -15,15 +15,15 @@ export default class TabuleiroModel {
 
 	CriarCasas(casasJson) {
 		for (const casaData of casasJson) {
-			 switch (casaData.funcao) {
+			 switch (casaData.tipo) {
 			 	case 'propriedade':
-				this.casas.push(new Propriedade(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.prices, casaData.fee, casaData.casaConstruida, casaData.proprietarioCor, casaData.cor, casaData.lateral));
+				this.casas.push(new Propriedade(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.prices, casaData.fee, casaData.casaConstruida, casaData.proprietarioCor, casaData.cor, casaData.lateral, casaData.tipo));
 					 break;
 				case 'sorte':
 					this.casas.push(new Sorte(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral));
 					break;
 				case 'praia':
-					this.casas.push(new Praia(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.price, casaData.fee, casaData.proprietarioCor,  casaData.lateral));
+					this.casas.push(new Praia(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.price, casaData.fee, casaData.proprietarioCor,  casaData.lateral, casaData.casaConstruida, casaData.tipo));
 					break
 				 default:
 				 	this.casas.push(new Casa(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral)); // Casas simples sem lógica especial
