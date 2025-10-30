@@ -68,33 +68,17 @@ new Vue({
 
     async jogarTurno(jogador) {
       if (!jogador) return;
-      //Rola os dados até que não sejam iguais ou sejam iguais 3 vezes
-      let lancamentos = 0;
-      let numero1 = 0;
-      let numero2 = 0;
-      while (numero1 === numero2 && lancamentos < 3) {
-        lancamentos++;
+      //Lançar dados - seu JogadorModel deve retornar {dado1,dado2,soma,novaPosicao}
+      const resultado = jogador.jogarDados(this.tabuleiro ? this.tabuleiro.totalCasas : 0);
 
-        //Lançar dados - seu JogadorModel deve retornar {dado1,dado2,soma,novaPosicao}
-        const resultado = jogador.jogarDados(this.tabuleiro ? this.tabuleiro.totalCasas : 0);
-    
-        numero1 = resultado.dado1;
-        numero2 = resultado.dado2;
+      this.dados.numero1 = resultado.dado1;
+      this.dados.numero2 = resultado.dado2;
 
-        this.dados.numero1 = numero1
-        this.dados.numero2 = numero2
+      //Atualiza a casa do jogador no tabuleiro
+      const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
-        //Atualiza a casa do jogador no tabuleiro
-        const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
-
-        //Realiza ação da casa (ex: comprar/alugar)
-        await this.realizarFuncao(jogador, novaCasa, this.modal);
-
-        // Se a ação alterar dados reativos que você mostra, atualize referências:
-        //this.jogadorAtivo = this.tabuleiro.jogadorAtivo;
-      }
-      //Passa a vez para o próximo jogador
-      //this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(jogador);
+      //Realiza ação da casa (ex: comprar/alugar)
+      this.realizarFuncao(jogador, novaCasa, this.modal);
     },
 
     realizarFuncao(jogador, casa, modal) {

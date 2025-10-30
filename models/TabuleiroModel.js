@@ -23,7 +23,7 @@ export default class TabuleiroModel {
 					this.casas.push(new Sorte(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral));
 					break;
 				case 'praia':
-					this.casas.push(new Praia(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral));
+					this.casas.push(new Praia(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.price, casaData.fee, casaData.proprietarioCor,  casaData.lateral));
 					break
 				 default:
 				 	this.casas.push(new Casa(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral)); // Casas simples sem lógica especial
@@ -80,40 +80,33 @@ export default class TabuleiroModel {
 	}
 
 	async atualizarCasaJogador(jogador, soma) {
-		// Remove o jogador da casa atual
-		let casaAtual = this.casas[jogador.localizacaoAtual];
-		casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
+		// Garantir que não haja movimento duplo simultâneo
+		if (jogador.movendo) return;
+		jogador.movendo = true;
 
-		// Calcula o destino final
-		const destino = (jogador.localizacaoAtual + soma) % this.totalCasas;
-
-		// Anda uma casa por vez
 		for (let i = 1; i <= soma; i++) {
-			// Espera 1 segundo
 			await new Promise(resolve => setTimeout(resolve, 1000));
 
-			// Calcula a próxima posição (com wrap se passar do fim)
-			const novaPosicao = (jogador.localizacaoAtual + 1) % this.totalCasas;
-
 			// Remove o jogador da casa atual
-			casaAtual = this.casas[jogador.localizacaoAtual];
+			let casaAtual = this.casas[jogador.localizacaoAtual];
 			casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
 
-			// Adiciona o jogador na nova casa
-			const novaCasa = this.casas[novaPosicao];
+			// Calcula nova posição
+			const novaPosicao = (jogador.localizacaoAtual + 1) % this.totalCasas;
+
+			// Adiciona na nova casa
+			let novaCasa = this.casas[novaPosicao];
 			if (!novaCasa.listaJogadores) novaCasa.listaJogadores = [];
 			novaCasa.listaJogadores.push(jogador.cor);
 
-			// Atualiza a posição atual
+			// Atualiza posição
 			jogador.localizacaoAtual = novaPosicao;
-
-			// (Opcional) Atualiza visualmente o tabuleiro a cada passo
-			// this.atualizarTabuleiro(); // <- se existir uma função de render
 		}
 
-		// Retorna a casa final
+		jogador.movendo = false;
 		return this.casas[jogador.localizacaoAtual];
 	}
+
 
 	getProximoJogadorAtivo(jogador) {
 		const indexAtual = this.jogadores.indexOf(jogador);

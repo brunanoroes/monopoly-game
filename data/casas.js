@@ -12,7 +12,7 @@ const casasJson = [
 
   // Lado esquerdo (subindo)
     { id: 9, nome: "Pé Pequeno", x: 13, y: 38, cor: "white", funcao: "propriedade", prices: [300, 470, 650, 880], fee: [45, 55, 65, 85], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 2 },
-  { id: 10, nome: "Jardim Icaraí", x: 18, y: 33, cor: "white", funcao: "propriedade", rodadasJogador: { jogadorCor: "", rodadas: 0 }, listaJogadores: [], lateral: 2 },
+  { id: 10, nome: "Jardim Icaraí", x: 18, y: 33, cor: "white", funcao: "propriedade", prices: [320, 480, 660, 900], fee: [50, 60, 70, 90], rodadasJogador: { jogadorCor: "", rodadas: 0 }, listaJogadores: [], lateral: 2 },
   { id: 11, nome: "Engenho do Mato", x: 22, y: 28, cor: "white", funcao: "propriedade", prices: [320, 480, 660, 900], fee: [50, 60, 70, 90], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 2 },
    { id: 12, nome: "Sorte", x: 27, y: 23, funcao: "sorte", listaJogadores: [], lateral: 2 },
   { id: 13, nome: "Cubango", x: 31, y: 20, cor: "pink", funcao: "propriedade", prices: [340, 500, 680, 920], fee: [55, 65, 75, 95], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 2 },

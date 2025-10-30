@@ -1,7 +1,7 @@
 import Casa from "./CasaModel.js";
 
 export default class Praia extends Casa {
-    constructor(id, nome, x, y, listaJogadores, price = 0, fee = [], proprietarioCor = null, lateral, casaConstruida = 0) {
+    constructor(id, nome, x, y, listaJogadores, price = 0, fee = 0, proprietarioCor = null, lateral, casaConstruida = 0) {
         super(id, nome, x, y, listaJogadores);
         this.price = price;
         this.fee = fee;
