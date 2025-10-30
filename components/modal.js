@@ -1,5 +1,5 @@
 Vue.component('modal', {
-  props: ['modal',],
+  props: ['modal'],
   template: `
     <div>
       <div v-if="modal.tipo === 1">
@@ -10,19 +10,19 @@ Vue.component('modal', {
 
             <div class="options">
               <label class="option">
-                <input type="radio" v-model="modal.selected" value="1"/>
+                <input type="radio" v-model="modal.selected" value="1" :disabled="modal.disabled[0]"/>
                 Casa 1 <span class="price">{{ modal.prices[0] || 0 }} R$</span>
               </label>
               <label class="option">
-                <input type="radio" v-model="modal.selected" value="2"/>
+                <input type="radio" v-model="modal.selected" value="2" :disabled="modal.disabled[1]"/>
                 Casa 2 <span class="price">{{ modal.prices[1] || 0 }} R$</span>
               </label>
               <label class="option">
-                <input type="radio" v-model="modal.selected" value="3"/>
+                <input type="radio" v-model="modal.selected" value="3" :disabled="modal.disabled[2]"/>
                 Casa 3 <span class="price">{{ modal.prices[2] || 0 }} R$</span>
               </label>
               <label class="option">
-                <input type="radio" v-model="modal.selected" value="4"/>
+                <input type="radio" v-model="modal.selected" value="4" :disabled="modal.disabled[3]"/>
                 Hotel <span class="price">{{ modal.prices[3] || 0 }} R$</span>
               </label>
             </div>
@@ -52,8 +52,8 @@ Vue.component('modal', {
       <div v-if="modal.tipo === 3">
         <div class="modal-overlay">
           <div class="modal-content">
-            {{ modal.mensagem }}
-            <button @click="$emit('dismiss')">Fechar</button>
+            <h2 class="modal-title">{{ modal.mensagem }}</h2>
+            <button class="btn confirm" @click="$emit('pagar-aluguel')">Pagar</button>
           </div>
         </div>
       </div>
@@ -61,8 +61,8 @@ Vue.component('modal', {
       <div v-if="modal.tipo === 4">
         <div class="modal-overlay">
           <div class="modal-content">
-            {{ modal.mensagem }}
-             <button @click="$emit('dismiss')">Fechar</button>
+            <h2 class="modal-title">{{ modal.mensagem }}</h2>
+             <button class="btn cancel" @click="$emit('dismiss')">Fechar</button>
           </div>
         </div>
       </div>

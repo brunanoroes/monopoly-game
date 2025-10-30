@@ -28,12 +28,7 @@ export default class Praia extends Casa {
             // Encontrar o proprietário e pagar
             const proprietario = this.jogadores.find(j => j.cor === this.proprietarioCor);
             if (proprietario) proprietario.receber(aluguel);
-        } else {
-            // O jogador caiu em sua própria praia
-            modal.tipo = 5;
-            modal.mostra = true;
-            modal.mensagem = `Você está em sua própria praia.`;
-        }
+        } 
     }
 
     comprarCasa(jogador, modal) {

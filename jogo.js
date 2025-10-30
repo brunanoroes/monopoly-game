@@ -15,6 +15,7 @@ new Vue({
       prices: [],
       selected: 0,
       mensagemAlerta: "",
+      disabled: [true, true, true, true]
     },
     areadados: {x: 45, y: 50},
     jogodiv: {x: 5, y: 75},
