@@ -173,6 +173,8 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
 }
 
 .buttonRodarDados {
+  border: 2px solid #ffcc00;
+  background-color: #ffe066;
   color: #fff;
   font-weight: bold;
   border-radius: 0.6rem;

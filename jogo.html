@@ -14,9 +14,7 @@
           <div>
             <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
             <button 
-              @click="jogarTurno(jogadorAtivo)"
-              :style="{ backgroundColor: jogadorAtivo.cor }" class="buttonRodarDados"
-            >
+              @click="jogarTurno(jogadorAtivo)" class="buttonRodarDados">
               Rodar Dados
             </button>
           </div>   
@@ -50,37 +48,11 @@
             :proprietario-cor="casa.proprietarioCor">
           </pino-casa> 
 
-          <!-- <peao
-                cor="vermelho" 
-                :index="1"
-                :total="casa.listaJogadores.length">
-          </peao>
-          <peao
-                cor="azul" 
-                :index="1"
-                :total="casa.listaJogadores.length">
-          </peao>
-          <peao
-                cor="amarelo" 
-                :index="1"
-                :total="casa.listaJogadores.length">
-          </peao>
-          <peao
-                cor="verde" 
-                :index="1"
-                :total="casa.listaJogadores.length">
-          </peao> 
-
-          <pino-casa 
-            :casa-construida="1" 
-            proprietario-cor="vermelho">
-          </pino-casa>  -->
-
         </div>
       </div>
 
 
-      <modal v-show="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @dismiss="dismiss"></modal>
+      <modal v-show="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @pagar-aluguel="pagarAluguel" @dismiss="dismiss"></modal>
 
     </div>
 

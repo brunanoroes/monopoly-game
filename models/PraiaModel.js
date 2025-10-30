@@ -1,13 +1,14 @@
 import Casa from "./CasaModel.js";
 
 export default class Praia extends Casa {
-    constructor(id, nome, x, y, listaJogadores, price = 0, fee = 0, proprietarioCor = null, lateral, casaConstruida = 0) {
+    constructor(id, nome, x, y, listaJogadores, price = 0, fee = 0, proprietarioCor = null, lateral, casaConstruida = 0, tipo) {
         super(id, nome, x, y, listaJogadores);
         this.price = price;
         this.fee = fee;
         this.casaConstruida = casaConstruida;
         this.proprietarioCor = proprietarioCor; //'azul', 'vermelho', 'verde', 'amarelo'
         this.lateral = lateral;
+        this.tipo = tipo;
     }
     funcao(jogador, modal) {
         if (!this.proprietarioCor) {
@@ -20,14 +21,10 @@ export default class Praia extends Casa {
         } else if (this.proprietarioCor !== jogador.cor) {
             // Pagar aluguel
             const aluguel = this.fee ? this.fee : 0;
-            modal.tipo = 4;
+            modal.tipo = 3;
             modal.mostra = true;
             modal.mensagem = `Pague aluguel da sua barraquinha de R$${aluguel} para o proprietário.`;
             modal.precoAluguel = aluguel;
-            jogador.pagar(aluguel);
-            // Encontrar o proprietário e pagar
-            const proprietario = this.jogadores.find(j => j.cor === this.proprietarioCor);
-            if (proprietario) proprietario.receber(aluguel);
         } 
     }
 

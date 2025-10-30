@@ -9,12 +9,8 @@ export default class Player extends Jogador {
         return super.jogarDados(totalCasas);
     }
 
-    comprarCasa(casa) {
-        return super.comprarCasa(casa);
-    }
-
-    pagarAluguel(casa) {
-        return super.pagarAluguel(casa);
+    pagar(casa) {
+        return super.pagar(casa);
     }
 
     receber(valor) {
