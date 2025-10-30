@@ -1,56 +1,50 @@
 import Casa from "./CasaModel.js";
 
-export default class Propriedade extends Casa {
-    constructor(id, nome, x, y, listaJogadores, prices = [], fee = [], casaConstruida = 0, proprietarioCor = null, cor, lateral) {
+export default class Praia extends Casa {
+    constructor(id, nome, x, y, listaJogadores, price = 0, fee = [], proprietarioCor = null, lateral, casaConstruida = 0) {
         super(id, nome, x, y, listaJogadores);
-        this.prices = prices;
+        this.price = price;
         this.fee = fee;
-        this.casaConstruida = casaConstruida; //1, 2, 3 ou 4
+        this.casaConstruida = casaConstruida;
         this.proprietarioCor = proprietarioCor; //'azul', 'vermelho', 'verde', 'amarelo'
-        this.cor = cor;
         this.lateral = lateral;
     }
     funcao(jogador, modal) {
         if (!this.proprietarioCor) {
             // Casa sem dono, pode comprar
-            modal.tipo = 1;
+            modal.tipo = 2;
             modal.mostra = true;
-            modal.mensagem = `Deseja comprar ${this.nome}?`;
-            modal.prices = this.prices;
+            modal.mensagem = `Deseja comprar a praia de ${this.nome}?`;
+            modal.prices = this.price;
             // A lógica de compra deve ser tratada no Vue após confirmação do usuário
         } else if (this.proprietarioCor !== jogador.cor) {
             // Pagar aluguel
-            const aluguel = this.fee ? this.fee[this.casaConstruida || 0] : 0;
-            modal.tipo = 3;
+            const aluguel = this.fee ? this.fee : 0;
+            modal.tipo = 4;
             modal.mostra = true;
-            modal.mensagem = `Pague aluguel de R$${aluguel} para o proprietário.`;
+            modal.mensagem = `Pague aluguel da sua barraquinha de R$${aluguel} para o proprietário.`;
             modal.precoAluguel = aluguel;
             jogador.pagar(aluguel);
             // Encontrar o proprietário e pagar
             const proprietario = this.jogadores.find(j => j.cor === this.proprietarioCor);
             if (proprietario) proprietario.receber(aluguel);
         } else {
-            // O jogador caiu em sua própria propriedade
-            modal.tipo = 4;
+            // O jogador caiu em sua própria praia
+            modal.tipo = 5;
             modal.mostra = true;
-            modal.mensagem = `Você está em sua própria propriedade.`;
+            modal.mensagem = `Você está em sua própria praia.`;
         }
     }
 
     comprarCasa(jogador, modal) {
-        const tipoCasa = modal.selected;
-        if (!tipoCasa) {
-            modal.mensagemAlerta = 'Selecione uma opção.';
-            return;
-        }
         if (this && !this.proprietarioCor) {
-            const preco = this.prices ? this.prices[tipoCasa - 1] : 0;
+            const preco = this.price ? this.price : 0;
                 if(!jogador.pagar(preco)){
                     modal.mensagemAlerta = 'Saldo insuficiente.';
                     return false
                 }
                 this.proprietarioCor = jogador.cor;
-                this.casaConstruida = tipoCasa;
+                this.casaConstruida = 5;
                 jogador.propriedades.push(this);
                 modal.mostra = false;
         }

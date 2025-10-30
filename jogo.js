@@ -105,7 +105,12 @@ new Vue({
       const casaId = this.jogadorAtivo.localizacaoAtual
       const casa = this.tabuleiro.casas[casaId]
       await casa.comprarCasa(this.jogadorAtivo, this.modal)
-      this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+      this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+    },
+
+    async cancelarCompra() {
+      this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+      this.dismiss()
     },
 
     dismiss(){
