@@ -134,6 +134,10 @@ new Vue({
       }else{
         modal.mensagemAlerta = "Jogador não tem dinheiro para pagar Alguel, precisa vender propriedades - Função não implementada ainda"
       }  
+    },
+
+    async funcaoEspecial(){
+
     }
   }
 });

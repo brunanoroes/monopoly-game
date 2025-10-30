@@ -1,0 +1,72 @@
+import Casa from "./CasaModel.js";
+
+export default class Especial extends Casa {
+    constructor(id, nome, x, y, listaJogadores, lateral) {
+        super(id, nome, x, y, listaJogadores);
+        this.lateral = lateral;
+        this.nome = nome;
+    }
+    
+    funcao(jogador, modal) {
+      modal.mensagem = this.getMensagemHtml()
+      modal.tipo = 5;
+      modal.mostra = true;
+
+    }
+
+    getMensagemHtml() {
+      switch (this.nome) {
+        case "MAC":
+          return `
+            <div>
+              <strong>🎨 Você caiu no MAC!</strong><br>
+              Escolha um bairro para realizar uma exposição de arte.<br>
+              Enquanto a exposição estiver lá, o valor das propriedades desse bairro será <strong>dobrado</strong>!
+            </div>
+          `;
+
+        case "UFF":
+          return `
+            <div>
+              <strong>📚 Você caiu na Semana de Provas da UFF!</strong><br>
+              Você ficará preso na universidade até pagar <strong>R$200</strong> pelo gabarito
+              ou tirar <strong>duas vezes o número 6</strong> nos dados.<br>
+              Boa sorte nos estudos (ou na malandragem)!
+            </div>
+          `;
+
+        case "Terminal":
+          return `
+            <div>
+              <strong>🚌 Você chegou ao Terminal!</strong><br>
+              Escolha uma casa para pegar o ônibus e avançar até ela na próxima rodada.
+            </div>
+          `;
+
+        case "Plaza":
+          return `
+            <div>
+              <strong>🛍️ Você caiu no Plaza Shopping!</strong><br>
+              Você saiu gastando — <strong>-R$100</strong> da sua conta. Aproveite as comprinhas!
+            </div>
+          `;
+
+        case "Início":
+          return `
+            <div>
+              <strong>🎁 Você passou pela casa inicial!</strong><br>
+              Receba <strong>R$200</strong> como incentivo para continuar seu caminho rumo à vitória!
+            </div>
+          `;
+
+        default:
+          return `
+            <div>
+              <strong>ℹ️ Evento desconhecido</strong><br>
+              Não foi possível encontrar informações para este espaço.
+            </div>
+          `;
+      }
+    }
+
+}

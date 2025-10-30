@@ -3,6 +3,7 @@ import Casa from './CasaModel.js';
 import Propriedade from './PropriedadeModel.js';
 import Sorte from './SorteModel.js';
 import Praia from './PraiaModel.js';
+import Especial from './EspecialModel.js';
 
 export default class TabuleiroModel {
 	constructor({ nomesJogadores }) {
@@ -24,6 +25,9 @@ export default class TabuleiroModel {
 					break;
 				case 'praia':
 					this.casas.push(new Praia(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores, casaData.price, casaData.fee, casaData.proprietarioCor,  casaData.lateral, casaData.casaConstruida, casaData.tipo));
+					break
+				case 'especial':
+					this.casas.push(new Especial(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral));
 					break
 				 default:
 				 	this.casas.push(new Casa(casaData.id, casaData.nome, casaData.x, casaData.y, casaData.listaJogadores,  casaData.lateral)); // Casas simples sem lógica especial
@@ -80,7 +84,6 @@ export default class TabuleiroModel {
 	}
 
 	async atualizarCasaJogador(jogador, soma) {
-		// Garantir que não haja movimento duplo simultâneo
 		if (jogador.movendo) return;
 		jogador.movendo = true;
 

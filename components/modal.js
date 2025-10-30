@@ -69,6 +69,15 @@ Vue.component('modal', {
           </div>
         </div>
       </div>
+
+      <div v-if="modal.tipo === 5">
+        <div class="modal-overlay">
+          <div class="modal-content">
+            <div v-html="modal.mensagem"></div>
+            <button class="btn confirm" @click="$emit('casa-especial')">Resgatar</button>
+          </div>
+        </div>
+      </div>
     </div>
   `
 });
@@ -76,3 +85,4 @@ Vue.component('modal', {
 //Modal 2 - Compra praia
 //Modal 3 - Pagamento Aluguel
 //Modal 4 - Avisos
+//Modal 5 - Casas Especiais
