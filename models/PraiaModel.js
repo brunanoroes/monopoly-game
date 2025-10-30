@@ -10,15 +10,8 @@ export default class Praia extends Casa {
         this.lateral = lateral;
         this.tipo = tipo;
     }
-    funcao(jogador, modal) {
-        if (!this.proprietarioCor) {
-            // Casa sem dono, pode comprar
-            modal.tipo = 2;
-            modal.mostra = true;
-            modal.mensagem = `Deseja comprar a praia de ${this.nome}?`;
-            modal.prices = this.price;
-            // A lógica de compra deve ser tratada no Vue após confirmação do usuário
-        } else if (this.proprietarioCor !== jogador.cor) {
+    funcao(jogador, modal, tipo = 0) {
+        if(this.proprietarioCor !== jogador.cor && this.proprietarioCor && !tipo) {
             // Pagar aluguel
             const aluguel = this.fee ? this.fee : 0;
             modal.tipo = 3;
@@ -26,20 +19,27 @@ export default class Praia extends Casa {
             modal.mensagem = `Pague aluguel da sua barraquinha de R$${aluguel} para o proprietário.`;
             modal.precoAluguel = aluguel;
         } 
+        else {
+            // Casa sem dono, pode comprar
+            modal.tipo = 2;
+            modal.mostra = true;
+            modal.mensagem = `Deseja comprar a praia de ${this.nome}?`;
+            
+            modal.prices = this.price + (this.proprietarioCor ? 100 : 0);
+        }
     }
 
     comprarCasa(jogador, modal) {
-        if (this && !this.proprietarioCor) {
-            const preco = this.price ? this.price : 0;
-                if(!jogador.pagar(preco)){
-                    modal.mensagemAlerta = 'Saldo insuficiente.';
-                    return false
-                }
-                this.proprietarioCor = jogador.cor;
-                this.casaConstruida = 5;
-                jogador.propriedades.push(this);
-                modal.mostra = false;
-        }
+        const preco = this.price + (this.proprietarioCor ? 100 : 0);
+            if(!jogador.pagar(preco)){
+                modal.mensagemAlerta = 'Saldo insuficiente.';
+                return false
+            }
+            this.proprietarioCor = jogador.cor;
+            this.casaConstruida = 5;
+            jogador.propriedades.push(this);
+            modal.mostra = false;
+        
     }
 
 }

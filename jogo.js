@@ -79,11 +79,7 @@ new Vue({
       const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
       //Realiza ação da casa (ex: comprar/alugar)
-      this.realizarFuncao(jogador, novaCasa, this.modal);
-    },
-
-    realizarFuncao(jogador, casa, modal) {
-      casa.funcao(jogador, modal);
+      novaCasa.funcao(jogador, this.modal);
     },
 
     async confirmarCompra() {
@@ -134,10 +130,10 @@ new Vue({
       if(await this.jogadorAtivo.pagar(_valor)){
         _jogador.receber(_valor)
         this.dismiss()
+        casa.funcao(this.jogadorAtivo, this.modal, 1);
       }else{
         modal.mensagemAlerta = "Jogador não tem dinheiro para pagar Alguel, precisa vender propriedades - Função não implementada ainda"
       }  
-      this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
     }
   }
 });

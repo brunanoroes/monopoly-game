@@ -21,7 +21,7 @@ const casasJson = [
   { id: 16, nome: "UFF", x: 45, y: 5, tipo: "companhia", proprietarioCor: "", listaJogadores: []},
 
 // Lado esquerdo (descendo)
-  { id: 17, nome: "Vital Brasil", x: 55, y: 10, cor: "orange", tipo: "propriedade", listaJogadores: [], lateral: 3 },
+  { id: 17, nome: "Vital Brasil", x: 55, y: 10, cor: "orange", tipo: "propriedade", prices: [380, 540, 720, 960], fee: [65, 75, 85, 105], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 3 },
   { id: 18, nome: "Camboinhas", x: 60, y: 15, tipo: "praia", price: 200, fee: 60, casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 3 },
   { id: 19, nome: "Fonseca", x: 65, y: 20, cor: "orange", tipo: "propriedade", prices: [420, 580, 760, 1000], fee: [75, 85, 95, 115], casaConstruida: 0, proprietarioCor: "", listaJogadores: [], lateral: 3 },
   { id: 20, nome: "Sorte", x: 68, y: 25, tipo: "sorte", listaJogadores: [], lateral: 3 },

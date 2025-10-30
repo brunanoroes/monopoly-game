@@ -11,8 +11,8 @@ export default class Propriedade extends Casa {
         this.lateral = lateral;
         this.tipo = tipo
     }
-    funcao(jogador, modal) {
-        if (this.proprietarioCor !== jogador.cor && this.proprietarioCor) {
+    funcao(jogador, modal, tipo = 0) {
+        if (this.proprietarioCor !== jogador.cor && this.proprietarioCor && !tipo) {
             // Pagar aluguel
             const aluguel = this.fee ? this.fee[this.casaConstruida - 1 || 0] : 0;
             modal.tipo = 3;
@@ -24,11 +24,20 @@ export default class Propriedade extends Casa {
             modal.tipo = 1;
             modal.selected = 0;
             modal.mostra = true;
-            modal.mensagem = `Deseja comprar ${this.nome}?`;
-            modal.prices = this.prices;
-            modal.disabled = [true, true, true, true];
-            if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
-                modal.disabled[this.casaConstruida] = false;
+            modal.mensagem = `Deseja comprar ${this.nome}?`;          
+            if(tipo){
+                modal.prices = this.prices.map(preco => preco + 100);
+                modal.disabled = [true, true, true, true];
+                if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
+                    modal.disabled[this.casaConstruida - 1] = false;
+                }
+            }
+            else {
+                modal.prices = this.prices;
+                modal.disabled = [true, true, true, true];
+                if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
+                    modal.disabled[this.casaConstruida] = false;
+                }
             }
         }
     }
@@ -39,17 +48,14 @@ export default class Propriedade extends Casa {
             modal.mensagemAlerta = 'Selecione uma opção.';
             return;
         }
-        if (this && !this.proprietarioCor) {
-            const preco = this.prices ? this.prices[tipoCasa - 1] : 0;
-                if(!jogador.pagar(preco)){
-                    modal.mensagemAlerta = 'Saldo insuficiente.';
-                    return false
-                }
-                this.proprietarioCor = jogador.cor;
-                this.casaConstruida = tipoCasa;
-                jogador.propriedades.push(this);
-                modal.mostra = false;
+        const preco = this.prices[tipoCasa - 1] + (this.proprietarioCor ? 100 : 0);
+        if(!jogador.pagar(preco)){
+            modal.mensagemAlerta = 'Saldo insuficiente.';
+            return false
         }
+            this.proprietarioCor = jogador.cor;
+            this.casaConstruida = tipoCasa;
+            jogador.propriedades.push(this);
+            modal.mostra = false;
     }
-
 }
