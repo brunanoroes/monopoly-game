@@ -11,17 +11,10 @@ export default class Propriedade extends Casa {
         this.lateral = lateral;
     }
     funcao(jogador, modal) {
-        if (!this.proprietarioCor) {
-            // Casa sem dono, pode comprar
-            modal.tipo = 1;
-            modal.mostra = true;
-            modal.mensagem = `Deseja comprar ${this.nome}?`;
-            modal.prices = this.prices;
-            // A lógica de compra deve ser tratada no Vue após confirmação do usuário
-        } else if (this.proprietarioCor !== jogador.cor) {
+        if (this.proprietarioCor !== jogador.cor && this.proprietarioCor) {
             // Pagar aluguel
             const aluguel = this.fee ? this.fee[this.casaConstruida || 0] : 0;
-            modal.tipo = 4;
+            modal.tipo = 3;
             modal.mostra = true;
             modal.mensagem = `Pague aluguel de R$${aluguel} para o proprietário.`;
             modal.precoAluguel = aluguel;
@@ -29,11 +22,17 @@ export default class Propriedade extends Casa {
             // Encontrar o proprietário e pagar
             const proprietario = this.jogadores.find(j => j.cor === this.proprietarioCor);
             if (proprietario) proprietario.receber(aluguel);
-        } else {
-            // O jogador caiu em sua própria propriedade
-            modal.tipo = 5;
+        }
+        else {
+            modal.tipo = 1;
+            modal.selected = 0;
             modal.mostra = true;
-            modal.mensagem = `Você está em sua própria propriedade.`;
+            modal.mensagem = `Deseja comprar ${this.nome}?`;
+            modal.prices = this.prices;
+            modal.disabled = [true, true, true, true];
+            if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
+                modal.disabled[this.casaConstruida] = false;
+            }
         }
     }
 
@@ -45,7 +44,6 @@ export default class Propriedade extends Casa {
         }
         if (this && !this.proprietarioCor) {
             const preco = this.prices ? this.prices[tipoCasa - 1] : 0;
-            console.log(jogador.dinheiro, preco)
                 if(!jogador.pagar(preco)){
                     modal.mensagemAlerta = 'Saldo insuficiente.';
                     return false

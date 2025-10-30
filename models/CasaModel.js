@@ -8,7 +8,7 @@ export default class Casa {
         this.lateral = lateral;
     }
     funcao(jogador, modal) {
-        modal.tipo = 2;
+        modal.tipo = 4;
         modal.mostra = true;
         modal.mensagem = 'Ainda não implementado';
     }

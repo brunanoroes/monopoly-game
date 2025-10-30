@@ -7,7 +7,7 @@ export default class Sorte extends Casa {
     }
     
     funcao(jogador, modal) {
-        modal.tipo = 2;
+        modal.tipo = 4;
         modal.mostra = true;
         modal.mensagem = 'Ainda não implementado';
     // const carta = this.cartasSorte.shift(); // pega a primeira carta
