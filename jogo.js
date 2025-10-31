@@ -82,7 +82,7 @@ new Vue({
       this.dados.numero2 = resultado.dado2;
 
       //Atualiza a casa do jogador no tabuleiro
-      const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, 8);
+      const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
 
       //Realiza ação da casa (ex: comprar/alugar)
       novaCasa.funcao(jogador, this.modal);
