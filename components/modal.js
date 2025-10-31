@@ -71,13 +71,19 @@ Vue.component('modal', {
       </div>
 
       <div v-if="modal.tipo === 5">
-        <div class="modal-overlay">
-          <div class="modal-content">
-            <div v-html="modal.mensagem"></div>
-            <button class="btn confirm" @click="$emit('casa-especial')">Resgatar</button>
-          </div>
+      <div class="modal-overlay">
+        <div class="modal-content">
+          <div v-html="modal.mensagem"></div>
+
+          <button class="btn confirm"
+                  @click="$emit('casa-especial')"
+                  style="margin-top: 2rem">
+            Continuar
+          </button>
         </div>
       </div>
+    </div>
+
     </div>
   `
 });

@@ -20,7 +20,7 @@ export default class Especial extends Casa {
           return `
             <div>
               <strong>🎨 Você caiu no MAC!</strong><br>
-              Escolha um bairro para realizar uma exposição de arte.<br>
+              Escolha um bairro seu para realizar uma exposição de arte.<br>
               Enquanto a exposição estiver lá, o valor das propriedades desse bairro será <strong>dobrado</strong>!
             </div>
           `;
@@ -67,6 +67,20 @@ export default class Especial extends Casa {
             </div>
           `;
       }
+    }
+
+    async funcaoEspecial(_escolhaBairros, _casas, _jogador){
+      if (this.nome === "MAC"){
+        _escolhaBairros.mostra = true;
+        _escolhaBairros.bairros = _casas
+          .filter(casa => casa.proprietarioCor === _jogador.cor)
+          .map(casa => casa.nome);
+        _escolhaBairros.mensagem = 
+          _escolhaBairros.bairros.length > 0
+            ? "Escolha um bairro para a exposição de arte"
+            : "Você não tem nenhuma propriedade para fazer exposição de arte";
+
+              }
     }
 
 }

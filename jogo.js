@@ -22,6 +22,12 @@ new Vue({
     dados: {
       numero1 : 1,
       numero2 : 1
+    },
+    escolhaBairros: {
+      bairros: [],
+      mensagem: '',
+      mensagemAlerta: '',
+      mostra: false
     }
   },
   created() {
@@ -76,7 +82,7 @@ new Vue({
       this.dados.numero2 = resultado.dado2;
 
       //Atualiza a casa do jogador no tabuleiro
-      const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
+      const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, 8);
 
       //Realiza ação da casa (ex: comprar/alugar)
       novaCasa.funcao(jogador, this.modal);
@@ -96,6 +102,8 @@ new Vue({
 
     dismiss(){
       this.modal.mostra = false;
+      this.escolhaBairros.mostra = false;
+      this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
     },
 
     jogadorAtivoAcao(casa, tipo) {
@@ -137,7 +145,21 @@ new Vue({
     },
 
     async funcaoEspecial(){
+      this.modal.mostra = false;
+      const casa = this.tabuleiro.casas.find(
+        casa => casa.id === this.jogadorAtivo.localizacaoAtual
+      );
+      casa.funcaoEspecial(this.escolhaBairros, this.tabuleiro.casas, this.jogadorAtivo)
 
+      //Plaza - Paga dinheiro
+      //Uff (Propriedade nova em jogador para saber se ele está preso)
+
+    },
+    
+    bairroSelecionado(bairro) {
+      console.log("Bairro escolhido:", bairro);
+      // MAC : aumentar o valor de fee a prices (diminuir o valor da última exposição)(pROPRIEDADE NOVA EM CASA - eM EXPOSIÇÃO)
+      // Terminal: marcar no jogador a próxima cidade q ele vai na próxima rodada(Propriedade nova em jogador- Proxima rodada bairro- Se vazio jogo normal, se cheiro ele vai pra lá)
     }
   }
 });
