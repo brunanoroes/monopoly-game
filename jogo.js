@@ -98,6 +98,13 @@ new Vue({
       this.modal.mostra = false;
     },
 
+    executarCartaSorte() {
+      if (this.modal.executarCartaSorte) {
+        this.modal.executarCartaSorte();
+      }
+      this.dismiss();
+    },
+
     jogadorAtivoAcao(casa, tipo) {
       if (!this.jogadorAtivo) return;
       // Exemplo: abre modal para comprar se propriedade, etc.
