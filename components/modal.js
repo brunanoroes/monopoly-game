@@ -71,19 +71,29 @@ Vue.component('modal', {
       </div>
 
       <div v-if="modal.tipo === 5">
-      <div class="modal-overlay">
-        <div class="modal-content">
-          <div v-html="modal.mensagem"></div>
-
-          <button class="btn confirm"
-                  @click="$emit('casa-especial')"
-                  style="margin-top: 2rem">
-            Continuar
-          </button>
+        <div class="modal-overlay">
+          <div class="modal-content">
+            <h2 class="modal-title">{{ modal.mensagem }}</h2>
+            <p class="modal-subtitle">{{ modal.mensagemAlerta }}</p>
+             <button class="btn confirm" @click="$emit('executar-carta-sorte')">Continuar</button>
+          </div>
         </div>
       </div>
     </div>
 
+    <div v-if="modal.tipo === 6">
+      <div class="modal-overlay">
+        <div class="modal-content">
+          <div v-html="modal.mensagem"></div>
+
+            <button class="btn confirm"
+                    @click="$emit('casa-especial')"
+                    style="margin-top: 2rem">
+              Continuar
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   `
 });
@@ -91,4 +101,5 @@ Vue.component('modal', {
 //Modal 2 - Compra praia
 //Modal 3 - Pagamento Aluguel
 //Modal 4 - Avisos
-//Modal 5 - Casas Especiais
+//Modal 5 - Cartas de Sorte/Azar
+//Modal 6 - Casas Especiais

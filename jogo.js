@@ -100,11 +100,28 @@ new Vue({
       this.dismiss()
     },
 
-    dismiss(){
-      this.modal.mostra = false;
-      this.escolhaBairros.mostra = false;
-      this.jogadorAtivo = this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
-    },
+      async dismiss(){
+        this.modal.mostra = false;
+        this.escolhaBairros.mostra = false;
+        if (this.modal.passarVez) {
+          this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+          this.modal.passarVez = false;
+        }
+      },
+
+      async executarCartaSorte() {
+        if (this.modal.executarCartaSorte) {
+          this.modal.executarCartaSorte();
+        }
+        if (!this.modal.keepOpen) {
+          this.dismiss();
+        }
+        if (this.modal.passarVez) {
+          this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+          this.modal.passarVez = false;
+        }
+        this.modal.keepOpen = false;
+      },
 
     jogadorAtivoAcao(casa, tipo) {
       if (!this.jogadorAtivo) return;

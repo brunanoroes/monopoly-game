@@ -52,7 +52,7 @@
       </div>
 
 
-      <modal v-if="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @pagar-aluguel="pagarAluguel" @casa-especial="funcaoEspecial" @dismiss="dismiss"></modal>
+      <modal v-if="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @pagar-aluguel="pagarAluguel" @casa-especial="funcaoEspecial" @dismiss="dismiss" @executar-carta-sorte="executarCartaSorte"></modal>
 
       <escolha-bairro v-if="escolhaBairros.mostra"  :escolha-bairros="escolhaBairros" @selecionar-bairro="bairroSelecionado" @dismiss="dismiss"/>
 
