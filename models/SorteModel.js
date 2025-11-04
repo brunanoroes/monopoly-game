@@ -28,16 +28,23 @@ export default class Sorte extends Casa {
         modal.executarCartaSorte = () => {
             const app = document.getElementById('appVue').__vue__;
             const tabuleiro = app.tabuleiro;
+            // flags de controle do fluxo no modal
+            modal.passarVez = false;
+            modal.keepOpen = false;
 
             switch (carta.funcao) {
                 case 'sorte':
                     jogador.receber(carta.valor);
                     Vue.set(jogador, 'dinheiro', jogador.dinheiro);
+                    // após ganhar/perder dinheiro, passa a vez
+                    modal.passarVez = true;
                     break;
                 case 'azar':
                     if (jogador.pagar(carta.valor)) {
                         Vue.set(jogador, 'dinheiro', jogador.dinheiro);
                     }
+                    // independente de conseguir pagar, finaliza e passa a vez
+                    modal.passarVez = true;
                     break;
                 case 'mover':
                     // Encontrar a casa no tabuleiro usando o array de casas do tabuleiro
@@ -62,16 +69,23 @@ export default class Sorte extends Casa {
                         Vue.set(casaDestino, 'listaJogadores', casaDestino.listaJogadores);
                         Vue.set(jogador, 'localizacaoAtual', casaDestino.id);
 
-                        // Executa a função da casa de destino, se houver
-                        if (casaDestino.funcao && typeof casaDestino.funcao === 'function') {
-                            casaDestino.funcao(jogador, modal);
+                        if (['propriedade', 'praia'].includes(casaDestino.tipo)) {
+                            if (casaDestino.funcao && typeof casaDestino.funcao === 'function') {
+                                casaDestino.funcao(jogador, modal);
+                                modal.keepOpen = true;
+                            }
+                        } else {
+                            if (casaDestino.funcao && typeof casaDestino.funcao === 'function') {
+                                casaDestino.funcao(jogador, modal);
+                            }
+                            modal.passarVez = true;
                         }
                     }
                     break;
             }
             // Coloca a carta no final do baralho após a execução
             this.cartas.push(carta);
-            modal.mostra = false; // Fecha o modal após executar a ação
+            // não fechar aqui; quem decide é o handler no jogo.js conforme flags
         };
     }
 
