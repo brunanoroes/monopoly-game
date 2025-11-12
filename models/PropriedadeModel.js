@@ -18,21 +18,36 @@ export default class Propriedade extends Casa {
             modal.tipo = 3;
             modal.mostra = true;
             modal.mensagem = `Pague aluguel de R$${aluguel} para o proprietário.`;
+            modal.mensagemAlerta = ''; // Limpa mensagem de alerta
             modal.precoAluguel = aluguel;
         }
         else {
             modal.tipo = 1;
             modal.selected = 0;
             modal.mostra = true;
-            modal.mensagem = `Deseja comprar ${this.nome}?`;          
-            if(tipo){
+            modal.mensagemAlerta = ''; // Limpa mensagem de alerta
+            
+            // Se já tem dono (jogador atual), é upgrade de propriedade
+            if(this.proprietarioCor === jogador.cor){
+                modal.mensagem = `Deseja melhorar ${this.nome}?`;
                 modal.prices = this.prices.map(preco => preco + 100);
                 modal.disabled = [true, true, true, true];
                 if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
-                    modal.disabled[this.casaConstruida - 1] = false;
+                    modal.disabled[this.casaConstruida] = false;
                 }
             }
+            // Se tem outro dono e tipo=1 (após pagar aluguel), pode comprar por +100
+            else if(this.proprietarioCor && tipo){
+                modal.mensagem = `Deseja comprar ${this.nome} do proprietário?`;
+                modal.prices = this.prices.map(preco => preco + 100);
+                modal.disabled = [true, true, true, true];
+                if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
+                    modal.disabled[this.casaConstruida] = false;
+                }
+            }
+            // Casa sem dono
             else {
+                modal.mensagem = `Deseja comprar ${this.nome}?`;
                 modal.prices = this.prices;
                 modal.disabled = [true, true, true, true];
                 if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
@@ -42,20 +57,42 @@ export default class Propriedade extends Casa {
         }
     }
 
-    comprarCasa(jogador, modal) {
+    comprarCasa(jogador, modal, tabuleiro = null) {
         const tipoCasa = modal.selected;
         if (!tipoCasa) {
             modal.mensagemAlerta = 'Selecione uma opção.';
             return;
         }
-        const preco = this.prices[tipoCasa - 1] + (this.proprietarioCor ? 100 : 0);
-        if(!jogador.pagar(preco)){
-            modal.mensagemAlerta = 'Saldo insuficiente.';
-            return false
+        
+        const antigoProprietario = this.proprietarioCor;
+        const preco = this.prices[tipoCasa - 1] + (antigoProprietario && antigoProprietario !== jogador.cor ? 100 : 0);
+        
+        // Se está comprando de outro jogador, transferir dinheiro e remover propriedade
+        if (antigoProprietario && antigoProprietario !== jogador.cor && tabuleiro) {
+            const vendedor = tabuleiro.jogadores.find(j => j.cor === antigoProprietario);
+            if (vendedor) {
+                // Remove propriedade do vendedor
+                const index = vendedor.propriedades.findIndex(p => p.id === this.id);
+                if (index !== -1) {
+                    vendedor.propriedades.splice(index, 1);
+                }
+                // Vendedor recebe o dinheiro
+                vendedor.receber(preco);
+            }
         }
-            this.proprietarioCor = jogador.cor;
-            this.casaConstruida = tipoCasa;
+        
+        // Realiza o pagamento (agora sempre funciona, mesmo com saldo insuficiente)
+        jogador.pagar(preco);
+        
+        // Se o jogador já não possui esta propriedade, adiciona
+        if (!jogador.propriedades.find(p => p.id === this.id)) {
             jogador.propriedades.push(this);
-            modal.mostra = false;
+        }
+        
+        this.proprietarioCor = jogador.cor;
+        this.casaConstruida = tipoCasa;
+        modal.mostra = false;
+        
+        return true;
     }
 }

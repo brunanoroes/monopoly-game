@@ -5,7 +5,8 @@ export default class Jogador {
     this.cor = cor;
     this.dinheiro = dinheiroInicial;
     this.localizacaoAtual = casaInicial;
-    this.propriedades = []; 
+    this.propriedades = [];
+    this.falido = false; // Nova propriedade para controle de falência
   }
 
   jogarDados() {
@@ -20,10 +21,58 @@ export default class Jogador {
   }
 
   pagar(valor) {
-    if (this.dinheiro >= valor) {
-      this.dinheiro -= valor;
-      return true;
+    // Agora permite pagar mesmo sem saldo suficiente (entra em dívida)
+    this.dinheiro -= valor;
+    return true;
+  }
+
+  // Verifica se o jogador está em falência (saldo negativo)
+  verificarFalencia() {
+    return this.dinheiro < 0;
+  }
+
+  // Calcula o valor total que o jogador pode obter vendendo propriedades
+  calcularValorTotalPropriedades() {
+    return this.propriedades.reduce((total, prop) => {
+      if (prop.tipo === 'praia') {
+        return total + Math.floor(prop.price * 0.5);
+      }
+      if (prop.prices && prop.casaConstruida > 0) {
+        return total + Math.floor(prop.prices[prop.casaConstruida - 1] * 0.5);
+      }
+      return total;
+    }, 0);
+  }
+
+  // Vende uma propriedade específica e retorna o valor obtido
+  venderPropriedade(propriedade) {
+    const index = this.propriedades.findIndex(p => p.id === propriedade.id);
+    if (index === -1) return 0;
+
+    let valorVenda = 0;
+    if (propriedade.tipo === 'praia') {
+      valorVenda = Math.floor(propriedade.price * 0.5);
+    } else if (propriedade.prices && propriedade.casaConstruida > 0) {
+      valorVenda = Math.floor(propriedade.prices[propriedade.casaConstruida - 1] * 0.5);
     }
-    return false;
+
+    // Remover propriedade do jogador e resetar valores da casa
+    this.propriedades.splice(index, 1);
+    propriedade.proprietarioCor = null;
+    propriedade.casaConstruida = 0;
+    
+    this.receber(valorVenda);
+    return valorVenda;
+  }
+
+  // Declara falência do jogador e libera todas as propriedades
+  declararFalencia() {
+    this.falido = true;
+    // Liberar todas as propriedades
+    this.propriedades.forEach(prop => {
+      prop.proprietarioCor = null;
+      prop.casaConstruida = 0;
+    });
+    this.propriedades = [];
   }
 }
