@@ -11,6 +11,7 @@ export default class Casa {
         modal.tipo = 4;
         modal.mostra = true;
         modal.mensagem = 'Ainda não implementado';
+        modal.passarVez = true; // Passa a vez após fechar o modal
     }
     
 }   

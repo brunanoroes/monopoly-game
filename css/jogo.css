@@ -142,6 +142,80 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   to { opacity: 1; transform: scale(1); }
 }
 
+/* ========== ESTILOS DO BOT ========== */
+.bot-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 15vh;
+  z-index: 500;
+  pointer-events: none;
+}
+
+.bot-indicator {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.bot-spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #fff;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.bot-message {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.jogador.bot {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+  border: 2px solid #a78bfa;
+}
+
+.jogador.bot.ativo {
+  background: linear-gradient(135deg, #c7d2fe 0%, #ddd6fe 100%);
+  border: 2px solid #8b5cf6;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+}
+
+.bot-badge {
+  font-size: 0.9em;
+  margin-right: 0.2rem;
+}
+
+.buttonRodarDados:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.buttonRodarDados.bloqueado {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .city {
   width: 5rem;
   height: 5rem;

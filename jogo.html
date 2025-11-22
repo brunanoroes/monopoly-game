@@ -8,13 +8,24 @@
   </head>
   <body>
     <div id="appVue" v-cloak>
+      <!-- Indicador de turno do Bot -->
+      <div v-if="botPensando" class="bot-overlay">
+        <div class="bot-indicator">
+          <div class="bot-spinner"></div>
+          <p class="bot-message">{{ mensagemBot }}</p>
+        </div>
+      </div>
+
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
         <div :style="EstilizarObjetoPosicao(areadados)">
           <div>
             <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
             <button 
-              @click="jogarTurno(jogadorAtivo)" class="buttonRodarDados">
+              @click="jogarTurno(jogadorAtivo)" 
+              class="buttonRodarDados"
+              :class="{ bloqueado: dadosBloqueados }"
+              :disabled="dadosBloqueados || (jogadorAtivo && jogadorAtivo.tipo === 'bot')">
               Rodar Dados
             </button>
           </div>   
@@ -23,9 +34,12 @@
           <div 
             v-for="jogador in tabuleiro ? tabuleiro.jogadores : []" 
             :key="jogador.nome"
-            :class="['jogador', { ativo: jogador === jogadorAtivo }]"
+            :class="['jogador', { ativo: jogador === jogadorAtivo, bot: jogador.tipo === 'bot' }]"
           >
-            <span class="nome">{{ jogador.nome }}</span>
+            <span class="nome">
+              <span v-if="jogador.tipo === 'bot'" class="bot-badge">🤖</span>
+              {{ jogador.nome }}
+            </span>
             <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
           </div>
         </div>
