@@ -42,7 +42,19 @@ export default class Sorte extends Casa {
                 case 'azar':
                     if (jogador.pagar(carta.valor)) {
                         Vue.set(jogador, 'dinheiro', jogador.dinheiro);
+                    } else {
+                        // Jogador não conseguiu pagar, registra dívida
+                        jogador.dinheiro -= carta.valor;
+                        Vue.set(jogador, 'dinheiro', jogador.dinheiro);
                     }
+                    
+                    // Verificar falência após o pagamento/dívida
+                    if (app.verificarFalencia && jogador.verificarFalencia()) {
+                        modal.mostra = false;
+                        app.verificarFalencia(jogador);
+                        return; // Sai para exibir modal de falência
+                    }
+                    
                     // independente de conseguir pagar, finaliza e passa a vez
                     modal.passarVez = true;
                     break;
