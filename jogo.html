@@ -14,7 +14,10 @@
           <div>
             <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
             <button 
-              @click="jogarTurno(jogadorAtivo)" class="buttonRodarDados">
+              @click="jogarTurno(jogadorAtivo)" 
+              class="buttonRodarDados"
+              :class="{ bloqueado: dadosBloqueados }"
+              :disabled="dadosBloqueados">
               Rodar Dados
             </button>
           </div>   
@@ -23,9 +26,12 @@
           <div 
             v-for="jogador in tabuleiro ? tabuleiro.jogadores : []" 
             :key="jogador.nome"
-            :class="['jogador', { ativo: jogador === jogadorAtivo }]"
+            :class="['jogador', { ativo: jogador === jogadorAtivo, falido: jogador.falido }]"
           >
-            <span class="nome">{{ jogador.nome }}</span>
+            <span class="nome">
+              <span class="cor-indicador" :style="{ backgroundColor: obterCorCSS(jogador.cor) }"></span>
+              {{ jogador.nome }}
+            </span>
             <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
           </div>
         </div>
@@ -52,7 +58,7 @@
       </div>
 
 
-      <modal v-if="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @pagar-aluguel="pagarAluguel" @casa-especial="funcaoEspecial" @dismiss="dismiss" @executar-carta-sorte="executarCartaSorte"></modal>
+      <modal v-if="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @pagar-aluguel="pagarAluguel" @casa-especial="funcaoEspecial" @dismiss="dismiss" @executar-carta-sorte="executarCartaSorte" @vender-propriedades="venderPropriedades" @declarar-falencia="declararFalencia"></modal>
 
       <escolha-bairro v-if="escolhaBairros.mostra"  :escolha-bairros="escolhaBairros" @selecionar-bairro="bairroSelecionado" @dismiss="dismiss"/>
 

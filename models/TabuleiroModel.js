@@ -112,10 +112,42 @@ export default class TabuleiroModel {
 
 
 	getProximoJogadorAtivo(jogador) {
-		const indexAtual = this.jogadores.indexOf(jogador);
-		const proximoIndex = (indexAtual + 1) % this.jogadores.length;
-		this.jogadorAtivo = this.jogadores[proximoIndex];
+		let indexAtual = this.jogadores.indexOf(jogador);
+		let tentativas = 0;
+		const totalJogadores = this.jogadores.length;
+
+		do {
+			indexAtual = (indexAtual + 1) % totalJogadores;
+			tentativas++;
+			
+			// Se todos os jogadores faliram, retorna null
+			if (tentativas > totalJogadores) {
+				return null;
+			}
+		} while (this.jogadores[indexAtual].falido);
+
+		this.jogadorAtivo = this.jogadores[indexAtual];
 		return this.jogadorAtivo;
+	}
+
+	// Verifica se há um vencedor (apenas um jogador ativo restante)
+	verificarVitoria() {
+		const jogadoresAtivos = this.jogadores.filter(j => !j.falido);
+		if (jogadoresAtivos.length === 1) {
+			return jogadoresAtivos[0];
+		}
+		return null;
+	}
+
+	// Elimina um jogador do jogo
+	eliminarJogador(jogador) {
+		jogador.declararFalencia();
+		
+		// Remove o peão do tabuleiro
+		const casaAtual = this.casas[jogador.localizacaoAtual];
+		if (casaAtual && casaAtual.listaJogadores) {
+			casaAtual.listaJogadores = casaAtual.listaJogadores.filter(cor => cor !== jogador.cor);
+		}
 	}
 
 	async MontarTabuleiro(cartasSorte, casasJson) {
