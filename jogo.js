@@ -18,7 +18,11 @@ new Vue({
       prices: [],
       selected: 0,
       mensagemAlerta: "",
-      disabled: [true, true, true, true]
+      disabled: [true, true, true, true],
+      divida: 0,
+      saldoAtual: 0,
+      propriedadesVendiveis: [],
+      propriedadesSelecionadas: []
     },
     areadados: {x: 45, y: 50},
     jogodiv: {x: 5, y: 75},
@@ -94,8 +98,13 @@ new Vue({
           this.modal.selected = escolha;
           this.mensagemBot = `${this.jogadorAtivo.nome} decidiu comprar!`;
           await this.aguardar(800);
-          await casa.comprarCasa(this.jogadorAtivo, this.modal);
+          await casa.comprarCasa(this.jogadorAtivo, this.modal, this.tabuleiro);
           Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
+          
+          // Verifica falência após compra
+          if (this.verificarFalencia(this.jogadorAtivo)) {
+            return;
+          }
         } else {
           this.mensagemBot = `${this.jogadorAtivo.nome} decidiu não comprar.`;
           await this.aguardar(800);
@@ -108,8 +117,13 @@ new Vue({
         if (deveComprar) {
           this.mensagemBot = `${this.jogadorAtivo.nome} decidiu comprar ${casa.nome}!`;
           await this.aguardar(800);
-          await casa.comprarCasa(this.jogadorAtivo, this.modal);
+          await casa.comprarCasa(this.jogadorAtivo, this.modal, this.tabuleiro);
           Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
+          
+          // Verifica falência após compra
+          if (this.verificarFalencia(this.jogadorAtivo)) {
+            return;
+          }
         } else {
           this.mensagemBot = `${this.jogadorAtivo.nome} decidiu não comprar.`;
           await this.aguardar(800);
@@ -146,30 +160,36 @@ new Vue({
         jogador => jogador.cor === casa.proprietarioCor
       );
 
-      if(this.jogadorAtivo.pagar(_valor)){
-        _jogador.receber(_valor);
-        Vue.set(_jogador, 'dinheiro', _jogador.dinheiro);
-        Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
-        
-        this.mensagemBot = `${this.jogadorAtivo.nome} pagou R$ ${_valor}.`;
+      // Realiza o pagamento
+      this.jogadorAtivo.pagar(_valor);
+      _jogador.receber(_valor);
+      Vue.set(_jogador, 'dinheiro', _jogador.dinheiro);
+      Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
+      
+      this.mensagemBot = `${this.jogadorAtivo.nome} pagou R$ ${_valor}.`;
+      await this.aguardar(1000);
+      
+      // Verifica falência após pagamento
+      if (this.verificarFalencia(this.jogadorAtivo)) {
+        // botGerenciarFalencia já foi chamado dentro de verificarFalencia
+        return;
+      }
+      
+      // Verifica se quer comprar a propriedade
+      const precoCompra = Array.isArray(casa.prices) ? casa.prices[0] + 100 : casa.price + 100;
+      const deveComprar = this.jogadorAtivo.deveComprarDeOutroJogador(casa, precoCompra);
+      
+      if (deveComprar && Array.isArray(casa.prices)) {
+        this.mensagemBot = `${this.jogadorAtivo.nome} decidiu comprar a propriedade!`;
         await this.aguardar(1000);
-        
-        // Verifica se quer comprar a propriedade
-        const precoCompra = Array.isArray(casa.prices) ? casa.prices[0] + 100 : casa.price + 100;
-        const deveComprar = this.jogadorAtivo.deveComprarDeOutroJogador(casa, precoCompra);
-        
-        if (deveComprar && Array.isArray(casa.prices)) {
-          this.mensagemBot = `${this.jogadorAtivo.nome} decidiu comprar a propriedade!`;
-          await this.aguardar(1000);
-          this.modal.selected = 1;
-          await casa.comprarCasa(this.jogadorAtivo, this.modal);
-          Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
-        } else if (deveComprar) {
-          this.mensagemBot = `${this.jogadorAtivo.nome} decidiu comprar ${casa.nome}!`;
-          await this.aguardar(1000);
-          await casa.comprarCasa(this.jogadorAtivo, this.modal);
-          Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
-        }
+        this.modal.selected = 1;
+        await casa.comprarCasa(this.jogadorAtivo, this.modal, this.tabuleiro);
+        Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
+      } else if (deveComprar) {
+        this.mensagemBot = `${this.jogadorAtivo.nome} decidiu comprar ${casa.nome}!`;
+        await this.aguardar(1000);
+        await casa.comprarCasa(this.jogadorAtivo, this.modal, this.tabuleiro);
+        Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
       }
       
       // Passa a vez
@@ -204,11 +224,82 @@ new Vue({
       this.modal.keepOpen = false;
     },
 
+    async botGerenciarFalencia(jogador, divida, valorPropriedades) {
+      this.mensagemBot = `${jogador.nome} está em dívida de R$ ${divida}...`;
+      await this.aguardar(1500);
+
+      // Verifica se tem propriedades suficientes para quitar
+      if (valorPropriedades >= divida) {
+        // Bot decide vender propriedades
+        this.mensagemBot = `${jogador.nome} está vendendo propriedades...`;
+        await this.aguardar(1200);
+
+        const propriedadesParaVender = jogador.escolherPropriedadesParaVender(jogador.dinheiro);
+        let totalArrecadado = 0;
+
+        propriedadesParaVender.forEach(propId => {
+          const prop = this.tabuleiro.casas.find(c => c.id === propId);
+          if (prop) {
+            const valor = jogador.venderPropriedade(prop);
+            totalArrecadado += valor;
+            Vue.set(prop, 'proprietarioCor', null);
+            Vue.set(prop, 'casaConstruida', 0);
+          }
+        });
+
+        Vue.set(jogador, 'dinheiro', jogador.dinheiro);
+        Vue.set(jogador, 'propriedades', jogador.propriedades);
+
+        this.mensagemBot = `${jogador.nome} vendeu propriedades por R$ ${totalArrecadado} e quitou a dívida!`;
+        await this.aguardar(2000);
+
+        // Passa a vez
+        this.mensagemBot = '';
+        this.botPensando = false;
+        this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+        this.dadosBloqueados = false;
+      } else {
+        // Bot não tem como quitar - declara falência
+        this.mensagemBot = `${jogador.nome} não consegue pagar a dívida...`;
+        await this.aguardar(1500);
+
+        this.tabuleiro.eliminarJogador(jogador);
+        Vue.set(jogador, 'falido', true);
+
+        this.mensagemBot = `${jogador.nome} faliu e foi eliminado! 💔`;
+        await this.aguardar(2000);
+
+        // Verificar se há um vencedor
+        const vencedor = this.tabuleiro.verificarVitoria();
+        if (vencedor) {
+          this.mensagemBot = `🎉 ${vencedor.nome} VENCEU O JOGO! 🎉`;
+          await this.aguardar(3000);
+        }
+
+        // Passa a vez
+        this.mensagemBot = '';
+        this.botPensando = false;
+        this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+        this.dadosBloqueados = false;
+      }
+    },
+
     aguardar(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     },
 
     // ========== MÉTODOS ORIGINAIS ==========
+    // Mapeia cores em português para códigos CSS
+    obterCorCSS(corPortugues) {
+      const mapaCores = {
+        'azul': '#0066CC',
+        'vermelho': '#CC0000',
+        'verde': '#00AA00',
+        'amarelo': '#FFCC00'
+      };
+      return mapaCores[corPortugues] || corPortugues;
+    },
+
     EstilizarObjetoPosicao(objeto) {
       
       // Define o ângulo conforme o valor de 'lateral'
@@ -278,6 +369,9 @@ new Vue({
       } else if (this.modal.tipo === 5) {
         // Carta de sorte
         await this.botExecutarCartaSorte();
+      } else if (this.modal.tipo === 6) {
+        // Falência - já foi tratada em verificarFalencia, apenas retorna
+        return;
       } else if (this.modal.tipo === 4) {
         // Avisos gerais - apenas passa a vez
         this.mensagemBot = `${this.jogadorAtivo.nome} continua...`;
@@ -292,15 +386,31 @@ new Vue({
     async confirmarCompra() {
       const casaId = this.jogadorAtivo.localizacaoAtual
       const casa = this.tabuleiro.casas[casaId]
-      await casa.comprarCasa(this.jogadorAtivo, this.modal)
+      await casa.comprarCasa(this.jogadorAtivo, this.modal, this.tabuleiro)
+      
+      // Atualiza o saldo na UI de todos os jogadores envolvidos
       Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
+      this.tabuleiro.jogadores.forEach(j => {
+        Vue.set(j, 'dinheiro', j.dinheiro);
+      });
+      
+      // Verifica se o jogador entrou em falência após a compra
+      if (this.verificarFalencia(this.jogadorAtivo)) {
+        return; // Modal de falência será exibido
+      }
+      
       this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+      
+      // Desbloqueia o botão de dados para o próximo jogador
       this.dadosBloqueados = false;
     },
 
     async cancelarCompra() {
       this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+      
+      // Desbloqueia o botão de dados para o próximo jogador
       this.dadosBloqueados = false;
+      
       this.dismiss()
     },
 
@@ -309,6 +419,8 @@ new Vue({
         if (this.modal.passarVez) {
           this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
           this.modal.passarVez = false;
+          
+          // Desbloqueia o botão de dados para o próximo jogador
           this.dadosBloqueados = false;
         }
       },
@@ -323,6 +435,8 @@ new Vue({
         if (this.modal.passarVez) {
           this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
           this.modal.passarVez = false;
+          
+          // Desbloqueia o botão de dados para o próximo jogador
           this.dadosBloqueados = false;
         }
         this.modal.keepOpen = false;
@@ -339,8 +453,108 @@ new Vue({
       }
     },
 
+    verificarFalencia(jogador) {
+      if (jogador.verificarFalencia()) {
+        const divida = Math.abs(jogador.dinheiro);
+        const valorPropriedades = jogador.calcularValorTotalPropriedades();
+
+        // Se for bot, gerencia falência automaticamente
+        if (jogador.tipo === 'bot') {
+          this.botGerenciarFalencia(jogador, divida, valorPropriedades);
+          return true;
+        }
+
+        // Para jogadores humanos, mostra modal
+        this.modal.tipo = 6;
+        this.modal.mostra = true;
+        this.modal.mensagem = `${jogador.nome}, você está em situação de falência!`;
+        this.modal.divida = divida;
+        this.modal.saldoAtual = jogador.dinheiro;
+        this.modal.propriedadesVendiveis = [...jogador.propriedades];
+        this.modal.propriedadesSelecionadas = [];
+
+        if (valorPropriedades < divida) {
+          this.modal.mensagemAlerta = 'Suas propriedades não são suficientes para quitar a dívida.';
+        } else {
+          this.modal.mensagemAlerta = 'Venda propriedades para quitar sua dívida e continuar no jogo.';
+        }
+
+        return true;
+      }
+      return false;
+    },
+
+    async venderPropriedades() {
+      if (!this.modal.propriedadesSelecionadas.length) {
+        this.modal.mensagemAlerta = 'Selecione ao menos uma propriedade.';
+        return;
+      }
+
+      const jogador = this.jogadorAtivo;
+      let totalArrecadado = 0;
+
+      // Vender cada propriedade selecionada
+      this.modal.propriedadesSelecionadas.forEach(propId => {
+        const prop = this.tabuleiro.casas.find(c => c.id === propId);
+        if (prop) {
+          const valor = jogador.venderPropriedade(prop);
+          totalArrecadado += valor;
+          Vue.set(prop, 'proprietarioCor', null);
+          Vue.set(prop, 'casaConstruida', 0);
+        }
+      });
+
+      Vue.set(jogador, 'dinheiro', jogador.dinheiro);
+      Vue.set(jogador, 'propriedades', jogador.propriedades);
+
+      // Verificar se ainda está em falência
+      if (jogador.verificarFalencia()) {
+        this.modal.saldoAtual = jogador.dinheiro;
+        this.modal.divida = Math.abs(jogador.dinheiro);
+        this.modal.propriedadesVendiveis = [...jogador.propriedades];
+        this.modal.propriedadesSelecionadas = [];
+        
+        if (jogador.propriedades.length === 0) {
+          this.modal.mensagemAlerta = 'Você não possui mais propriedades. Declare falência.';
+        } else {
+          this.modal.mensagemAlerta = `Você vendeu propriedades por R$ ${totalArrecadado}, mas ainda está devendo.`;
+        }
+      } else {
+        // Conseguiu quitar a dívida
+        this.modal.mostra = false;
+        this.modal.tipo = 4;
+        this.modal.mostra = true;
+        this.modal.mensagem = `${jogador.nome} quitou a dívida vendendo propriedades!`;
+        this.modal.mensagemAlerta = `Total arrecadado: R$ ${totalArrecadado}`;
+        this.modal.passarVez = true; // Passa a vez após quitar a dívida
+      }
+    },
+
+    async declararFalencia() {
+      const jogador = this.jogadorAtivo;
+      this.tabuleiro.eliminarJogador(jogador);
+
+      // Força atualização visual do jogador falido
+      Vue.set(jogador, 'falido', true);
+
+      this.modal.mostra = false;
+      this.modal.tipo = 4;
+      this.modal.mostra = true;
+      this.modal.mensagem = `${jogador.nome} faliu e foi eliminado do jogo! 💔`;
+      this.modal.mensagemAlerta = '';
+      this.modal.passarVez = true;
+
+      // Verificar se há um vencedor
+      const vencedor = this.tabuleiro.verificarVitoria();
+      if (vencedor) {
+        setTimeout(() => {
+          this.modal.mensagem = `🎉 ${vencedor.nome} VENCEU O JOGO! 🎉`;
+          this.modal.mensagemAlerta = `Parabéns! Você é o único jogador restante.`;
+        }, 2000);
+      }
+    },
+
     async pagarAluguel(){
- 
       const casa = this.tabuleiro.casas.find(
         casa => casa.id === this.jogadorAtivo.localizacaoAtual
       );
@@ -357,22 +571,23 @@ new Vue({
         jogador => jogador.cor === casa.proprietarioCor
       );
 
-      if(await this.jogadorAtivo.pagar(_valor)){
-        _jogador.receber(_valor);
-        
-        // Atualiza UI
-        Vue.set(_jogador, 'dinheiro', _jogador.dinheiro);
-        Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
-        
-        this.modal.mostra = false;
-        
-        // Após pagar, mostra opção de compra apenas para jogadores humanos
-        if (this.jogadorAtivo.tipo !== 'bot') {
-          casa.funcao(this.jogadorAtivo, this.modal, 1);
-        }
-      }else{
-        this.modal.mensagemAlerta = "Jogador não tem dinheiro para pagar Aluguel, precisa vender propriedades - Função não implementada ainda";
-      }  
+      // Realiza o pagamento (agora sempre funciona, mesmo sem saldo)
+      this.jogadorAtivo.pagar(_valor);
+      _jogador.receber(_valor);
+      
+      // Atualiza UI
+      Vue.set(_jogador, 'dinheiro', _jogador.dinheiro);
+      Vue.set(this.jogadorAtivo, 'dinheiro', this.jogadorAtivo.dinheiro);
+      
+      this.modal.mostra = false;
+      
+      // Verificar falência após pagamento
+      if (this.verificarFalencia(this.jogadorAtivo)) {
+        return; // Modal de falência será exibido (ou bot gerencia automaticamente)
+      }
+
+      // Após pagar aluguel, exibe opção de comprar a propriedade (tipo = 1)
+      casa.funcao(this.jogadorAtivo, this.modal, 1);
     }
   }
 });

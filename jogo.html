@@ -34,10 +34,11 @@
           <div 
             v-for="jogador in tabuleiro ? tabuleiro.jogadores : []" 
             :key="jogador.nome"
-            :class="['jogador', { ativo: jogador === jogadorAtivo, bot: jogador.tipo === 'bot' }]"
+            :class="['jogador', { ativo: jogador === jogadorAtivo, falido: jogador.falido, bot: jogador.tipo === 'bot' }]"
           >
             <span class="nome">
               <span v-if="jogador.tipo === 'bot'" class="bot-badge">🤖</span>
+              <span class="cor-indicador" :style="{ backgroundColor: obterCorCSS(jogador.cor) }"></span>
               {{ jogador.nome }}
             </span>
             <span class="dinheiro">💰 {{ jogador.dinheiro }}</span>
@@ -66,7 +67,7 @@
       </div>
 
 
-      <modal v-show="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @pagar-aluguel="pagarAluguel" @dismiss="dismiss" @executar-carta-sorte="executarCartaSorte"></modal>
+      <modal v-show="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @pagar-aluguel="pagarAluguel" @dismiss="dismiss" @executar-carta-sorte="executarCartaSorte" @vender-propriedades="venderPropriedades" @declarar-falencia="declararFalencia"></modal>
 
     </div>
 

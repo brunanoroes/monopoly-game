@@ -10,7 +10,8 @@ export default class Casa {
     funcao(jogador, modal) {
         modal.tipo = 4;
         modal.mostra = true;
-        modal.mensagem = 'Ainda não implementado';
+        modal.mensagem = `Você está em ${this.nome}`;
+        modal.mensagemAlerta = ''; // Limpa mensagem de alerta
         modal.passarVez = true; // Passa a vez após fechar o modal
     }
     

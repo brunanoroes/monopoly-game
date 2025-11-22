@@ -32,6 +32,7 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
 .jogador {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0.4rem 0.8px;
   border-radius: 6px;
   background: #f5f5f5;
@@ -40,11 +41,44 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   font-size: 0.6rem;
 }
 
+.jogador .nome {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.cor-indicador {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 3px rgba(0,0,0,0.3);
+  flex-shrink: 0;
+}
+
 .jogador.ativo {
   background: #ffe066; /* fundo diferente */
   border: 2px solid #ffcc00;
   font-weight: bold;
   transform: scale(1.05); /* cresce um pouco */
+}
+
+.jogador.falido {
+  background: #ffcccc; /* fundo vermelho claro */
+  border: 2px solid #ff0000;
+  opacity: 0.7;
+}
+
+.jogador.falido .nome {
+  color: #cc0000; /* texto vermelho escuro */
+  text-decoration: line-through; /* risco no nome */
+  font-weight: bold;
+}
+
+.jogador.falido .dinheiro {
+  color: #cc0000;
+  text-decoration: line-through;
 }
 
 .modal-overlay {
@@ -142,6 +176,37 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   to { opacity: 1; transform: scale(1); }
 }
 
+/* Estilos para modal de falência */
+.modal-content .options {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 15px 0;
+}
+
+.modal-content .option input[type="checkbox"] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.modal-content .option {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-content .option:hover {
+  background-color: #f9f9f9;
+}
+
+.btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn:disabled:hover {
+  background-color: #ccc;
+}
+
 /* ========== ESTILOS DO BOT ========== */
 .bot-overlay {
   position: fixed;
@@ -206,16 +271,6 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   margin-right: 0.2rem;
 }
 
-.buttonRodarDados:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.buttonRodarDados.bloqueado {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
 .city {
   width: 5rem;
   height: 5rem;
@@ -257,6 +312,17 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   width: 5rem;
   height: 2rem;
   margin-left: 1.7rem;
+  transition: opacity 0.3s ease, cursor 0.3s ease;
+}
+
+.buttonRodarDados.bloqueado {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.buttonRodarDados:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* ========================================
@@ -292,6 +358,11 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   }
   .jogador {
     max-height: 0.5rem;
+  }
+
+  .cor-indicador {
+    width: 0.6rem;
+    height: 0.6rem;
   }
 
   .buttonRodarDados{
@@ -333,6 +404,12 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
     max-height: 0.3rem;
   }
 
+  .cor-indicador {
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid #fff;
+  }
+
   .buttonRodarDados{
     max-width: 3rem;
     max-height: 1rem;
@@ -369,6 +446,12 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   }
   .jogador {
     max-height: 0.2rem;
+  }
+
+  .cor-indicador {
+    width: 0.3rem;
+    height: 0.3rem;
+    border: 1px solid #fff;
   }
 
   .buttonRodarDados{
