@@ -211,17 +211,24 @@ new Vue({
         this.modal.executarCartaSorte();
       }
       
-      this.mensagemBot = '';
-      this.botPensando = false;
       await this.aguardar(500);
       
-      // Se a carta não moveu o jogador, passa a vez
-      if (!this.modal.keepOpen) {
+      // Se a carta moveu o jogador (keepOpen = true), processa a ação da nova casa
+      if (this.modal.keepOpen) {
+        this.modal.keepOpen = false;
+        const casaAtual = this.tabuleiro.casas[this.jogadorAtivo.localizacaoAtual];
+        this.mensagemBot = `${this.jogadorAtivo.nome} foi movido para ${casaAtual.nome}...`;
+        await this.aguardar(1000);
+        
+        // Processa a ação da nova casa
+        await this.processarAcaoBot(casaAtual);
+      } else {
+        // Se a carta não moveu o jogador, apenas passa a vez
+        this.mensagemBot = '';
+        this.botPensando = false;
         this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
         this.dadosBloqueados = false;
       }
-      
-      this.modal.keepOpen = false;
     },
 
     async botGerenciarFalencia(jogador, divida, valorPropriedades) {
