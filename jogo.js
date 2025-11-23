@@ -331,23 +331,26 @@ new Vue({
 
     async jogarTurno(jogador, _tipo = 0) {
       if (!jogador || this.dadosBloqueados) return;
+      
+      // Bloqueia o botão de dados
+      this.dadosBloqueados = true;
 
+      let novaCasa;
+      
       if(_tipo){
-        this.dadosBloqueados = true;
-        const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, this.numeroCasasTeste);
-        //Realiza ação da casa (ex: comprar/alugar)
-        novaCasa.funcao(jogador, this.modal);
-        this.numeroCasasTeste=0
-      }
-      else{
-        // Bloqueia o botão de dados
-        this.dadosBloqueados = true;
-        
-        //Lançar dados - seu JogadorModel deve retornar {dado1,dado2,soma,novaPosicao}
+        // Modo teste: avança número específico de casas
+        const numCasas = parseInt(this.numeroCasasTeste) || 0;
+        novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, numCasas);
+        this.numeroCasasTeste = 0;
+      } else {
+        // Modo normal: lança dados
         const resultado = jogador.jogarDados(this.tabuleiro ? this.tabuleiro.totalCasas : 0);
-
         this.dados.numero1 = resultado.dado1;
         this.dados.numero2 = resultado.dado2;
+        
+        //Atualiza a casa do jogador no tabuleiro
+        novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
+      }
 
       //Realiza ação da casa (ex: comprar/alugar)
       novaCasa.funcao(jogador, this.modal);

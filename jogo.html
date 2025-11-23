@@ -16,23 +16,37 @@
         </div>
       </div>
 
-      <div>
-        Modo teste<input type="checkbox" v-model="modoTeste" />
+      <!-- Modo Teste -->
+      <div class="modo-teste-wrapper">
+        <label>
+          <input type="checkbox" v-model="modoTeste" />
+          Modo Teste
+        </label>
       </div>
+
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
-          <div :style="EstilizarObjetoPosicao(areadados)">
-            <div v-if="modoTeste">
-              <input type="number" v-model="numeroCasasTeste" class="input"/>
-              <button 
-                  @click="jogarTurno(jogadorAtivo, 1)" 
-                  class="buttonRodarDados"
-                  :class="{ bloqueado: dadosBloqueados }"
-                  :disabled="dadosBloqueados">
-                  Avançar Casas
-              </button>
+        <div :style="EstilizarObjetoPosicao(areadados)">
+          <!-- Modo Teste: Avançar casas específicas -->
+          <div v-if="modoTeste" class="teste-controls">
+            <input 
+              type="number" 
+              v-model.number="numeroCasasTeste" 
+              class="input"
+              placeholder="Nº casas"
+              min="0"
+            />
+            <button 
+              @click="jogarTurno(jogadorAtivo, 1)" 
+              class="buttonRodarDados"
+              :class="{ bloqueado: dadosBloqueados }"
+              :disabled="dadosBloqueados || (jogadorAtivo && jogadorAtivo.tipo === 'bot')">
+              Avançar Casas
+            </button>
           </div>
-          <div>
+          
+          <!-- Modo Normal: Rodar dados -->
+          <div class="normal-controls">
             <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
             <button 
               @click="jogarTurno(jogadorAtivo)" 

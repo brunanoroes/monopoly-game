@@ -281,6 +281,57 @@ input {
   margin-right: 0.2rem;
 }
 
+/* ========== MODO TESTE ========== */
+.modo-teste-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modo-teste-wrapper label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+}
+
+.modo-teste-wrapper input[type="checkbox"] {
+  cursor: pointer;
+  width: auto;
+  margin: 0;
+}
+
+.teste-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.teste-controls .input {
+  width: 5rem;
+  padding: 8px;
+  font-size: 14px;
+  margin: 0;
+}
+
+.normal-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ========== FIM MODO TESTE ========== */
+
 .city {
   width: 5rem;
   height: 5rem;
