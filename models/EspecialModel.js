@@ -29,8 +29,7 @@ export default class Especial extends Casa {
           return `
             <div>
               <strong>📚 Você caiu na Semana de Provas da UFF!</strong><br>
-              Você ficará preso na universidade até pagar <strong>R$200</strong> pelo gabarito
-              ou tirar <strong>duas vezes o número 6</strong> nos dados.<br>
+              Você ficará preso na universidade tirar <strong>duas vezes o número 6</strong> nos dados.<br>
               Boa sorte nos estudos (ou na malandragem)!
             </div>
           `;
@@ -100,8 +99,7 @@ export default class Especial extends Casa {
           break;
 
         case "UFF":
-          // jogador fica preso
-          // coloque aqui a lógica correspondente
+
           break;
 
         case "Plaza":

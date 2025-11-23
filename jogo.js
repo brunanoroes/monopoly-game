@@ -337,35 +337,54 @@ new Vue({
 
     async jogarTurno(jogador, _tipo = 0) {
       if (!jogador || this.dadosBloqueados) return;
-      
-      // Bloqueia o botão de dados
+
       this.dadosBloqueados = true;
 
       let novaCasa;
-      
-      if(_tipo){
-        // Modo teste: avança número específico de casas
+
+      if (_tipo) {
+        // Modo teste
         const numCasas = parseInt(this.numeroCasasTeste) || 0;
         novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, numCasas);
         this.numeroCasasTeste = 0;
-      } else {
+      } 
+      else {
         // Modo normal: lança dados
-        const resultado = jogador.jogarDados(this.tabuleiro ? this.tabuleiro.totalCasas : 0);
+        const resultado = jogador.jogarDados(this.tabuleiro.totalCasas);
+
         this.dados.numero1 = resultado.dado1;
         this.dados.numero2 = resultado.dado2;
-        
-        //Atualiza a casa do jogador no tabuleiro
+        const tirouDuploSeis = resultado.dado1 === 6 && resultado.dado2 === 6;
+
+        // 📌 Achar a casa atual do jogador
+        const casaAtualJogador = this.tabuleiro.casas.find(casa =>
+          casa.listaJogadores.includes(jogador.cor)
+        );
+
+        // 📌 Regra do MAC
+        if (casaAtualJogador?.nome === "MAC" && !tirouDuploSeis) {
+          console.log("Jogador está no MAC e não tirou duplo 6 — fica preso!");
+          
+          // passar turno
+          this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+          this.dadosBloqueados = false;
+          return; 
+        }
+
+        // Se não está preso, anda normalmente
         novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
       }
 
-      //Realiza ação da casa (ex: comprar/alugar)
+      // Executa lógica da casa
       novaCasa.funcao(jogador, this.modal);
-      
-      // Se for bot, automaticamente processa a ação após o movimento
-      if (jogador.tipo === 'bot') {
+
+      // Jogador bot
+      if (jogador.tipo === "bot") {
         await this.aguardar(800);
         await this.processarAcaoBot(novaCasa);
       }
+
+      this.dadosBloqueados = false;
     },
 
     async processarAcaoBot(casa) {
@@ -628,7 +647,13 @@ new Vue({
         casa => casa.id === this.jogadorAtivo.localizacaoAtual
       );
       casa.funcaoEspecial(this.escolhaBairros, this.tabuleiro.casas, this.jogadorAtivo)
-      this.dadosBloqueados = false;
+      const casasQueMovem = ["UFF", "Plaza", "Início"];
+
+      if (casasQueMovem.includes(casa.nome)) {
+        this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
+        this.dadosBloqueados = false;
+      }
+
 
     },
     
