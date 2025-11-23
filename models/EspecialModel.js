@@ -69,18 +69,55 @@ export default class Especial extends Casa {
       }
     }
 
-    async funcaoEspecial(_escolhaBairros, _casas, _jogador){
-      if (this.nome === "MAC"){
-        _escolhaBairros.mostra = true;
-        _escolhaBairros.bairros = _casas
-          .filter(casa => casa.proprietarioCor === _jogador.cor)
-          .map(casa => casa.nome);
-        _escolhaBairros.mensagem = 
-          _escolhaBairros.bairros.length > 0
-            ? "Escolha um bairro para a exposição de arte"
-            : "Você não tem nenhuma propriedade para fazer exposição de arte";
+    async funcaoEspecial(_escolhaBairros, _casas, _jogador) {
 
-              }
-    }
+      switch (this.nome) {
+
+        case "MAC":
+          // Mostra bairros do jogador
+          _escolhaBairros.mostra = true;
+
+          _escolhaBairros.bairros = _casas
+            .filter(casa => casa.proprietarioCor === _jogador.cor)
+            .map(casa => casa.nome);
+
+          _escolhaBairros.mensagem =
+            _escolhaBairros.bairros.length > 0
+              ? "Escolha um bairro para a exposição de arte"
+              : "Você não tem nenhuma propriedade para fazer exposição de arte";
+
+          break;
+
+        case "Terminal":
+          _escolhaBairros.mostra = true;
+
+          _escolhaBairros.bairros = _casas
+            .filter(casa => casa.tipo === 'propriedade')
+            .map(casa => casa.nome);
+
+          _escolhaBairros.mensagem = "Escolha um bairro viajar na próxima rodada";
+
+          break;
+
+        case "UFF":
+          // jogador fica preso
+          // coloque aqui a lógica correspondente
+          break;
+
+        case "Plaza":
+         _jogador.dinheiro -= 100;
+          break;
+
+        case "Início":
+          _jogador.dinheiro += 200;
+          break;
+
+        default:
+          // nenhum efeito especial
+          break;
+      }
+
+}
+
 
 }

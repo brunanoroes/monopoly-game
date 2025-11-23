@@ -628,9 +628,7 @@ new Vue({
         casa => casa.id === this.jogadorAtivo.localizacaoAtual
       );
       casa.funcaoEspecial(this.escolhaBairros, this.tabuleiro.casas, this.jogadorAtivo)
-
-      //Plaza - Paga dinheiro
-      //Uff (Propriedade nova em jogador para saber se ele está preso)
+      this.dadosBloqueados = false;
 
     },
     

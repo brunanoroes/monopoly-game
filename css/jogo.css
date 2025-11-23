@@ -92,6 +92,9 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   justify-content: center;
   align-items: center;
   z-index: 1000;
+
+  overflow-y: auto; /* 👈 scroll na área do modal */
+  padding: 20px;    /* evita o modal colar no topo ao rolar */
 }
 
 .modal-content {
@@ -103,7 +106,11 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   box-shadow: 0 8px 25px rgba(0,0,0,0.3);
   text-align: center;
   animation: fadeIn 0.3s ease;
+
+  max-height: 90vh;  /* 👈 limite de altura */
+  overflow-y: auto;  /* 👈 scroll dentro do conteúdo */
 }
+
 
 .modal-title {
   font-size: 22px;
