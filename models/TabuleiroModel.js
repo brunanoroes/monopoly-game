@@ -142,12 +142,43 @@ export default class TabuleiroModel {
 		return this.jogadorAtivo;
 	}
 
-	// Verifica se há um vencedor (apenas um jogador ativo restante)
+	// Verifica se há um vencedor (apenas um jogador ativo restante OU domínio de todas as praias)
 	verificarVitoria() {
 		const jogadoresAtivos = this.jogadores.filter(j => !j.falido);
+		
+		// Vitória por eliminação - apenas um jogador ativo restante
 		if (jogadoresAtivos.length === 1) {
-			return jogadoresAtivos[0];
+			return { jogador: jogadoresAtivos[0], tipo: 'eliminacao' };
 		}
+		
+		// Vitória por domínio de praias - algum jogador possui todas as praias
+		const vencedorPorPraias = this.verificarVitoriaPorPraias();
+		if (vencedorPorPraias) {
+			return { jogador: vencedorPorPraias, tipo: 'praias' };
+		}
+		
+		return null;
+	}
+
+	// Verifica se algum jogador possui todas as praias
+	verificarVitoriaPorPraias() {
+		const praias = this.casas.filter(casa => casa.tipo === 'praia');
+		const totalPraias = praias.length;
+		
+		if (totalPraias === 0) return null;
+		
+		// Verifica cada jogador ativo
+		for (const jogador of this.jogadores) {
+			if (jogador.falido) continue;
+			
+			// Conta quantas praias o jogador possui
+			const praiasDoJogador = praias.filter(praia => praia.proprietarioCor === jogador.cor);
+			
+			if (praiasDoJogador.length === totalPraias) {
+				return jogador; // Este jogador possui todas as praias!
+			}
+		}
+		
 		return null;
 	}
 

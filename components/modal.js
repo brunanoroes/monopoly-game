@@ -133,6 +133,22 @@ Vue.component('modal', {
           </div>
         </div>
       </div>
+
+      <div v-if="modal.tipo === 7">
+        <div class="modal-overlay">
+          <div class="modal-content modal-vitoria">
+            <h2 class="modal-title" style="font-size: 2.5em; color: #FFD700;">{{ modal.mensagem }}</h2>
+            <p class="modal-subtitle" style="font-size: 1.2em; margin-top: 20px;">{{ modal.mensagemAlerta }}</p>
+            <div style="font-size: 4em; margin: 20px 0;">🏆</div>
+            <p style="font-size: 1.1em; color: #666; margin-top: 10px;">O jogo foi encerrado!</p>
+            <div class="buttons" style="margin-top: 30px;">
+              <button class="btn confirm" @click="jogarNovamente()" style="font-size: 1.1em; padding: 12px 30px;">
+                🔄 Jogar Novamente
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   `,
   methods: {
@@ -154,6 +170,9 @@ Vue.component('modal', {
         const prop = this.modal.propriedadesVendiveis.find(p => p.id === propId);
         return total + (prop ? this.calcularValorVenda(prop) : 0);
       }, 0);
+    },
+    jogarNovamente() {
+      window.location.href = 'index.html';
     }
   }
 });
@@ -163,3 +182,4 @@ Vue.component('modal', {
 //Modal 4 - Avisos
 //Modal 5 - Cartas de Sorte/Azar
 //Modal 6 - Falência
+//Modal 7 - Vitória

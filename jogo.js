@@ -11,6 +11,7 @@ new Vue({
     dadosBloqueados: false, // Controla se o botão de rolar dados está bloqueado
     botPensando: false, // Indica quando o bot está "pensando"
     mensagemBot: '', // Mensagem de ação do bot
+    jogoEncerrado: false, // Indica quando o jogo foi finalizado
     modal: {
       tipo: 1,
       mostra: false,
@@ -73,7 +74,7 @@ new Vue({
   methods: {
     // ========== MÉTODOS DO BOT ==========
     async iniciarTurnoBot() {
-      if (!this.jogadorAtivo || this.jogadorAtivo.tipo !== 'bot') return;
+      if (!this.jogadorAtivo || this.jogadorAtivo.tipo !== 'bot' || this.jogoEncerrado) return;
       
       this.botPensando = true;
       this.mensagemBot = `${this.jogadorAtivo.nome} está jogando...`;
@@ -279,10 +280,25 @@ new Vue({
         await this.aguardar(2000);
 
         // Verificar se há um vencedor
-        const vencedor = this.tabuleiro.verificarVitoria();
-        if (vencedor) {
-          this.mensagemBot = `🎉 ${vencedor.nome} VENCEU O JOGO! 🎉`;
-          await this.aguardar(3000);
+        const resultado = this.tabuleiro.verificarVitoria();
+        if (resultado) {
+          this.mensagemBot = '';
+          this.botPensando = false;
+          this.jogoEncerrado = true;
+          this.dadosBloqueados = true;
+          
+          // Exibir modal de vitória
+          this.modal.tipo = 7;
+          this.modal.mostra = true;
+          this.modal.mensagem = `🎉 ${resultado.jogador.nome} VENCEU O JOGO! 🎉`;
+          
+          if (resultado.tipo === 'praias') {
+            this.modal.mensagemAlerta = `${resultado.jogador.nome} conquistou todas as praias e dominou o litoral! 🏖️`;
+          } else {
+            this.modal.mensagemAlerta = `${jogador.nome} faliu. ${resultado.jogador.nome} é o único jogador restante e conquistou a vitória!`;
+          }
+          this.modal.passarVez = false;
+          return;
         }
 
         // Passa a vez
@@ -421,6 +437,20 @@ new Vue({
         return; // Modal de falência será exibido
       }
       
+      // Verificar se o jogador venceu por dominar todas as praias
+      const resultado = this.tabuleiro.verificarVitoria();
+      if (resultado && resultado.tipo === 'praias') {
+        this.jogoEncerrado = true;
+        this.dadosBloqueados = true;
+        this.modal.mostra = false;
+        this.modal.tipo = 7;
+        this.modal.mostra = true;
+        this.modal.mensagem = `🎉 ${resultado.jogador.nome} VENCEU O JOGO! 🎉`;
+        this.modal.mensagemAlerta = `${resultado.jogador.nome} conquistou todas as praias e dominou o litoral! 🏖️`;
+        this.modal.passarVez = false;
+        return;
+      }
+      
       this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
       
       // Desbloqueia o botão de dados para o próximo jogador
@@ -549,6 +579,24 @@ new Vue({
         this.modal.mensagem = `${jogador.nome} quitou a dívida vendendo propriedades!`;
         this.modal.mensagemAlerta = `Total arrecadado: R$ ${totalArrecadado}`;
         this.modal.passarVez = true; // Passa a vez após quitar a dívida
+        
+        // Verificar se alguém venceu após esta venda (improvável, mas verificação de segurança)
+        const resultado = this.tabuleiro.verificarVitoria();
+        if (resultado) {
+          this.jogoEncerrado = true;
+          this.dadosBloqueados = true;
+          this.modal.mostra = false;
+          this.modal.tipo = 7;
+          this.modal.mostra = true;
+          this.modal.mensagem = `🎉 ${resultado.jogador.nome} VENCEU O JOGO! 🎉`;
+          
+          if (resultado.tipo === 'praias') {
+            this.modal.mensagemAlerta = `${resultado.jogador.nome} conquistou todas as praias e dominou o litoral! 🏖️`;
+          } else {
+            this.modal.mensagemAlerta = `Apenas um jogador permanece ativo!`;
+          }
+          this.modal.passarVez = false;
+        }
       }
     },
 
@@ -559,20 +607,34 @@ new Vue({
       // Força atualização visual do jogador falido
       Vue.set(jogador, 'falido', true);
 
-      this.modal.mostra = false;
-      this.modal.tipo = 4;
-      this.modal.mostra = true;
-      this.modal.mensagem = `${jogador.nome} faliu e foi eliminado do jogo! 💔`;
-      this.modal.mensagemAlerta = '';
-      this.modal.passarVez = true;
-
       // Verificar se há um vencedor
-      const vencedor = this.tabuleiro.verificarVitoria();
-      if (vencedor) {
-        setTimeout(() => {
-          this.modal.mensagem = `🎉 ${vencedor.nome} VENCEU O JOGO! 🎉`;
-          this.modal.mensagemAlerta = `Parabéns! Você é o único jogador restante.`;
-        }, 2000);
+      const resultado = this.tabuleiro.verificarVitoria();
+      
+      if (resultado) {
+        // Encerrar o jogo
+        this.jogoEncerrado = true;
+        this.dadosBloqueados = true;
+        
+        // Exibir modal de vitória
+        this.modal.mostra = false;
+        this.modal.tipo = 7; // Tipo 7 = Vitória
+        this.modal.mostra = true;
+        this.modal.mensagem = `🎉 ${resultado.jogador.nome} VENCEU O JOGO! 🎉`;
+        
+        if (resultado.tipo === 'praias') {
+          this.modal.mensagemAlerta = `${resultado.jogador.nome} conquistou todas as praias e dominou o litoral! 🏖️`;
+        } else {
+          this.modal.mensagemAlerta = `${jogador.nome} faliu. ${resultado.jogador.nome} é o único jogador restante e conquistou a vitória!`;
+        }
+        this.modal.passarVez = false;
+      } else {
+        // Ainda há jogadores, apenas mostrar mensagem de falência
+        this.modal.mostra = false;
+        this.modal.tipo = 4;
+        this.modal.mostra = true;
+        this.modal.mensagem = `${jogador.nome} faliu e foi eliminado do jogo! 💔`;
+        this.modal.mensagemAlerta = '';
+        this.modal.passarVez = true;
       }
     },
 
