@@ -9,7 +9,7 @@ export default class Especial extends Casa {
     
     funcao(jogador, modal) {
       modal.mensagem = this.getMensagemHtml()
-      modal.tipo = 7;
+      modal.tipo = 8;
       modal.mostra = true;
 
     }

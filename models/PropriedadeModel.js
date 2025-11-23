@@ -29,30 +29,48 @@ export default class Propriedade extends Casa {
             
             // Se já tem dono (jogador atual), é upgrade de propriedade
             if(this.proprietarioCor === jogador.cor){
+                // Verifica se já está no nível máximo
+                if (this.casaConstruida >= 4) {
+                    modal.tipo = 4;
+                    modal.mensagem = `${this.nome} já está no nível máximo (Hotel)!`;
+                    modal.mensagemAlerta = '';
+                    return;
+                }
+                
                 modal.mensagem = `Deseja melhorar ${this.nome}?`;
                 modal.prices = this.prices.map(preco => preco + 100);
                 modal.disabled = [true, true, true, true];
-                if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
-                    modal.disabled[this.casaConstruida] = false;
+                // Habilita a próxima casa disponível
+                const proximoNivel = this.casaConstruida;
+                if (proximoNivel >= 0 && proximoNivel <= 3) {
+                    modal.disabled[proximoNivel] = false;
                 }
             }
             // Se tem outro dono e tipo=1 (após pagar aluguel), pode comprar por +100
             else if(this.proprietarioCor && tipo){
+                // Verifica se já está no nível máximo
+                if (this.casaConstruida >= 4) {
+                    modal.tipo = 4;
+                    modal.mensagem = `${this.nome} já está no nível máximo (Hotel)!`;
+                    modal.mensagemAlerta = 'Não é possível melhorar esta propriedade.';
+                    return;
+                }
+                
                 modal.mensagem = `Deseja comprar ${this.nome} do proprietário?`;
                 modal.prices = this.prices.map(preco => preco + 100);
                 modal.disabled = [true, true, true, true];
-                if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
-                    modal.disabled[this.casaConstruida] = false;
+                // Habilita a próxima casa disponível
+                const proximoNivel = this.casaConstruida;
+                if (proximoNivel >= 0 && proximoNivel <= 3) {
+                    modal.disabled[proximoNivel] = false;
                 }
             }
             // Casa sem dono
             else {
                 modal.mensagem = `Deseja comprar ${this.nome}?`;
                 modal.prices = this.prices;
-                modal.disabled = [true, true, true, true];
-                if (this.casaConstruida >= 0 && this.casaConstruida < 4) {
-                    modal.disabled[this.casaConstruida] = false;
-                }
+                // Casa sem dono - permite comprar apenas Casa 1 (índice 0)
+                modal.disabled = [false, true, true, true];
             }
         }
     }
