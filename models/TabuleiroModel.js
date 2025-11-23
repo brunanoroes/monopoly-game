@@ -35,13 +35,24 @@ export default class TabuleiroModel {
 
 	PosicionarPeoes() {
 		const coresPeao = ['azul', 'vermelho', 'verde', 'amarelo'];
+		const nomesBots = [
+			'Carlos', 'Zé', 'Tom', 'Maria',
+			'Pedro', 'João', 'Fernanda', 'Roberto',
+			'Lucinha', 'Marcos', 'Ana', 'Paulo',
+			'Vitória', 'Ricardo', 'Juliana', 'Felipe'
+		];
+		
+		// Embaralha os nomes dos bots para serem aleatórios
+		const nomesBotsEmbaralhados = [...nomesBots].sort(() => Math.random() - 0.5);
+		
 		this.jogadores.length = 0;
 
 		// Cria uma lista de 4 nomes: pega os nomes fornecidos e completa com bots se necessário
 		const nomesCompletos = [...this.nomesJogadores];
+		let indiceBots = 0;
 		while (nomesCompletos.length < 4) {
-			const botNumero = nomesCompletos.length + 1;
-			nomesCompletos.push(`Bot ${botNumero}`);
+			nomesCompletos.push(nomesBotsEmbaralhados[indiceBots]);
+			indiceBots++;
 		}
 
 		nomesCompletos.forEach((nome, index) => {
