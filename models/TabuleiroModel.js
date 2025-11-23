@@ -66,7 +66,7 @@ export default class TabuleiroModel {
 			// Cria Bot ou Jogador dependendo do tipo
 			const jogador = tipo === 'bot' 
 				? new Bot(nome, cor, 1500, 0)
-				: new Jogador(tipo, nome, cor, 1500, 0);
+				: new Jogador('jogador', nome, cor, 1500, 0); // Passa 'jogador' fixo como tipo
 
 			// Jogador começa na saída (casa com nome "Saída")
 			const casaSaida = this.casas.find(c => c.nome === 'Início');

@@ -28,9 +28,9 @@ export default class Especial extends Casa {
         case "UFF":
           return `
             <div>
-              <strong>📚 Você caiu na Semana de Provas da UFF!</strong><br>
-              Você ficará preso na universidade tirar <strong>duas vezes o número 6</strong> nos dados.<br>
-              Boa sorte nos estudos (ou na malandragem)!
+              <strong>📚 Você caiu na UFF - Semana de Provas!</strong><br>
+              Você ficará preso estudando até tirar <strong>duplo 6</strong> (duas vezes o número 6) nos dados.<br>
+              Boa sorte nos estudos!
             </div>
           `;
 
@@ -73,17 +73,19 @@ export default class Especial extends Casa {
       switch (this.nome) {
 
         case "MAC":
-          // Mostra bairros do jogador
-          _escolhaBairros.mostra = true;
-
+          // Filtra propriedades do jogador
           _escolhaBairros.bairros = _casas
             .filter(casa => casa.proprietarioCor === _jogador.cor)
             .map(casa => casa.nome);
 
-          _escolhaBairros.mensagem =
-            _escolhaBairros.bairros.length > 0
-              ? "Escolha um bairro para a exposição de arte"
-              : "Você não tem nenhuma propriedade para fazer exposição de arte";
+          // Só mostra modal se tiver propriedades
+          if (_escolhaBairros.bairros.length > 0) {
+            _escolhaBairros.mostra = true;
+            _escolhaBairros.mensagem = "Escolha um bairro para a exposição de arte";
+          } else {
+            _escolhaBairros.mostra = false;
+            _escolhaBairros.mensagem = "Você não tem nenhuma propriedade para fazer exposição de arte";
+          }
 
           break;
 
