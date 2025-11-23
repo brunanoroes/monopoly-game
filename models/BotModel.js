@@ -4,9 +4,9 @@ export default class Bot extends Jogador {
   constructor(nome, cor, dinheiroInicial = 1500, casaInicial = 0) {
     super('bot', nome, cor, dinheiroInicial, casaInicial);
     
-    // Configurações de personalidade do Bot
-    this.agressividade = Math.random(); // 0-1: quanto maior, mais agressivo nas compras
-    this.reservaMinima = 300 + Math.floor(Math.random() * 200); // Dinheiro mínimo que o bot tenta manter
+    // Configurações de personalidade do Bot - Bots mais agressivos
+    this.agressividade = 0.6 + Math.random() * 0.4; // 0.6-1.0: Sempre pelo menos moderadamente agressivo
+    this.reservaMinima = 150 + Math.floor(Math.random() * 150); // R$150-300: Reserva menor para comprar mais
   }
 
   // Decide se deve comprar uma propriedade
@@ -16,8 +16,8 @@ export default class Bot extends Jogador {
       return false;
     }
 
-    // Não compra se o preço for mais de 40% do seu dinheiro atual
-    if (precoCompra > this.dinheiro * 0.4) {
+    // Aumentado de 40% para 60% - permite compras mais caras
+    if (precoCompra > this.dinheiro * 0.6) {
       return false;
     }
 
@@ -28,8 +28,8 @@ export default class Bot extends Jogador {
       return true;
     }
 
-    // Decisão baseada na agressividade e preço
-    const chancesCompra = this.agressividade * 0.7 + (1 - (precoCompra / this.dinheiro)) * 0.3;
+    // Decisão baseada na agressividade e preço - aumentado peso da agressividade
+    const chancesCompra = this.agressividade * 0.85 + (1 - (precoCompra / this.dinheiro)) * 0.15;
     return Math.random() < chancesCompra;
   }
 
@@ -50,8 +50,8 @@ export default class Bot extends Jogador {
       
       // Verifica se tem dinheiro para o próximo nível
       if (this.dinheiro >= precoProximo + this.reservaMinima) {
-        // Bot mais agressivo tenta comprar níveis mais altos
-        if (this.agressividade > 0.6 && proximoNivel < prices.length - 1) {
+        // Bot mais agressivo tenta comprar níveis mais altos - reduzido threshold de 0.6 para 0.5
+        if (this.agressividade > 0.5 && proximoNivel < prices.length - 1) {
           // Tenta comprar um nível acima se possível
           const precoSuperior = prices[proximoNivel + 1];
           if (this.dinheiro >= precoSuperior + this.reservaMinima) {
@@ -67,8 +67,8 @@ export default class Bot extends Jogador {
 
   // Decide se deve comprar de outro jogador (após pagar aluguel)
   deveComprarDeOutroJogador(casa, precoCompra) {
-    // Mais criterioso para comprar de outros jogadores (preço mais alto)
-    if (this.dinheiro < precoCompra + this.reservaMinima * 1.5) {
+    // Reduzido multiplicador de 1.5 para 1.2 - menos criterioso
+    if (this.dinheiro < precoCompra + this.reservaMinima * 1.2) {
       return false;
     }
 
@@ -80,8 +80,9 @@ export default class Bot extends Jogador {
       return this.dinheiro >= precoCompra + this.reservaMinima;
     }
 
-    // Apenas bots muito agressivos compram de outros jogadores sem ter conjunto
-    return this.agressividade > 0.7 && this.dinheiro > precoCompra + this.reservaMinima * 2;
+    // Reduzido threshold de 0.7 para 0.5 - mais bots compram de outros jogadores
+    // Reduzido multiplicador de 2 para 1.5
+    return this.agressividade > 0.5 && this.dinheiro > precoCompra + this.reservaMinima * 1.5;
   }
 
   // Decide quais propriedades vender em caso de falência
