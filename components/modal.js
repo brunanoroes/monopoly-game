@@ -136,20 +136,6 @@ Vue.component('modal', {
 
       <div v-if="modal.tipo === 7">
         <div class="modal-overlay">
-          <div class="modal-content">
-            <div v-html="modal.mensagem"></div>
-
-              <button class="btn confirm"
-                      @click="$emit('casa-especial')"
-                      style="margin-top: 2rem">
-                Continuar
-              </button>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="modal.tipo === 8">
-        <div class="modal-overlay">
           <div class="modal-content modal-vitoria">
             <h2 class="modal-title" style="font-size: 2.5em; color: #FFD700;">{{ modal.mensagem }}</h2>
             <p class="modal-subtitle" style="font-size: 1.2em; margin-top: 20px;">{{ modal.mensagemAlerta }}</p>
@@ -160,6 +146,20 @@ Vue.component('modal', {
                 🔄 Jogar Novamente
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="modal.tipo === 8">
+        <div class="modal-overlay">
+          <div class="modal-content">
+            <div v-html="modal.mensagem"></div>
+
+              <button class="btn confirm"
+                      @click="$emit('casa-especial')"
+                      style="margin-top: 2rem">
+                Continuar
+              </button>
           </div>
         </div>
       </div>
