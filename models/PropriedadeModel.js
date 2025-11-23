@@ -65,10 +65,11 @@ export default class Propriedade extends Casa {
         }
         
         const antigoProprietario = this.proprietarioCor;
-        const preco = this.prices[tipoCasa - 1] + (antigoProprietario && antigoProprietario !== jogador.cor ? 100 : 0);
+        const comprouDeOutroJogador = antigoProprietario && antigoProprietario !== jogador.cor;
+        const preco = this.prices[tipoCasa - 1] + (comprouDeOutroJogador ? 100 : 0);
         
         // Se está comprando de outro jogador, transferir dinheiro e remover propriedade
-        if (antigoProprietario && antigoProprietario !== jogador.cor && tabuleiro) {
+        if (comprouDeOutroJogador && tabuleiro) {
             const vendedor = tabuleiro.jogadores.find(j => j.cor === antigoProprietario);
             if (vendedor) {
                 // Remove propriedade do vendedor
@@ -90,7 +91,15 @@ export default class Propriedade extends Casa {
         }
         
         this.proprietarioCor = jogador.cor;
-        this.casaConstruida = tipoCasa;
+        
+        // Se comprou de outro jogador, evolui para o próximo nível
+        // Se é upgrade da própria propriedade, usa tipoCasa
+        if (comprouDeOutroJogador) {
+            this.casaConstruida = Math.min(this.casaConstruida + 1, 4);
+        } else {
+            this.casaConstruida = tipoCasa;
+        }
+        
         modal.mostra = false;
         
         return true;
