@@ -16,9 +16,22 @@
         </div>
       </div>
 
+      <div>
+        Modo teste<input type="checkbox" v-model="modoTeste" />
+      </div>
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
-        <div :style="EstilizarObjetoPosicao(areadados)">
+          <div :style="EstilizarObjetoPosicao(areadados)">
+            <div v-if="modoTeste">
+              <input type="number" v-model="numeroCasasTeste" class="input"/>
+              <button 
+                  @click="jogarTurno(jogadorAtivo, 1)" 
+                  class="buttonRodarDados"
+                  :class="{ bloqueado: dadosBloqueados }"
+                  :disabled="dadosBloqueados">
+                  Avançar Casas
+              </button>
+          </div>
           <div>
             <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
             <button 

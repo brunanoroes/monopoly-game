@@ -29,7 +29,9 @@ new Vue({
     dados: {
       numero1 : 1,
       numero2 : 1
-    }
+    },
+    numeroCasasTeste: 0,
+    modoTeste: false
   },
   created() {
     const params = new URLSearchParams(window.location.search);
@@ -327,20 +329,25 @@ new Vue({
       };
     },
 
-    async jogarTurno(jogador) {
+    async jogarTurno(jogador, _tipo = 0) {
       if (!jogador || this.dadosBloqueados) return;
-      
-      // Bloqueia o botão de dados
-      this.dadosBloqueados = true;
-      
-      //Lançar dados - seu JogadorModel deve retornar {dado1,dado2,soma,novaPosicao}
-      const resultado = jogador.jogarDados(this.tabuleiro ? this.tabuleiro.totalCasas : 0);
 
-      this.dados.numero1 = resultado.dado1;
-      this.dados.numero2 = resultado.dado2;
+      if(_tipo){
+        this.dadosBloqueados = true;
+        const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, this.numeroCasasTeste);
+        //Realiza ação da casa (ex: comprar/alugar)
+        novaCasa.funcao(jogador, this.modal);
+        this.numeroCasasTeste=0
+      }
+      else{
+        // Bloqueia o botão de dados
+        this.dadosBloqueados = true;
+        
+        //Lançar dados - seu JogadorModel deve retornar {dado1,dado2,soma,novaPosicao}
+        const resultado = jogador.jogarDados(this.tabuleiro ? this.tabuleiro.totalCasas : 0);
 
-      //Atualiza a casa do jogador no tabuleiro
-      const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
+        this.dados.numero1 = resultado.dado1;
+        this.dados.numero2 = resultado.dado2;
 
       //Realiza ação da casa (ex: comprar/alugar)
       novaCasa.funcao(jogador, this.modal);
@@ -387,6 +394,11 @@ new Vue({
         this.botPensando = false;
         this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
         this.dadosBloqueados = false;
+        //Atualiza a casa do jogador no tabuleiro
+        const novaCasa = await this.tabuleiro.atualizarCasaJogador(jogador, resultado.soma);
+
+        //Realiza ação da casa (ex: comprar/alugar)
+        novaCasa.funcao(jogador, this.modal);
       }
     },
 

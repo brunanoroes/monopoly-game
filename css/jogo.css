@@ -203,6 +203,16 @@ body { background-image: url('/assets/imagemfundo.jpg'); }
   opacity: 0.6;
 }
 
+input {
+  width: 4rem;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
 .btn:disabled:hover {
   background-color: #ccc;
 }
