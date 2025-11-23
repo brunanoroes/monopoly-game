@@ -338,6 +338,19 @@ new Vue({
     async jogarTurno(jogador, _tipo = 0) {
       if (!jogador || this.dadosBloqueados) return;
 
+      // No começo do turno do jogador:
+      if (this.jogadorAtivo.proximoBairro) {
+        const destino = this.jogadorAtivo.proximoBairro;
+
+        // Mover jogador automaticamente
+        const casaDestino = this.tabuleiro.casas.find(c => c.nome === destino);
+        await this.tabuleiro.moverParaCasa(this.jogadorAtivo, casaDestino);
+
+        // Limpa o valor para voltar ao normal
+        this.jogadorAtivo.proximoBairro = null;
+      }
+
+
       this.dadosBloqueados = true;
 
       let novaCasa;
@@ -659,8 +672,28 @@ new Vue({
     
     bairroSelecionado(bairro) {
       console.log("Bairro escolhido:", bairro);
-      // MAC : aumentar o valor de fee a prices (diminuir o valor da última exposição)(pROPRIEDADE NOVA EM CASA - eM EXPOSIÇÃO)
-      // Terminal: marcar no jogador a próxima cidade q ele vai na próxima rodada(Propriedade nova em jogador- Proxima rodada bairro- Se vazio jogo normal, se cheiro ele vai pra lá)
+
+      const casaAtualJogador = this.tabuleiro.casas.find(casa =>
+        casa.listaJogadores.includes(this.jogadorAtivo.cor)
+      );
+
+      const casaSelecionada = this.tabuleiro.casas.find(casa =>
+        casa.nome === bairro
+      );
+
+      if (!casaAtualJogador || !casaSelecionada) return;
+
+      // --- Regra MAC ---
+      if (casaAtualJogador.nome === 'MAC') {
+        casaSelecionada.prices = casaSelecionada.prices.map(p => p + 200);
+        casaSelecionada.fee = casaSelecionada.fee.map(f => f + 100);
+      }
+
+      // --- Regra Terminal ---
+      if (casaAtualJogador.nome === 'Terminal') {
+        this.jogadorAtivo.proximoBairro = casaSelecionada.nome;
+      }
     }
+
   }
 });
