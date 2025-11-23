@@ -1,4 +1,5 @@
 import Jogador from './JogadorModel.js';
+import Bot from './BotModel.js';
 import Casa from './CasaModel.js';
 import Propriedade from './PropriedadeModel.js';
 import Sorte from './SorteModel.js';
@@ -51,7 +52,10 @@ export default class TabuleiroModel {
 			const cor = coresPeao[index % coresPeao.length];
 			const tipo = index < this.nomesJogadores.length ? 'jogador' : 'bot';
 
-			const jogador = new Jogador(tipo, nome, cor, 1500);
+			// Cria Bot ou Jogador dependendo do tipo
+			const jogador = tipo === 'bot' 
+				? new Bot(nome, cor, 1500, 0)
+				: new Jogador(tipo, nome, cor, 1500, 0);
 
 			// Jogador começa na saída (casa com nome "Saída")
 			const casaSaida = this.casas.find(c => c.nome === 'Início');

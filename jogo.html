@@ -8,16 +8,51 @@
   </head>
   <body>
     <div id="appVue" v-cloak>
+      <!-- Indicador de turno do Bot -->
+      <div v-if="botPensando" class="bot-overlay">
+        <div class="bot-indicator">
+          <div class="bot-spinner"></div>
+          <p class="bot-message">{{ mensagemBot }}</p>
+        </div>
+      </div>
+
+      <!-- Modo Teste -->
+      <div class="modo-teste-wrapper">
+        <label>
+          <input type="checkbox" v-model="modoTeste" />
+          Modo Teste
+        </label>
+      </div>
+
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
         <div :style="EstilizarObjetoPosicao(areadados)">
-          <div>
+          <!-- Modo Teste: Avançar casas específicas -->
+          <div v-if="modoTeste" class="teste-controls">
+            <input 
+              type="number" 
+              v-model.number="numeroCasasTeste" 
+              class="input"
+              placeholder="Nº casas"
+              min="0"
+            />
+            <button 
+              @click="jogarTurno(jogadorAtivo, 1)" 
+              class="buttonRodarDados"
+              :class="{ bloqueado: dadosBloqueados }"
+              :disabled="dadosBloqueados || (jogadorAtivo && jogadorAtivo.tipo === 'bot')">
+              Avançar Casas
+            </button>
+          </div>
+          
+          <!-- Modo Normal: Rodar dados -->
+          <div class="normal-controls">
             <dados :numero1="dados.numero1" :numero2="dados.numero2"></dados>
             <button 
               @click="jogarTurno(jogadorAtivo)" 
               class="buttonRodarDados"
               :class="{ bloqueado: dadosBloqueados }"
-              :disabled="dadosBloqueados">
+              :disabled="dadosBloqueados || (jogadorAtivo && jogadorAtivo.tipo === 'bot')">
               Rodar Dados
             </button>
           </div>   
@@ -26,9 +61,10 @@
           <div 
             v-for="jogador in tabuleiro ? tabuleiro.jogadores : []" 
             :key="jogador.nome"
-            :class="['jogador', { ativo: jogador === jogadorAtivo, falido: jogador.falido }]"
+            :class="['jogador', { ativo: jogador === jogadorAtivo, falido: jogador.falido, bot: jogador.tipo === 'bot' }]"
           >
             <span class="nome">
+              <span v-if="jogador.tipo === 'bot'" class="bot-badge">🤖</span>
               <span class="cor-indicador" :style="{ backgroundColor: obterCorCSS(jogador.cor) }"></span>
               {{ jogador.nome }}
             </span>
