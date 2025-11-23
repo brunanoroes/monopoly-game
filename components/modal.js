@@ -133,18 +133,17 @@ Vue.component('modal', {
           </div>
         </div>
       </div>
-    </div>
 
-    <div v-if="modal.tipo === 6">
-      <div class="modal-overlay">
-        <div class="modal-content">
-          <div v-html="modal.mensagem"></div>
+      <div v-if="modal.tipo === 7">
+        <div class="modal-overlay">
+          <div class="modal-content">
+            <div v-html="modal.mensagem"></div>
 
-            <button class="btn confirm"
-                    @click="$emit('casa-especial')"
-                    style="margin-top: 2rem">
-              Continuar
-            </button>
+              <button class="btn confirm"
+                      @click="$emit('casa-especial')"
+                      style="margin-top: 2rem">
+                Continuar
+              </button>
           </div>
         </div>
       </div>
@@ -178,4 +177,4 @@ Vue.component('modal', {
 //Modal 4 - Avisos
 //Modal 5 - Cartas de Sorte/Azar
 //Modal 6 - Casas Especiais
-//Modal 6 - Falência
+//Modal 7 - Falência
