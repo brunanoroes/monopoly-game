@@ -39,7 +39,7 @@ export default class Bot extends Jogador {
 
     // Para propriedades com níveis (casa 1, 2, 3, hotel)
     if (Array.isArray(prices)) {
-      // Tenta comprar o próximo nível disponível
+      // Compra sempre o próximo nível disponível
       const proximoNivel = casaConstruida || 0;
       
       if (proximoNivel >= prices.length) {
@@ -50,14 +50,6 @@ export default class Bot extends Jogador {
       
       // Verifica se tem dinheiro para o próximo nível
       if (this.dinheiro >= precoProximo + this.reservaMinima) {
-        // Bot mais agressivo tenta comprar níveis mais altos - reduzido threshold de 0.6 para 0.5
-        if (this.agressividade > 0.5 && proximoNivel < prices.length - 1) {
-          // Tenta comprar um nível acima se possível
-          const precoSuperior = prices[proximoNivel + 1];
-          if (this.dinheiro >= precoSuperior + this.reservaMinima) {
-            return proximoNivel + 2; // +2 porque modal usa 1-based index
-          }
-        }
         return proximoNivel + 1; // +1 porque modal usa 1-based index
       }
     }
