@@ -48,7 +48,7 @@ export default class Especial extends Casa {
           return `
             <div>
               <strong>🚌 Você chegou ao Terminal!</strong><br>
-              Escolha uma casa para pegar o ônibus e avançar até ela na próxima rodada.
+              Escolha uma casa para pegar o ônibus e avançar até ela.
             </div>
           `;
 
@@ -96,7 +96,6 @@ export default class Especial extends Casa {
             _escolhaBairros.mostra = false;
             _escolhaBairros.mensagem = "Você não tem nenhuma propriedade para fazer exposição de arte";
           }
-
           break;
 
         case "Terminal":
