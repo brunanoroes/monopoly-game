@@ -300,6 +300,38 @@ input {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* ========== TIMER DA PARTIDA ========== */
+.timer-partida {
+  position: absolute;
+  top: 24%;
+  left: 49.5%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: rgba(0, 0, 0, 1);
+  padding: 6px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Arial', sans-serif;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.timer-icone {
+  font-size: 16px;
+  filter: grayscale(1) brightness(1.5);
+}
+
+.timer-tempo {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+  font-family: 'Courier New', monospace;
+  min-width: 50px;
+  text-align: center;
+}
+
 .modo-teste-wrapper label {
   display: flex;
   align-items: center;

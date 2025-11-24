@@ -9,9 +9,18 @@ export default class Especial extends Casa {
     
     funcao(jogador, modal) {
       modal.mensagem = this.getMensagemHtml()
-      modal.tipo = 8;
+      
+      if (this.nome === "UFF") {
+        // Para UFF, usa tipo 4 com opção de pagar fiança
+        modal.tipo = 4;
+        modal.mostrarOpcaoPagarFianca = true;
+        modal.valorFianca = 250;
+        modal.passarVez = false; // Não passa a vez automaticamente
+      } else {
+        modal.tipo = 8;
+      }
+      
       modal.mostra = true;
-
     }
 
     getMensagemHtml() {
@@ -29,7 +38,8 @@ export default class Especial extends Casa {
           return `
             <div>
               <strong>📚 Você caiu na UFF - Semana de Provas!</strong><br>
-              Você ficará preso estudando até tirar <strong>duplo 6</strong> (duas vezes o número 6) nos dados.<br>
+              Você ficará preso estudando até tirar <strong>duplo 6</strong> (duas vezes o número 6) nos dados<br>
+              ou pagar <strong>R$ 250</strong> de fiança para sair livre no próximo turno.<br>
               Boa sorte nos estudos!
             </div>
           `;
@@ -101,7 +111,8 @@ export default class Especial extends Casa {
           break;
 
         case "UFF":
-
+          // Marca que ainda não pagou a fiança
+          _jogador.pagouFiancaUFF = false;
           break;
 
         case "Plaza":

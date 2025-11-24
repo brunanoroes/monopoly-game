@@ -24,6 +24,12 @@
         </label>
       </div>
 
+      <!-- Timer da Partida -->
+      <div class="timer-partida">
+        <span class="timer-icone">⏱️</span>
+        <span class="timer-tempo">{{ tempoFormatado }}</span>
+      </div>
+
       <div class="board">
         <img src="assets/tabuleiro.jpg" class="imagem-fundo" />
         <div :style="EstilizarObjetoPosicao(areadados)">
@@ -94,7 +100,7 @@
       </div>
 
 
-      <modal v-if="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @pagar-aluguel="pagarAluguel" @casa-especial="funcaoEspecial" @dismiss="dismiss" @executar-carta-sorte="executarCartaSorte" @vender-propriedades="venderPropriedades" @declarar-falencia="declararFalencia"></modal>
+      <modal v-if="modal.mostra" :modal="modal" @confirmar-compra="confirmarCompra" @cancelar-compra="cancelarCompra" @pagar-aluguel="pagarAluguel" @casa-especial="funcaoEspecial" @dismiss="dismiss" @executar-carta-sorte="executarCartaSorte" @vender-propriedades="venderPropriedades" @declarar-falencia="declararFalencia" @pagar-fianca="pagarFiancaUFF"></modal>
 
       <escolha-bairro v-if="escolhaBairros.mostra"  :escolha-bairros="escolhaBairros" @selecionar-bairro="bairroSelecionado" @dismiss="dismiss"/>
 
