@@ -63,9 +63,19 @@ Vue.component('modal', {
       <div v-if="modal.tipo === 4">
         <div class="modal-overlay">
           <div class="modal-content">
-            <h2 class="modal-title">{{ modal.mensagem }}</h2>
+            <h2 class="modal-title" v-html="modal.mensagem"></h2>
             <p class="modal-subtitle">{{ modal.mensagemAlerta }}</p>
-             <button class="btn cancel" @click="$emit('dismiss')">Fechar</button>
+            
+            <div class="buttons" v-if="modal.mostrarOpcaoPagarFianca">
+              <button class="btn confirm" @click="$emit('pagar-fianca')">
+                Pagar R$ {{ modal.valorFianca }}
+              </button>
+              <button class="btn cancel" @click="$emit('dismiss')">
+                Ficar Preso
+              </button>
+            </div>
+            
+            <button v-else class="btn cancel" @click="$emit('dismiss')">Fechar</button>
           </div>
         </div>
       </div>
@@ -138,7 +148,7 @@ Vue.component('modal', {
         <div class="modal-overlay">
           <div class="modal-content modal-vitoria">
             <h2 class="modal-title" style="font-size: 2.5em; color: #FFD700;">{{ modal.mensagem }}</h2>
-            <p class="modal-subtitle" style="font-size: 1.2em; margin-top: 20px;">{{ modal.mensagemAlerta }}</p>
+            <p class="modal-subtitle" style="font-size: 1.2em; margin-top: 20px;" v-html="modal.mensagemAlerta"></p>
             <div style="font-size: 4em; margin: 20px 0;">🏆</div>
             <p style="font-size: 1.1em; color: #666; margin-top: 10px;">O jogo foi encerrado!</p>
             <div class="buttons" style="margin-top: 30px;">
@@ -146,6 +156,20 @@ Vue.component('modal', {
                 🔄 Jogar Novamente
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="modal.tipo === 8">
+        <div class="modal-overlay">
+          <div class="modal-content">
+            <div v-html="modal.mensagem"></div>
+
+              <button class="btn confirm"
+                      @click="$emit('casa-especial')"
+                      style="margin-top: 2rem">
+                Continuar
+              </button>
           </div>
         </div>
       </div>
@@ -183,3 +207,4 @@ Vue.component('modal', {
 //Modal 5 - Cartas de Sorte/Azar
 //Modal 6 - Falência
 //Modal 7 - Vitória
+//Modal 8 - Casas Especiais

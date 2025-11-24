@@ -7,6 +7,8 @@ export default class Jogador {
     this.localizacaoAtual = casaInicial;
     this.propriedades = [];
     this.falido = false; // Nova propriedade para controle de falência
+    this.preso = false; // Flag para indicar se está preso na UFF
+    this.pagouFiancaUFF = false; // Flag para indicar se pagou fiança
   }
 
   jogarDados() {

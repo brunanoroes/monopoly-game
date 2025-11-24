@@ -104,4 +104,56 @@ export default class Bot extends Jogador {
 
     return paraVender;
   }
+
+  // Escolhe bairro para exposição no MAC (melhor retorno)
+  escolherBairroParaMAC(casas, jogador) {
+    const propriedadesDoBot = casas.filter(casa => 
+      casa.proprietarioCor === jogador.cor && casa.tipo === 'propriedade'
+    );
+
+    if (propriedadesDoBot.length === 0) return null;
+
+    // Escolhe a propriedade com maior potencial de aluguel
+    const melhorPropriedade = propriedadesDoBot.reduce((melhor, atual) => {
+      const aluguelAtualMedio = atual.fee ? atual.fee.reduce((a, b) => a + b, 0) / atual.fee.length : 0;
+      const aluguelMelhorMedio = melhor.fee ? melhor.fee.reduce((a, b) => a + b, 0) / melhor.fee.length : 0;
+      return aluguelAtualMedio > aluguelMelhorMedio ? atual : melhor;
+    });
+
+    return melhorPropriedade.nome;
+  }
+
+  // Escolhe casa estratégica para viajar no Terminal
+  escolherCasaParaTerminal(casas, jogador) {
+    // Filtra propriedades disponíveis (sem dono ou do próprio bot)
+    const propriedadesDisponiveis = casas.filter(casa => 
+      casa.tipo === 'propriedade' && 
+      (!casa.proprietarioCor || casa.proprietarioCor === jogador.cor)
+    );
+
+    if (propriedadesDisponiveis.length === 0) {
+      // Se não há propriedades disponíveis, escolhe uma aleatória
+      const todasPropriedades = casas.filter(c => c.tipo === 'propriedade');
+      return todasPropriedades[Math.floor(Math.random() * todasPropriedades.length)]?.nome;
+    }
+
+    // Prioriza propriedades da mesma cor que já possui
+    const coresQueTemho = [...new Set(
+      jogador.propriedades.map(p => p.cor).filter(c => c)
+    )];
+
+    for (const cor of coresQueTemho) {
+      const propMesmaCor = propriedadesDisponiveis.find(p => p.cor === cor);
+      if (propMesmaCor) return propMesmaCor.nome;
+    }
+
+    // Senão, escolhe propriedade mais barata disponível
+    const maisBarata = propriedadesDisponiveis.reduce((min, atual) => {
+      const precoAtual = Array.isArray(atual.prices) ? atual.prices[0] : atual.price || 0;
+      const precoMin = Array.isArray(min.prices) ? min.prices[0] : min.price || 0;
+      return precoAtual < precoMin ? atual : min;
+    });
+
+    return maisBarata.nome;
+  }
 }
