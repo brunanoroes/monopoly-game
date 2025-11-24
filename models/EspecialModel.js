@@ -78,7 +78,7 @@ export default class Especial extends Casa {
       }
     }
 
-    async funcaoEspecial(_escolhaBairros, _casas, _jogador) {
+    async funcaoEspecial(_escolhaBairros, _casas, _jogador, _modal) {
 
       switch (this.nome) {
 
@@ -88,14 +88,12 @@ export default class Especial extends Casa {
             .filter(casa => casa.proprietarioCor === _jogador.cor)
             .map(casa => casa.nome);
 
-          // Só mostra modal se tiver propriedades
-          if (_escolhaBairros.bairros.length > 0) {
             _escolhaBairros.mostra = true;
-            _escolhaBairros.mensagem = "Escolha um bairro para a exposição de arte";
-          } else {
-            _escolhaBairros.mostra = false;
-            _escolhaBairros.mensagem = "Você não tem nenhuma propriedade para fazer exposição de arte";
-          }
+            _modal.passarVez = true;
+          _escolhaBairros.mensagem =
+            _escolhaBairros.bairros.length > 0
+              ? "Escolha um bairro para a exposição de arte"
+              : "Você não tem nenhuma propriedade para fazer exposição de arte";
           break;
 
         case "Terminal":

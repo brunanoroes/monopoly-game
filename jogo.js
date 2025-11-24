@@ -1005,7 +1005,7 @@ new Vue({
       const casa = this.tabuleiro.casas.find(
         casa => casa.id === this.jogadorAtivo.localizacaoAtual
       );
-      casa.funcaoEspecial(this.escolhaBairros, this.tabuleiro.casas, this.jogadorAtivo)
+      casa.funcaoEspecial(this.escolhaBairros, this.tabuleiro.casas, this.jogadorAtivo, this.modal)
       
       // Casas que passam a vez automaticamente (não requerem escolha)
       const casasQueMovem = ["Plaza", "Início"];
@@ -1016,12 +1016,6 @@ new Vue({
         this.dadosBloqueados = false;
       }
       
-      // Se MAC ou Terminal sem propriedades disponíveis, passa a vez
-      if ((casa.nome === 'MAC' || casa.nome === 'Terminal') && this.escolhaBairros.bairros.length === 0) {
-        this.escolhaBairros.mostra = false;
-        this.jogadorAtivo = await this.tabuleiro.getProximoJogadorAtivo(this.jogadorAtivo);
-        this.dadosBloqueados = false;
-      }
       
       // Para bots, o processamento é feito em botProcessarCasaEspecial
       // Para MAC e Terminal (jogadores humanos), a vez é passada em bairroSelecionado
