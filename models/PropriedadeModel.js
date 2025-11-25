@@ -5,7 +5,7 @@ export default class Propriedade extends Casa {
         super(id, nome, x, y, listaJogadores);
         this.prices = prices;
         this.fee = fee;
-        this.casaConstruida = casaConstruida; //1, 2, 3 ou 4
+        this.casaConstruida = casaConstruida; //0 (sem casa), 1, 2, 3, 4 ou 5 (Hotel)
         this.proprietarioCor = proprietarioCor; //'azul', 'vermelho', 'verde', 'amarelo'
         this.cor = cor;
         this.lateral = lateral;
@@ -30,38 +30,42 @@ export default class Propriedade extends Casa {
             // Se já tem dono (jogador atual), é upgrade de propriedade
             if(this.proprietarioCor === jogador.cor){
                 // Verifica se já está no nível máximo
-                if (this.casaConstruida >= 4) {
+                if (this.casaConstruida >= 5) {
                     modal.tipo = 4;
                     modal.mensagem = `${this.nome} já está no nível máximo (Hotel)!`;
                     modal.mensagemAlerta = '';
+                    modal.passarVez = true; // Passa a vez após fechar o modal
                     return;
                 }
                 
                 modal.mensagem = `Deseja melhorar ${this.nome}?`;
                 modal.prices = this.prices.map(preco => preco + 100);
-                modal.disabled = [true, true, true, true];
+                modal.disabled = [true, true, true, true, true];
                 // Habilita a próxima casa disponível
-                const proximoNivel = this.casaConstruida;
-                if (proximoNivel >= 0 && proximoNivel <= 3) {
+                // casaConstruida indica o nível atual (0=sem casa, 1=Casa1, 2=Casa2...)
+                // O índice do array corresponde à casa que será comprada (0=Casa1, 1=Casa2...)
+                const proximoNivel = this.casaConstruida; // Se tem Casa 2 (casaConstruida=2), próximo é Casa 3 (índice 2)
+                if (proximoNivel >= 0 && proximoNivel <= 4) {
                     modal.disabled[proximoNivel] = false;
                 }
             }
             // Se tem outro dono e tipo=1 (após pagar aluguel), pode comprar por +100
             else if(this.proprietarioCor && tipo){
                 // Verifica se já está no nível máximo
-                if (this.casaConstruida >= 4) {
+                if (this.casaConstruida >= 5) {
                     modal.tipo = 4;
                     modal.mensagem = `${this.nome} já está no nível máximo (Hotel)!`;
                     modal.mensagemAlerta = 'Não é possível melhorar esta propriedade.';
+                    modal.passarVez = true; // Passa a vez após fechar o modal
                     return;
                 }
                 
                 modal.mensagem = `Deseja comprar ${this.nome} do proprietário?`;
                 modal.prices = this.prices.map(preco => preco + 100);
-                modal.disabled = [true, true, true, true];
+                modal.disabled = [true, true, true, true, true];
                 // Habilita a próxima casa disponível
                 const proximoNivel = this.casaConstruida;
-                if (proximoNivel >= 0 && proximoNivel <= 3) {
+                if (proximoNivel >= 0 && proximoNivel <= 4) {
                     modal.disabled[proximoNivel] = false;
                 }
             }
@@ -70,7 +74,7 @@ export default class Propriedade extends Casa {
                 modal.mensagem = `Deseja comprar ${this.nome}?`;
                 modal.prices = this.prices;
                 // Casa sem dono - permite comprar apenas Casa 1 (índice 0)
-                modal.disabled = [false, true, true, true];
+                modal.disabled = [false, true, true, true, true];
             }
         }
     }
@@ -110,12 +114,15 @@ export default class Propriedade extends Casa {
         
         this.proprietarioCor = jogador.cor;
         
-        // Se comprou de outro jogador, evolui para o próximo nível
-        // Se é upgrade da própria propriedade, usa tipoCasa
-        if (comprouDeOutroJogador) {
-            this.casaConstruida = Math.min(this.casaConstruida + 1, 4);
+        // Lógica de atualização de nível da casa:
+        // - Primeira compra (sem dono): define como 1 (Casa 1)
+        // - Upgrade ou compra de outro: incrementa +1
+        if (!antigoProprietario) {
+            // Primeira compra - sempre começa em Casa 1
+            this.casaConstruida = 1;
         } else {
-            this.casaConstruida = tipoCasa;
+            // Upgrade ou compra de outro jogador - incrementa
+            this.casaConstruida = Math.min(this.casaConstruida + 1, 5);
         }
         
         modal.mostra = false;

@@ -23,7 +23,11 @@ Vue.component('modal', {
               </label>
               <label class="option">
                 <input type="radio" v-model="modal.selected" value="4" :disabled="modal.disabled[3]"/>
-                Hotel <span class="price">{{ modal.prices[3] || 0 }} R$</span>
+                Casa 4 <span class="price">{{ modal.prices[3] || 0 }} R$</span>
+              </label>
+              <label class="option">
+                <input type="radio" v-model="modal.selected" value="5" :disabled="modal.disabled[4]"/>
+                Hotel <span class="price">{{ modal.prices[4] || 0 }} R$</span>
               </label>
             </div>
 
