@@ -762,11 +762,12 @@ new Vue({
       if (resultado && resultado.tipo === 'praias') {
         this.jogoEncerrado = true;
         this.dadosBloqueados = true;
+        this.pararTimer(); // Para o timer
         this.modal.mostra = false;
         this.modal.tipo = 7;
         this.modal.mostra = true;
         this.modal.mensagem = `🎉 ${resultado.jogador.nome} VENCEU O JOGO! 🎉`;
-        this.modal.mensagemAlerta = `${resultado.jogador.nome} conquistou todas as praias e dominou o litoral! 🏖️`;
+        this.modal.mensagemAlerta = `${resultado.jogador.nome} conquistou todas as praias e dominou o litoral! 🏖️<br><br>⏱️ Tempo de partida: ${this.tempoFormatado}`;
         this.modal.passarVez = false;
         return;
       }
@@ -907,15 +908,16 @@ new Vue({
         if (resultado) {
           this.jogoEncerrado = true;
           this.dadosBloqueados = true;
+          this.pararTimer(); // Para o timer
           this.modal.mostra = false;
           this.modal.tipo = 7;
           this.modal.mostra = true;
           this.modal.mensagem = `🎉 ${resultado.jogador.nome} VENCEU O JOGO! 🎉`;
           
           if (resultado.tipo === 'praias') {
-            this.modal.mensagemAlerta = `${resultado.jogador.nome} conquistou todas as praias e dominou o litoral! 🏖️`;
+            this.modal.mensagemAlerta = `${resultado.jogador.nome} conquistou todas as praias e dominou o litoral! 🏖️<br><br>⏱️ Tempo de partida: ${this.tempoFormatado}`;
           } else {
-            this.modal.mensagemAlerta = `Apenas um jogador permanece ativo!`;
+            this.modal.mensagemAlerta = `Apenas um jogador permanece ativo!<br><br>⏱️ Tempo de partida: ${this.tempoFormatado}`;
           }
           this.modal.passarVez = false;
         }
